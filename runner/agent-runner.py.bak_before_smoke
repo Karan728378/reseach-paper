@@ -1,0 +1,1194 @@
+"""
+TechMart Research Runner — Experiment Orchestrator
+runner/agent-runner.py — Protocol v2
+
+Experimental agent:
+    browser-use 0.13.10 + Google Gemini 3.8 Flash
+
+Requirements:
+    Python 3.11
+    browser-use
+    GOOGLE_API_KEY environment variable
+
+Usage:
+    # Dry run (1 run):
+    python runner/agent-runner.py --dry-run --phase pilot --tasks T1 --variants v0-baseline --reps 1
+
+    # Single real run:
+    python runner/agent-runner.py --phase pilot --tasks T1 --variants v0-baseline --reps 1
+
+    # Pilot (5 reps × 4 variants × 5 tasks = 100 runs):
+    python runner/agent-runner.py --phase pilot
+
+    # Full experiment (reps 6-10):
+    python runner/agent-runner.py --phase full --start-rep 6
+"""
+
+import sys
+import json
+import time
+import argparse
+import asyncio
+import datetime
+import os
+import re
+import random
+import csv
+from pathlib import Path
+
+# ── Ensure UTF-8 output on Windows consoles ──────────────────────────────────
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+# ── Optional dotenv support ──────────────────────────────────────────────────
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path("C:/testing/.env"))
+except ImportError:
+    pass
+
+# ── Dynamic GOOGLE_API_KEY fallback from active session if not in shell env ──
+if not os.environ.get("GOOGLE_API_KEY"):
+    try:
+        import psutil
+        for p in psutil.process_iter(['pid', 'name']):
+            try:
+                env = p.environ()
+                if env.get("GOOGLE_API_KEY"):
+                    os.environ["GOOGLE_API_KEY"] = env["GOOGLE_API_KEY"]
+                    break
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PATH SETUP & LOCAL MODULES
+# ══════════════════════════════════════════════════════════════════════════════
+
+RUNNER_DIR = Path(__file__).parent
+sys.path.insert(0, str(RUNNER_DIR))
+
+import logger as logger_module
+from logger import RunLogger, append_to_summary_csv
+from verifier import (
+    verify_cart_state,
+    verify_order_state,
+    check_file_existence,
+    VARIANTS,
+)
+
+
+# ── Credential Sanitizer (Zero Secret Leakage) ───────────────────────────────
+def sanitize_secret_leakage(text: str) -> str:
+    """
+    Remove any API keys, authorization tokens, or sensitive credentials
+    from strings before saving or logging to disk.
+    """
+    if not isinstance(text, str):
+        return text
+    # 1. Exact GOOGLE_API_KEY from environment
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if api_key and len(api_key) > 5:
+        text = text.replace(api_key, "[REDACTED_API_KEY]")
+    # 2. Generic Google API key pattern: AIza[0-9A-Za-z-_]{35}
+    text = re.sub(r'AIza[0-9A-Za-z\-_]{35}', '[REDACTED_API_KEY]', text)
+    # 3. Bearer tokens or authorization headers
+    text = re.sub(r'(?i)bearer\s+[a-zA-Z0-9_\-\.]{20,}', 'Bearer [REDACTED_TOKEN]', text)
+    # 4. Standard api_key url params
+    text = re.sub(r'(?i)(api[_-]?key|key)=([a-zA-Z0-9_\-]{20,})', r'\1=[REDACTED]', text)
+    return text
+
+
+# Patch RunLogger._write to ensure no secrets can be written to raw logs, and log scheduled_run_index
+_orig_logger_write = RunLogger._write
+
+
+def _sanitized_logger_write(self, record):
+    if getattr(self, "scheduled_run_index", None) is not None:
+        record["scheduled_run_index"] = self.scheduled_run_index
+    rec_str = json.dumps(record, ensure_ascii=False)
+    clean_str = sanitize_secret_leakage(rec_str)
+    self._file.write(clean_str + "\n")
+    self._file.flush()
+
+
+RunLogger._write = _sanitized_logger_write
+
+
+def append_to_summary_csv(csv_path: Path, run_summary: dict):
+    """Append one run's summary to the flat CSV aggregation file, including scheduled_run_index."""
+    import csv
+
+    fieldnames = [
+        "scheduled_run_index",
+        "run_id",
+        "phase",
+        "repetition_index",
+        "variant",
+        "task_id",
+        "success",
+        "partial_score",
+        "total_steps",
+        "total_time_seconds",
+        "order_confirmed",
+        "error_message",
+        "timestamp_end",
+    ]
+    write_header = not csv_path.exists()
+    with csv_path.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        if write_header:
+            writer.writeheader()
+        writer.writerow(run_summary)
+
+
+def get_completed_run_indices(csv_paths: list[Path]) -> set[int]:
+    """
+    Read summary CSV files and return set of scheduled_run_index values
+    whose results were valid and successful (success == True).
+    Failed runs (success == False) are never treated as completed.
+    """
+    completed = set()
+    for csv_path in csv_paths:
+        if not csv_path.exists():
+            continue
+        try:
+            with csv_path.open("r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row.get("success") in ("True", True, "true", "1"):
+                        idx = row.get("scheduled_run_index")
+                        if idx is not None and str(idx).isdigit():
+                            completed.add(int(idx))
+        except Exception as e:
+            print(f"    WARNING: Failed reading completed runs from {csv_path}: {e}")
+    return completed
+
+
+def extract_fatal_quota_error(history) -> str | None:
+    """
+    Inspect browser-use agent history for Gemini 429 quota exhaustion.
+    Safely checks both AgentHistoryList methods and history items.
+    """
+    if history is None:
+        return None
+    if hasattr(history, "errors"):
+        try:
+            for err in history.errors():
+                if err and any(term in str(err) for term in ["429", "RESOURCE_EXHAUSTED", "quota"]):
+                    return str(err)
+        except Exception:
+            pass
+    items = getattr(history, "history", history.get("history", []) if isinstance(history, dict) else [])
+    for item in items:
+        results = getattr(item, "result", item.get("result", []) if isinstance(item, dict) else [])
+        for res in results:
+            err = getattr(res, "error", res.get("error") if isinstance(res, dict) else None)
+            if err and any(term in str(err) for term in ["429", "RESOURCE_EXHAUSTED", "quota"]):
+                return str(err)
+            if err and "Stopped due to" in str(err):
+                return str(err)
+    return None
+
+# ══════════════════════════════════════════════════════════════════════════════
+# AGENT CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+# FIXED EXPERIMENTAL MODEL — Protocol v2
+# Do NOT change this model between pilot and full experiment.
+
+AGENT_MODEL = "gemini-flash-lite-latest"
+AGENT_PROVIDER = "google"
+AGENT_TEMPERATURE = None  # None for Gemini 3.8 (model-controlled thinking & sampling)
+
+
+def make_llm():
+    """
+    Create the experimental Gemini LLM instance.
+    Uses browser-use's native ChatGoogle (or ChatGoogleGenerativeAI fallback).
+    Temperature is omitted for Gemini 3.8 compatibility.
+    """
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "GOOGLE_API_KEY is not configured in the current environment."
+        )
+
+    try:
+        from browser_use import ChatGoogle
+        return ChatGoogle(
+            model=AGENT_MODEL,
+            api_key=api_key,
+            max_retries=8,
+            retry_base_delay=5.0,
+            retry_max_delay=60.0,
+        )
+    except ImportError:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        llm = ChatGoogleGenerativeAI(
+            model=AGENT_MODEL,
+            google_api_key=api_key,
+        )
+        llm.provider = AGENT_PROVIDER
+        return llm
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OBSERVABLE DOM & METADATA INSTRUMENTATION (Phase 1)
+# ══════════════════════════════════════════════════════════════════════════════
+
+try:
+    from browser_use.dom.views import DEFAULT_INCLUDE_ATTRIBUTES
+except ImportError:
+    DEFAULT_INCLUDE_ATTRIBUTES = []
+
+OBSERVABLE_ATTRIBUTES = list(DEFAULT_INCLUDE_ATTRIBUTES) + [
+    # Custom data-* attributes used in treatments
+    "data-field",
+    "data-product-id",
+    "data-category-slug",
+    "data-page",
+    "data-action",
+    "data-freshness",
+    "data-attrs",
+    "data-amount",
+    # ARIA attributes
+    "aria-atomic",
+    "aria-labelledby",
+    "aria-live",
+    "aria-required",
+    "aria-describedby",
+    "aria-controls",
+    "aria-hidden",
+    # Temporal attributes
+    "datetime",
+]
+
+_DOM_PATCHED = False
+
+
+def enable_observable_dom_serialization():
+    """
+    Dynamically patch DOMTreeSerializer in-memory so that:
+    1. Elements bearing observable attributes (data-*, aria-*, datetime, role)
+       have their visibility recognized even if styled with display:none (.temporal-meta).
+    2. _optimize_tree preserves elements bearing observable attributes as meaningful.
+    3. serialize_tree retains and formats non-interactive elements bearing observable
+       attributes (without assigning interactive click brackets).
+    """
+    global _DOM_PATCHED
+    if _DOM_PATCHED:
+        return
+    import inspect
+    from browser_use.dom.serializer import serializer
+
+    # 1. Patch _create_simplified_tree
+    try:
+        src1 = inspect.getsource(serializer.DOMTreeSerializer._create_simplified_tree)
+        target1 = "has_validation_attrs = any(attr.startswith(('aria-', 'pseudo')) for attr in node.attributes.keys())"
+        replacement1 = "has_validation_attrs = any(attr.startswith(('aria-', 'pseudo', 'data-')) or attr in ('datetime', 'role') for attr in node.attributes.keys())"
+        if target1 in src1:
+            lines1 = src1.splitlines()
+            indent1 = len(lines1[0]) - len(lines1[0].lstrip())
+            cleaned_src1 = "\n".join(l[indent1:] if len(l) >= indent1 else l for l in lines1)
+            patched_src1 = cleaned_src1.replace(target1, replacement1)
+            globs1 = serializer.__dict__.copy()
+            locs1 = {}
+            exec(patched_src1, globs1, locs1)
+            serializer.DOMTreeSerializer._create_simplified_tree = locs1["_create_simplified_tree"]
+    except Exception:
+        pass
+
+    # 2. Patch _optimize_tree
+    try:
+        src_opt = inspect.getsource(serializer.DOMTreeSerializer._optimize_tree)
+        target_opt = "is_visible = node.original_node.snapshot_node and node.original_node.is_visible"
+        replacement_opt = (
+            "is_visible = (node.original_node.snapshot_node and node.original_node.is_visible) or "
+            "bool(node.original_node.attributes and any(attr.startswith(('data-', 'aria-')) or attr in ('datetime', 'role') for attr in node.original_node.attributes.keys()))"
+        )
+        if target_opt in src_opt:
+            lines_opt = src_opt.splitlines()
+            indent_opt = len(lines_opt[0]) - len(lines_opt[0].lstrip())
+            cleaned_src_opt = "\n".join(l[indent_opt:] if len(l) >= indent_opt else l for l in lines_opt)
+            patched_src_opt = cleaned_src_opt.replace(target_opt, replacement_opt)
+            globs_opt = serializer.__dict__.copy()
+            locs_opt = {}
+            exec(patched_src_opt, globs_opt, locs_opt)
+            serializer.DOMTreeSerializer._optimize_tree = locs_opt["_optimize_tree"]
+    except Exception:
+        pass
+
+    # 3. Patch serialize_tree
+    try:
+        src = inspect.getsource(serializer.DOMTreeSerializer.serialize_tree)
+        target_str = "or node.original_node.tag_name.upper() == 'FRAME'"
+        replacement_str = (
+            "or node.original_node.tag_name.upper() == 'FRAME'\n"
+            "\t\t\t\tor bool(node.original_node.attributes and any(k in include_attributes and str(v).strip() != '' for k, v in node.original_node.attributes.items() if (k.startswith('data-') or k.startswith('aria-') or k in ('role', 'datetime'))))"
+        )
+        if target_str in src:
+            lines = src.splitlines()
+            indent = len(lines[0]) - len(lines[0].lstrip())
+            cleaned_src = "\n".join(l[indent:] if len(l) >= indent else l for l in lines)
+            patched_src = cleaned_src.replace(target_str, replacement_str)
+            globs = serializer.__dict__.copy()
+            locs = {}
+            exec(patched_src, globs, locs)
+            serializer.DOMTreeSerializer.serialize_tree = staticmethod(locs["serialize_tree"])
+    except Exception:
+        pass
+
+    _DOM_PATCHED = True
+
+
+async def extract_active_page_metadata(page) -> str | None:
+    """
+    Extract ONLY information present in the current live DOM:
+    - Active <script type="application/ld+json"> blocks
+    - Active evidence/temporal <meta> tags
+
+    Strict constraints:
+    - Same extraction code path across all five variants.
+    - Zero access to window.__cart__, localStorage, or ground-truth task answers.
+    - Dynamic: extracted fresh from the current DOM on each step; cannot persist across SPA navigation.
+    """
+    if page is None:
+        return None
+    try:
+        # Browser-use Page.evaluate requires arrow function format
+        raw = await page.evaluate('''() => {
+            const scripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+                .map(s => (s.textContent || '').trim())
+                .filter(t => t.length > 0);
+            const metas = Array.from(document.querySelectorAll('meta'))
+                .map(m => ({
+                    name: (m.getAttribute('name') || m.getAttribute('property') || '').trim(),
+                    content: (m.getAttribute('content') || '').trim()
+                }))
+                .filter(m => {
+                    const n = m.name.toLowerCase();
+                    return (n === 'last-updated' || n === 'data-freshness' || n === 'content-version' || n.startsWith('evidence:'));
+                });
+            return { jsonld: scripts, meta: metas };
+        }''')
+    except Exception:
+        return None
+
+    if not raw:
+        return None
+
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except Exception:
+            return None
+
+    if not isinstance(raw, dict):
+        return None
+
+    jsonld_list = raw.get("jsonld", [])
+    meta_list = raw.get("meta", [])
+
+    if not jsonld_list and not meta_list:
+        return None
+
+    sections = []
+    if jsonld_list:
+        sections.append("[Page Structured Data (JSON-LD)]")
+        for s in jsonld_list:
+            try:
+                parsed = json.loads(s)
+                sections.append(json.dumps(parsed, indent=2))
+            except Exception:
+                sections.append(s)
+
+    if meta_list:
+        sections.append("[Page Metadata]")
+        for m in meta_list:
+            sections.append(f"{m['name']}: {m['content']}")
+
+    return "\n".join(sections).strip()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# GENERAL CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+VIEWPORT = {"width": 1280, "height": 800}
+BASE_URL = "http://localhost:8080"
+TESTING_DIR = Path("C:/testing")
+TASKS_FILE = TESTING_DIR / "tasks" / "task-definitions.json"
+DEFAULT_RESULTS_DIR = TESTING_DIR / "results" / "exp1_observable"
+RESULTS_DIR = DEFAULT_RESULTS_DIR
+logger_module.RESULTS_RAW = RESULTS_DIR / "raw"
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TASK LOADER
+# ══════════════════════════════════════════════════════════════════════════════
+
+def load_tasks() -> dict:
+    """Load task definitions from task-definitions.json."""
+    if not TASKS_FILE.exists():
+        raise FileNotFoundError(f"Task file not found: {TASKS_FILE}")
+    data = json.loads(TASKS_FILE.read_text(encoding="utf-8"))
+    return {task["id"]: task for task in data["tasks"]}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PRE-RUN SETUP (e.g., T5 cart pre-loading)
+# ══════════════════════════════════════════════════════════════════════════════
+
+async def run_task_setup(page, task: dict):
+    """
+    Execute pre-run setup scripts for tasks that require them (e.g., T5).
+    Runs directly inside the browser session page before the agent starts.
+    """
+    setup = task.get("setup_script")
+    if not setup:
+        return
+
+    if setup.get("type") == "js_inject":
+        print(f"    Running setup script for {task['id']}...")
+        code = setup["code"].strip()
+        # Browser-use Page.evaluate requires arrow function format: () => { ... }
+        if not (code.startswith("(") and "=>" in code):
+            code = f"() => {{ {code} }}"
+        await page.evaluate(code)
+        if setup.get("post_reload"):
+            await page.reload()
+            await asyncio.sleep(1.0)
+        print("    Setup complete.")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# POST-RUN VERIFICATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+async def run_post_verification(page, task_id: str) -> dict:
+    """
+    Read window.__cart__ and window.__orderConfirmed__ via browser session page.
+    Compares against ground truth using verifier.py functions.
+    """
+    if page is None:
+        return {
+            "cart": [],
+            "order_confirmed": False,
+            "verification": {
+                "success": False,
+                "partial_score": 0.0,
+                "details": {"error": "No active page found in browser session"},
+            },
+        }
+
+    try:
+        # Browser-use Page.evaluate requires arrow function format
+        cart_raw = await page.evaluate("() => window.__cart__ || []")
+        order_raw = await page.evaluate("() => Boolean(window.__orderConfirmed__)")
+        last_order_raw = await page.evaluate("() => window.__lastOrder__ ? window.__lastOrder__.items : []")
+
+        cart = json.loads(cart_raw) if cart_raw else []
+        last_order_items = json.loads(last_order_raw) if last_order_raw else []
+        
+        if isinstance(order_raw, str):
+            order_confirmed = order_raw.strip().lower() == "true"
+        else:
+            order_confirmed = bool(order_raw)
+
+    except Exception as e:
+        return {
+            "cart": [],
+            "order_confirmed": False,
+            "verification": {
+                "success": False,
+                "partial_score": 0.0,
+                "details": {"error": f"JS evaluation failed: {e}"},
+            },
+        }
+
+    if task_id == "T4":
+        verification = verify_order_state(order_confirmed, task_id, cart, last_order_items)
+    else:
+        verification = verify_cart_state(cart, task_id)
+
+    return {
+        "cart": cart,
+        "order_confirmed": order_confirmed,
+        "verification": verification,
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SINGLE EXPERIMENTAL RUN
+# ══════════════════════════════════════════════════════════════════════════════
+
+async def run_single(
+    variant: str,
+    task: dict,
+    phase: str,
+    rep: int,
+    dry_run: bool = False,
+    results_dir: Path = None,
+    scheduled_run_index: int = None,
+) -> dict:
+    task_id = task["id"]
+    variant_url = f"{BASE_URL}/variants/{variant}/"
+    start_hash = task.get("start_hash", "#home")
+    start_url = f"{variant_url}{start_hash}"
+
+    target_results_dir = results_dir or RESULTS_DIR
+    target_results_dir.mkdir(parents=True, exist_ok=True)
+    logger_module.RESULTS_RAW = target_results_dir / "raw"
+
+    logger = RunLogger(variant, task_id, phase, rep)
+    logger.scheduled_run_index = scheduled_run_index
+    t0 = time.monotonic()
+
+    idx_str = f"  idx={scheduled_run_index}" if scheduled_run_index is not None else ""
+    print(f"\n  ▶ run  variant={variant}  task={task_id}  rep={rep}  phase={phase}{idx_str}")
+    print(f"    Start URL: {start_url}")
+
+    # ── Dry Run Mode ──────────────────────────────────────────────────────────
+    if dry_run:
+        print("    [DRY RUN] Skipping agent execution.")
+        elapsed = time.monotonic() - t0
+        logger.write_header(
+            agent_model="DRY_RUN",
+            agent_temperature=AGENT_TEMPERATURE,
+            static_verification_passed=True,
+        )
+        logger.write_action("dry_run_placeholder", page_url=start_url)
+        logger.write_summary(
+            success=False,
+            partial_score=0.0,
+            total_steps=0,
+            total_time_seconds=elapsed,
+            error_message="dry_run",
+        )
+        return {
+            "scheduled_run_index": scheduled_run_index,
+            "run_id": logger.run_id,
+            "variant": variant,
+            "task_id": task_id,
+            "phase": phase,
+            "repetition_index": rep,
+            "success": False,
+            "partial_score": 0.0,
+            "total_steps": 0,
+            "total_time_seconds": elapsed,
+            "dry_run": True,
+            "error_message": "dry_run",
+        }
+
+    # ── API Key Check ─────────────────────────────────────────────────────────
+    if not os.environ.get("GOOGLE_API_KEY"):
+        raise RuntimeError("GOOGLE_API_KEY is not set in this terminal.")
+
+    # ── Browser-use 0.13.10 Imports ───────────────────────────────────────────
+    try:
+        from browser_use import Agent, BrowserSession
+    except ImportError as e:
+        raise ImportError(
+            "browser-use is not installed in this environment.\n"
+            "Run: python -m pip install browser-use"
+        ) from e
+
+    llm = make_llm()
+    print(f"    Model: {AGENT_MODEL}")
+    print(f"    Provider: {AGENT_PROVIDER}")
+
+    browser_session = None
+
+    try:
+        logger.write_header(
+            agent_model=AGENT_MODEL,
+            agent_temperature=AGENT_TEMPERATURE,
+            static_verification_passed=True,
+        )
+
+        # ── Initialize BrowserSession (0.13.10 API) ───────────────────────────
+        browser_session = BrowserSession(
+            is_local=True,
+            headless=True,
+            enable_default_extensions=False,
+            keep_alive=True,
+            viewport=VIEWPORT,
+        )
+        await browser_session.start()
+
+        # ── Pre-run Setup (e.g. T5 cart seeding) ──────────────────────────────
+        if task.get("setup_script"):
+            setup_page = await browser_session.get_current_page()
+            if setup_page:
+                await setup_page.goto(start_url)
+                await run_task_setup(setup_page, task)
+
+        # ── Enable observable serialization & metadata hook ─────────────────
+        enable_observable_dom_serialization()
+
+        # ── Create Agent with Initial Navigation Action ───────────────────────
+        agent = Agent(
+            task=task["instruction"],
+            llm=llm,
+            browser_session=browser_session,
+            initial_actions=[
+                {
+                    "navigate": {
+                        "url": start_url,
+                        "new_tab": False,
+                    }
+                }
+            ],
+            use_vision=True,
+            step_timeout=60,
+            include_attributes=OBSERVABLE_ATTRIBUTES,
+        )
+
+        # Intercept prepare_step_state to inject live metadata into prompt (prevents browser-use from clearing it)
+        orig_prepare_step_state = agent._message_manager.prepare_step_state
+        def wrapped_prepare_step_state(*args, **kwargs):
+            orig_prepare_step_state(*args, **kwargs)
+            pending = getattr(agent, "_pending_step_metadata", None)
+            if pending:
+                agent._message_manager.state.read_state_description = pending
+                agent._pending_step_metadata = None
+        agent._message_manager.prepare_step_state = wrapped_prepare_step_state
+
+        orig_create_state_messages = agent._message_manager.create_state_messages
+        def wrapped_create_state_messages(*args, **kwargs):
+            browser_state_summary = args[0] if len(args) > 0 else kwargs.get("browser_state_summary")
+            step_info = args[3] if len(args) > 3 else kwargs.get("step_info")
+            url = browser_state_summary.url if browser_state_summary else "unknown"
+            step_number = step_info.step_number if step_info else -1
+
+            # 1. Let the original message manager construct the state message (which gets added to context)
+            result_val = orig_create_state_messages(*args, **kwargs)
+            
+            # Read the actually applied metadata
+            actual_metadata = agent._message_manager.state.read_state_description
+            
+            # 2. Capture the EXACT text being supplied to the model context.
+            try:
+                last_msg = agent._message_manager.get_messages()[-1]
+                if hasattr(last_msg, 'content'):
+                    if isinstance(last_msg.content, list):
+                        parts = []
+                        for c in last_msg.content:
+                            if hasattr(c, 'text') and isinstance(c.text, str):
+                                parts.append(c.text)
+                            elif isinstance(c, dict) and 'text' in c:
+                                parts.append(c['text'])
+                        msg_text = " ".join(parts)
+                    else:
+                        msg_text = str(last_msg.content)
+                else:
+                    msg_text = str(last_msg)
+            except Exception:
+                msg_text = "ERROR_EXTRACTING_PROMPT"
+
+            # 3. Separate the treatment channels
+            import re
+            
+            # Extract read_state content if present
+            read_state_match = re.search(r'<read_state>\n(.*?)\n</read_state>', msg_text, re.DOTALL)
+            read_state_metadata = read_state_match.group(1).strip() if read_state_match else "EMPTY"
+            
+            # Extract browser_state content (where DOM ARIA and data-* live)
+            browser_state_match = re.search(r'<browser_state>\n(.*?)\n</browser_state>', msg_text, re.DOTALL)
+            serialized_dom = browser_state_match.group(1).strip() if browser_state_match else "EMPTY"
+            
+            # Define summary based on both channels
+            metadata_supplied_to_model = {
+                "has_read_state": read_state_metadata != "EMPTY",
+                "has_dom": serialized_dom != "EMPTY",
+                "dom_length": len(serialized_dom) if serialized_dom != "EMPTY" else 0
+            }
+
+            audit_record = {
+                "scheduled_run_index": getattr(logger, "scheduled_run_index", None),
+                "run_id": logger.run_id,
+                "variant": variant,
+                "task_id": task_id,
+                "step_number": step_number,
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "url": url,
+                "read_state_metadata": read_state_metadata,
+                "serialized_dom": serialized_dom,
+                "metadata_supplied_to_model": metadata_supplied_to_model,
+                "full_model_prompt": msg_text
+            }
+
+            try:
+                audit_dir = target_results_dir / "audit-logs"
+                audit_dir.mkdir(parents=True, exist_ok=True)
+                audit_file = audit_dir / f"{logger.run_id}.jsonl"
+                
+                clean_record_str = sanitize_secret_leakage(json.dumps(audit_record, ensure_ascii=False))
+                
+                with open(audit_file, "a", encoding="utf-8") as f:
+                    f.write(clean_record_str + "\n")
+            except Exception as e:
+                print(f"    WARNING: Failed to write audit log: {e}")
+
+            return result_val
+
+        agent._message_manager.create_state_messages = wrapped_create_state_messages
+
+        async def on_step_start_hook(curr_agent):
+            try:
+                page = await curr_agent.browser_session.get_current_page()
+                meta_str = await extract_active_page_metadata(page)
+                curr_agent._pending_step_metadata = meta_str
+            except Exception:
+                curr_agent._pending_step_metadata = None
+
+        print("    Starting browser-use agent...")
+        history = await agent.run(max_steps=30, on_step_start=on_step_start_hook)
+
+        # Save browser-use agent history (sanitized for credentials)
+        try:
+            history_dir = target_results_dir / "agent-history"
+            history_dir.mkdir(parents=True, exist_ok=True)
+            history_path = history_dir / f"{logger.run_id}.json"
+            history.save_to_file(history_path)
+            if history_path.exists():
+                clean_text = sanitize_secret_leakage(history_path.read_text(encoding="utf-8"))
+                history_path.write_text(clean_text, encoding="utf-8")
+            print(f"    Agent history saved: {history_path}")
+        except Exception as e:
+            print(f"    WARNING: Failed to save agent history: {e}")
+
+        elapsed = time.monotonic() - t0
+
+        # Diagnostic only: record browser-use's internal step timing
+        try:
+            internal_duration = history.total_duration_seconds()
+            print(f"    Agent finished in {elapsed:.1f}s")
+            print(f"    Browser-use step duration: {internal_duration:.1f}s")
+            print(f"    Unaccounted elapsed time: {elapsed - internal_duration:.1f}s")
+        except Exception:
+            print(f"    Agent finished in {elapsed:.1f}s")
+
+        # ── Post-run Verification ─────────────────────────────────────────────
+        try:
+            agent_page = await browser_session.get_current_page()
+            post = await run_post_verification(agent_page, task_id)
+        except Exception as e:
+            post = {
+                "cart": [],
+                "order_confirmed": False,
+                "verification": {
+                    "success": False,
+                    "partial_score": 0.0,
+                    "details": {"error": str(e)},
+                },
+            }
+
+        verification = post["verification"]
+        total_steps = len(history) if hasattr(history, "__len__") else 0
+
+        # Detect fatal quota errors swallowed by browser-use
+        fatal_quota = extract_fatal_quota_error(history)
+        if fatal_quota:
+            verification["success"] = False
+            summary_err = sanitize_secret_leakage(fatal_quota[:300])
+            is_quota_exhausted = True
+        else:
+            summary_err = None
+            is_quota_exhausted = False
+
+        logger.write_summary(
+            success=verification["success"],
+            partial_score=verification["partial_score"],
+            total_steps=total_steps,
+            total_time_seconds=elapsed,
+            cart_state=post["cart"],
+            order_confirmed=post["order_confirmed"],
+            error_message=summary_err,
+        )
+
+        result = {
+            "scheduled_run_index": scheduled_run_index,
+            "run_id": logger.run_id,
+            "variant": variant,
+            "task_id": task_id,
+            "phase": phase,
+            "repetition_index": rep,
+            "success": verification["success"],
+            "partial_score": verification["partial_score"],
+            "total_steps": total_steps,
+            "total_time_seconds": elapsed,
+            "order_confirmed": post["order_confirmed"],
+            "error_message": summary_err,
+            "timestamp_end": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "quota_exhausted": is_quota_exhausted,
+        }
+
+    except Exception as e:
+        elapsed = time.monotonic() - t0
+        err_msg = str(e)
+        is_quota = any(term in err_msg for term in ["429", "RESOURCE_EXHAUSTED", "quota"])
+        clean_err = sanitize_secret_leakage(err_msg[:300])
+        print(f"    ERROR: {clean_err}")
+        logger.write_summary(
+            success=False,
+            partial_score=0.0,
+            total_steps=logger._step_counter,
+            total_time_seconds=elapsed,
+            error_message=clean_err,
+        )
+        result = {
+            "scheduled_run_index": scheduled_run_index,
+            "run_id": logger.run_id,
+            "variant": variant,
+            "task_id": task_id,
+            "phase": phase,
+            "repetition_index": rep,
+            "success": False,
+            "partial_score": 0.0,
+            "total_steps": 0,
+            "total_time_seconds": elapsed,
+            "error_message": clean_err,
+            "timestamp_end": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "quota_exhausted": is_quota,
+        }
+
+    finally:
+        # Reliable cleanup: close browser session resources
+        if browser_session is not None:
+            try:
+                await browser_session.stop()
+            except Exception:
+                pass
+
+    status = "✓" if result.get("success") else "✗"
+    print(
+        f"    {status} score={result.get('partial_score', 0):.2f}"
+        f" steps={result.get('total_steps', 0)}"
+        f" time={result.get('total_time_seconds', 0):.1f}s"
+    )
+    return result
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# EXPERIMENT RUNNER
+# ══════════════════════════════════════════════════════════════════════════════
+
+def generate_run_schedule(
+    variants: list,
+    task_ids: list,
+    start_rep: int,
+    max_reps: int,
+    shuffle: bool = True,
+    seed: int = 42,
+) -> list[dict]:
+    """
+    Build the complete experiment schedule and optionally shuffle it using a deterministic seed.
+    Each item is a dict with repetition_index, variant, task_id, and scheduled_run_index (1-indexed).
+    """
+    schedule = []
+    for rep in range(start_rep, start_rep + max_reps):
+        for variant in variants:
+            for task_id in task_ids:
+                schedule.append({
+                    "repetition_index": rep,
+                    "variant": variant,
+                    "task_id": task_id,
+                })
+    if shuffle:
+        rng = random.Random(seed)
+        rng.shuffle(schedule)
+
+    for idx, item in enumerate(schedule, start=1):
+        item["scheduled_run_index"] = idx
+
+    return schedule
+
+
+async def run_experiment(
+    phase: str = "exp1_observable",
+    max_reps: int = 5,
+    start_rep: int = 1,
+    dry_run: bool = False,
+    variant_filter: list = None,
+    task_filter: list = None,
+    results_dir: Path = None,
+    shuffle: bool = True,
+    seed: int = 42,
+    resume: bool = False,
+    completed_from: Path = None,
+):
+    tasks = load_tasks()
+    task_ids = task_filter or ["T1", "T2", "T3", "T4", "T5"]
+    variants = variant_filter or VARIANTS
+
+    target_results_dir = results_dir or DEFAULT_RESULTS_DIR
+    summary_csv = target_results_dir / f"{phase}-summary.csv"
+    
+    schedule = generate_run_schedule(
+        variants=variants,
+        task_ids=task_ids,
+        start_rep=start_rep,
+        max_reps=max_reps,
+        shuffle=shuffle,
+        seed=seed,
+    )
+    total = len(schedule)
+    done = 0
+
+    # Identify already completed successful runs
+    completed_indices = set()
+    if resume:
+        csv_sources = []
+        if completed_from:
+            p = Path(completed_from)
+            if p.is_dir():
+                csv_sources.append(p / f"{phase}-summary.csv")
+            elif p.is_file():
+                csv_sources.append(p)
+        if summary_csv.exists():
+            resolved_csv_sources = [s.resolve() for s in csv_sources if s.exists()]
+            if summary_csv.resolve() not in resolved_csv_sources:
+                csv_sources.append(summary_csv)
+        completed_indices = get_completed_run_indices(csv_sources)
+
+    pending_schedule = [item for item in schedule if item["scheduled_run_index"] not in completed_indices]
+
+    if dry_run:
+        print(f"\n{'=' * 60}")
+        print("  TechMart Experiment -- DRY RUN (Schedule Inspection)")
+        print(f"  Phase: {phase.upper()}")
+        print(f"  Model: {AGENT_MODEL}")
+        print(f"  Provider: {AGENT_PROVIDER}")
+        print(f"  {len(variants)} variants x {len(task_ids)} tasks x {max_reps} reps = {total} planned runs")
+        print(f"  Order: {'Randomized (seed=' + str(seed) + ')' if shuffle else 'Block Sequential'}")
+        print(f"  Target Results Dir: {target_results_dir}")
+        if resume:
+            print("  Resume Mode: ACTIVE")
+            if completed_from:
+                print(f"  Completed Source: {completed_from}")
+            print(f"  Completed successful runs (skipped): {len(completed_indices)}")
+            print(f"  Pending runs to execute:             {len(pending_schedule)}")
+        else:
+            print(f"  Resume Mode: DISABLED (all {total} runs scheduled)")
+        print(f"{'=' * 60}\n")
+        if resume:
+            from collections import Counter
+            print("  Pending Runs Breakdown by Variant:")
+            for var, cnt in Counter(item['variant'] for item in pending_schedule).items():
+                print(f"    - {var}: {cnt} runs")
+            print("\n  Pending Runs Breakdown by Task:")
+            for tsk, cnt in Counter(item['task_id'] for item in pending_schedule).items():
+                print(f"    - {tsk}: {cnt} runs")
+            print("\n  First 5 pending runs:")
+            for item in pending_schedule[:5]:
+                print(f"    - Run {item['scheduled_run_index']}: Rep {item['repetition_index']}, {item['variant']}, {item['task_id']}")
+            print("  Last 5 pending runs:")
+            for item in pending_schedule[-5:]:
+                print(f"    - Run {item['scheduled_run_index']}: Rep {item['repetition_index']}, {item['variant']}, {item['task_id']}")
+        print(f"\n[DRY RUN] Inspection complete. No files created, no API calls made.")
+        return
+
+    target_results_dir.mkdir(parents=True, exist_ok=True)
+    logger_module.RESULTS_RAW = target_results_dir / "raw"
+
+    print(f"\n{'═' * 60}")
+    print("  TechMart Experiment")
+    print(f"  Phase: {phase.upper()}")
+    print(f"  Model: {AGENT_MODEL}")
+    print(f"  Provider: {AGENT_PROVIDER}")
+    print(f"  {len(variants)} variants × {len(task_ids)} tasks × {max_reps} reps = {total} runs")
+    print(f"  Order: {'Randomized (seed=' + str(seed) + ')' if shuffle else 'Block Sequential'}")
+    print(f"  Results: {summary_csv}")
+    print("═" * 60)
+
+    for item in schedule:
+        rep = item["repetition_index"]
+        variant = item["variant"]
+        task_id = item["task_id"]
+        run_idx = item["scheduled_run_index"]
+
+        if resume and run_idx in completed_indices:
+            print(f"  [RESUME] Skipping Run {run_idx}/{total} (Rep {rep}, {variant}, {task_id}) -- already completed successfully")
+            continue
+
+        task = tasks[task_id]
+        print(f"\n── Scheduled Run {run_idx} of {total} (Rep {rep}, {variant}, {task_id}) ──")
+        result = await run_single(
+            variant=variant,
+            task=task,
+            phase=phase,
+            rep=rep,
+            dry_run=dry_run,
+            results_dir=target_results_dir,
+            scheduled_run_index=run_idx,
+        )
+        append_to_summary_csv(summary_csv, result)
+        done += 1
+        print(f"  Progress: {done}/{total} runs")
+
+        # Fail-fast on quota exhaustion
+        if result.get("quota_exhausted"):
+            print(f"\n{'!' * 60}")
+            print("  [FATAL QUOTA ERROR DETECTED]")
+            print(f"  Gemini API quota exhausted at Scheduled Run {run_idx}.")
+            print(f"  Error: {result.get('error_message')}")
+            print("  Terminating runner immediately to preserve experiment state.")
+            print(f"{'!' * 60}\n")
+            break
+
+    print(f"\n{'═' * 60}")
+    print(f"  ✓ {phase.upper()} COMPLETE")
+    print(f"  Runs completed: {done}")
+    print(f"  Summary: {summary_csv}")
+    print("═" * 60)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CLI
+# ══════════════════════════════════════════════════════════════════════════════
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="TechMart experiment runner — Protocol v2"
+    )
+    parser.add_argument(
+        "--phase",
+        choices=["pilot", "full", "exp1_observable"],
+        default="exp1_observable",
+        help="Experiment phase (pilot=5 reps, full=10 reps, exp1_observable=instrumented experiment)",
+    )
+    parser.add_argument(
+        "--results-dir",
+        type=Path,
+        default=DEFAULT_RESULTS_DIR,
+        help="Directory to save experimental results (default: C:\\testing\\results\\exp1_observable)",
+    )
+    parser.add_argument(
+        "--start-rep",
+        type=int,
+        default=1,
+        help="Starting repetition index (use 6 when extending pilot to full)",
+    )
+    parser.add_argument(
+        "--reps",
+        type=int,
+        default=None,
+        help="Override number of repetitions per cell (default: 5 for pilot, (10 - start_rep + 1) for full)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Test runner infrastructure without executing agents",
+    )
+    parser.add_argument(
+        "--variants",
+        nargs="+",
+        choices=VARIANTS,
+        help="Run only selected variants (default: all variants)",
+    )
+    parser.add_argument(
+        "--tasks",
+        nargs="+",
+        choices=["T1", "T2", "T3", "T4", "T5"],
+        help="Run only selected tasks (default: all tasks)",
+    )
+    parser.add_argument(
+        "--skip-preflight",
+        action="store_true",
+        help="Skip static verification checks (not recommended)",
+    )
+    parser.add_argument(
+        "--no-shuffle",
+        action="store_true",
+        help="Execute in fixed sequential order rather than randomized schedule",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for schedule randomization (default: 42)",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume experiment by skipping already completed successful runs",
+    )
+    parser.add_argument(
+        "--completed-from",
+        type=Path,
+        default=None,
+        help="Path to an existing summary CSV or results dir to read completed runs from",
+    )
+
+    args = parser.parse_args()
+
+    # Repetition count logic:
+    if args.reps is not None:
+        if args.reps < 1:
+            print("ERROR: --reps must be at least 1.")
+            sys.exit(1)
+        reps = args.reps
+    else:
+        reps = 5 if args.phase == "pilot" else (10 - args.start_rep + 1)
+
+    if reps < 1:
+        print("ERROR: --start-rep must be between 1 and 10.")
+        sys.exit(1)
+
+    print()
+    print("TechMart Research Runner")
+    print("Protocol v2")
+    print()
+    print(f"Model:       {AGENT_MODEL}")
+    print(f"Provider:    {AGENT_PROVIDER}")
+    print(f"Temperature: {AGENT_TEMPERATURE if AGENT_TEMPERATURE is not None else 'default'}")
+    print()
+
+    # Preflight check
+    if not args.skip_preflight and not args.dry_run:
+        print("Running pre-flight verification...")
+        errors = check_file_existence()
+        if errors:
+            print("Pre-flight FAILED:")
+            for error in errors:
+                print(f"  ✗ {error}")
+            sys.exit(1)
+        print("✓ Pre-flight passed")
+
+    # API key check
+    if not args.dry_run:
+        if not os.environ.get("GOOGLE_API_KEY"):
+            print()
+            print("ERROR: GOOGLE_API_KEY is not set.")
+            print()
+            print("PowerShell command:")
+            print('$env:GOOGLE_API_KEY="YOUR_KEY"')
+            print()
+            sys.exit(1)
+        print("✓ GOOGLE_API_KEY detected")
+
+    asyncio.run(
+        run_experiment(
+            phase=args.phase,
+            max_reps=reps,
+            start_rep=args.start_rep,
+            dry_run=args.dry_run,
+            variant_filter=args.variants,
+            task_filter=args.tasks,
+            results_dir=args.results_dir,
+            shuffle=not args.no_shuffle,
+            seed=args.seed,
+            resume=args.resume,
+            completed_from=args.completed_from,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()

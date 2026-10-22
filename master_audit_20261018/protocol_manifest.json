@@ -1,0 +1,64 @@
+{
+  "protocol_version": "v3-proposed",
+  "audit_date": "2026-10-18",
+  "generated_utc": "2026-10-18T08:24:39.230490+00:00",
+  "design": {
+    "type": "Randomized Complete Block Design (RCBD)",
+    "arms": [
+      "ABS",
+      "VIS",
+      "ARIA",
+      "DATA-CFG"
+    ],
+    "tasks": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6"
+    ],
+    "K": 4,
+    "J": 6,
+    "block_size": 24,
+    "planned_blocks": 4,
+    "total_planned": 96,
+    "balance_guarantee": "Any complete block (24 runs) is perfectly balanced across all 4 arms x 6 tasks.",
+    "quota_robustness": "If failure at run 49, blocks 1-2 (48 runs, 12 per arm) are analyzable independently."
+  },
+  "arms": {
+    "ABS": "Target fact absent from all channels.",
+    "VIS": "Target fact in visible text paragraph (v0-baseline pattern).",
+    "ARIA": "Target fact in aria-label attribute (v2-aria pattern).",
+    "DATA-CFG": "Target fact in data-* attribute WITH runner patch to include_attributes."
+  },
+  "tasks": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6"
+  ],
+  "verifier_requirements": [
+    "T3: Use cart_exact_match (length==1 AND sku==wh-002) \u2014 already in task-definitions.json v2 but legacy verifier.py does not enforce it.",
+    "T4: Remove unconditional partial credit; require window.__orderConfirmed__===true AND lastOrder.items contains mse-001.",
+    "T5: Add pre-run JS assertion that localStorage cart contains wh-001 before agent launches.",
+    "All retrieval tasks: Replace naive substring match with regex word-boundary match and require match only in structured final_result field, not in full agent reasoning text."
+  ],
+  "execution_safeguards": [
+    "Hard quota guard: abort experiment after 3 consecutive 429 errors.",
+    "Per-run timeout: 120s hard limit to prevent single run consuming disproportionate budget.",
+    "Cache disable: CDP Network.setCacheDisabled(True) + context.clear_cookies() between runs.",
+    "Pre-run cart state assertion: verify window.__cart__ is empty (T1-T4,T6) or contains wh-001 (T5) before agent launch.",
+    "use_vision=False for all runs (eliminates vision confound for VIS arm)."
+  ],
+  "primary_outcome": "Binary task success rate per arm (0/1); Fisher exact test for pairwise arm comparisons; Bonferroni correction for 6 pairwise tests (alpha_adjusted=0.0083).",
+  "pre_registration_required": true,
+  "known_blockers": [
+    "v1-jsonld arm BLOCKED by DISABLED_ELEMENTS \u2014 must be redesigned or dropped.",
+    "v3-data-attrs requires runner patch to DEFAULT_INCLUDE_ATTRIBUTES to be operational.",
+    "use_vision must be set to False to eliminate vision confound.",
+    "Legacy verifier.py T3/T4/T5 flaws must be corrected before any new experiment."
+  ]
+}

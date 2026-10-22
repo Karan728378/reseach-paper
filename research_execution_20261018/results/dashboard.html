@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous Browser Agent Semantic Markup Study — Senior Research Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b1329;
+      --card-bg: #152238;
+      --card-inner: #1c2d4a;
+      --border: #2a3e60;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; color: #fff; }
+    .header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-locked { background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+    .badge-pending { background: #78350f; color: #fde68a; border: 1px solid #f59e0b; }
+    .badge-offline { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; }
+    .badge-synthetic { background: #312e81; color: #c7d2fe; border: 1px solid #818cf8; }
+    
+    .provenance-banner {
+      background: #1e1b4b;
+      border: 1px solid #6366f1;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .provenance-banner strong { color: #a5b4fc; }
+    
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .kpi-title { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: #fff; margin: 8px 0 4px 0; }
+    .kpi-sub { font-size: 11px; color: var(--text-muted); }
+    
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: -6px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      background: rgba(0,0,0,0.15);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    
+    .text-success { color: var(--success); font-weight: 600; }
+    .text-warning { color: var(--warning); font-weight: 600; }
+    .text-danger { color: var(--danger); font-weight: 600; }
+    .text-accent { color: var(--accent); font-weight: 600; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 20px;
+    }
+    
+    .alert-box {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 14px;
+      background: var(--card-inner);
+      border-left: 4px solid var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Additive Semantic Markup Evaluation — Senior Research Dashboard</h1>
+      <p>Option A Benchmark: Investigating WAI-ARIA and data-* Attributes for Autonomous Browser Agents</p>
+    </div>
+    <div class="badges">
+      <span class="badge badge-locked">Safety Gate: Locked</span>
+      <span class="badge badge-pending">Confirmatory Trials: Pending</span>
+      <span class="badge badge-offline">Offline Demo: Verified</span>
+      <span class="badge badge-synthetic">Data: Synthetic Benchmark</span>
+    </div>
+  </div>
+
+  <!-- PROVENANCE BANNER -->
+  <div class="provenance-banner">
+    <strong>DATA PROVENANCE & SENIOR DISCLOSURE:</strong> This demonstration dashboard presents verified offline software artifacts.
+    No live experimental trials were executed ($0.00 model cost, zero API calls).
+    Demonstration tables below separate (1) local browser state mechanics, (2) mock agent observation delivery,
+    and (3) statistical pipeline calculations executed over a deterministic 96-run synthetic benchmark.
+    Confirmatory research claims remain strictly pending live experiment execution.
+  </div>
+
+  <!-- TOP KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-title">Scheduled Confirmatory Trials</div>
+      <div class="kpi-value mono">96</div>
+      <div class="kpi-sub">4 Blocks x 24 Runs (RCBD Schedule)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Browser Mechanics Tests</div>
+      <div class="kpi-value mono text-success">6 / 6</div>
+      <div class="kpi-sub">Tasks T1–T6 Direct DOM State Tests</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Agent Observation Delivery</div>
+      <div class="kpi-value mono text-success">3 / 4</div>
+      <div class="kpi-sub">MockChatModel + use_vision=False</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Statistical Pipeline Validation</div>
+      <div class="kpi-value mono text-accent">11 / 11</div>
+      <div class="kpi-sub">Agresti 2002 & Newcombe 1998 Tests Passed</div>
+    </div>
+  </div>
+
+  <!-- DEMONSTRATION SECTION: TWO EXPLICITLY SEPARATED PANELS -->
+  <div class="grid-2">
+    
+    <!-- PANEL 1: BROWSER MECHANICS -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>Part 3A: Browser Mechanics & Strict Verifier Tests</span>
+        <span class="badge badge-offline">Direct DOM Execution</span>
+      </div>
+      <div class="panel-subtitle">
+        Validates local SPA rendering, hash routing, client cart state mutation, and strict task verifiers.
+        <em>(Tests application state mechanics—not autonomous agent decision-making).</em>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Arm</th>
+            <th>Target</th>
+            <th>State Verified</th>
+            <th>Time</th>
+            <th>Verifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono font-bold">T1</td>
+            <td>BASELINE</td>
+            <td>wh-001 ($49.99 cheapest)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.25s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr><tr>
+            <td class="mono font-bold">T2</td>
+            <td>ARIA</td>
+            <td>mkp-001 (Mechanical Keyboard Pro)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.266s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr><tr>
+            <td class="mono font-bold">T3</td>
+            <td>DATA-CFG</td>
+            <td>wh-002 (BudPro Wireless X, rating 4.5)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.203s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr><tr>
+            <td class="mono font-bold">T4</td>
+            <td>BASELINE</td>
+            <td>mse-001 (ErgoGlide Mouse checkout)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.234s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr><tr>
+            <td class="mono font-bold">T5</td>
+            <td>BASELINE</td>
+            <td>cart_mutation ($1 -> 0 items)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.172s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr><tr>
+            <td class="mono font-bold">T6</td>
+            <td>BASELINE</td>
+            <td>warranty_duration_absence (Negative Probe)</td>
+            <td><span class="text-success mono">OK</span></td>
+            <td class="mono">1.219s</td>
+            <td><span class="text-success mono">PASS (1.0)</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="alert-box">
+        <strong>Source Log:</strong> <code class="mono">results/demo_browser_mechanics_and_verifier_runs.csv</code>.
+        Confirms exact SKU matches (T1: wh-001, T2: mkp-001, T3: wh-002 only), T4 order checkout, T5 pre-seeded cart mutation, and T6 refusal detection.
+      </div>
+    </div>
+
+    <!-- PANEL 2: AGENT OBSERVATION DELIVERY -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>Part 3B: Autonomous Agent Observation Delivery</span>
+        <span class="badge badge-offline">MockChatModel</span>
+      </div>
+      <div class="panel-subtitle">
+        Tests that browser-use Agent observation builder delivers semantic markup into the LLM prompt buffer under <code class="mono">use_vision=False</code>.
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Arm</th>
+            <th>Variant</th>
+            <th>Prompt Chars</th>
+            <th>Delivered Semantic Markup</th>
+            <th>Delivery Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono font-bold">BASELINE</td>
+            <td>v0-baseline</td>
+            <td class="mono">26,663</td>
+            <td style="font-size:11px;">Unaugmented HTML baseline (plain visible text only)</td>
+            <td><span class="text-success mono">VERIFIED</span></td>
+          </tr><tr>
+            <td class="mono font-bold">ARIA</td>
+            <td>v2-aria</td>
+            <td class="mono">26,936</td>
+            <td style="font-size:11px;">Semantic WAI-ARIA accessibility attributes (aria-label on button)</td>
+            <td><span class="text-success mono">VERIFIED</span></td>
+          </tr><tr>
+            <td class="mono font-bold">DATA-CFG</td>
+            <td>v3-data-attrs</td>
+            <td class="mono">27,703</td>
+            <td style="font-size:11px;">Configured custom attributes (data-action, data-product-id)</td>
+            <td><span class="text-success mono">VERIFIED</span></td>
+          </tr><tr>
+            <td class="mono font-bold">JSON-LD (Control)</td>
+            <td>v1-jsonld</td>
+            <td class="mono">26,659</td>
+            <td style="font-size:11px;">JSON-LD schema scripts (demonstrates serializer script pruning)</td>
+            <td><span class="text-success mono">VERIFIED</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="alert-box">
+        <strong>Source Log:</strong> <code class="mono">results/demo_agent_prompt_delivery_runs.csv</code>.
+        Proves ARIA reaches the prompt on interactive buttons, configured data-* attributes reach the prompt via extended whitelist, and JSON-LD is pruned by serializer.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATISTICAL ANALYSIS SECTION (SYNTHETIC BENCHMARK) -->
+  <div class="panel">
+    <div class="panel-title">
+      <span>Part 4: Post-Experiment Statistical Analysis Pipeline</span>
+      <span class="badge badge-synthetic">Synthetic Benchmark ($N=96$)</span>
+    </div>
+    <div class="panel-subtitle">
+      Evaluated by <code class="mono">analyze_v3_results.py</code> over deterministic synthetic benchmark data.
+      Demonstrates task-stratified Cochran-Mantel-Haenszel (CMH) test, Newcombe hybrid score 95% CIs, and Bonferroni adjustments.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Planned Contrast</th>
+          <th>Treatment ($n/N$)</th>
+          <th>Reference ($n/N$)</th>
+          <th>Risk Difference</th>
+          <th>Newcombe 95% CI</th>
+          <th>Agresti-Caffo 95% CI</th>
+          <th>CMH &chi;&sup2; (p-value)</th>
+          <th>Bonferroni Adj. p</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono font-bold">ARIA_vs_BASELINE</td>
+          <td class="mono">15 / 20 (75.0%)</td>
+          <td class="mono">27 / 40 (67.5%)</td>
+          <td class="mono font-bold text-success">+0.0750</td>
+          <td class="mono">[-0.1765, +0.2825]</td>
+          <td class="mono">[-0.1739, +0.2951]</td>
+          <td class="mono">0.088 (p = 0.7662)</td>
+          <td class="mono font-bold">1.0000</td>
+        </tr><tr>
+          <td class="mono font-bold">DATA_CFG_vs_BASELINE</td>
+          <td class="mono">18 / 20 (90.0%)</td>
+          <td class="mono">27 / 40 (67.5%)</td>
+          <td class="mono font-bold text-success">+0.2250</td>
+          <td class="mono">[-0.0113, +0.3958]</td>
+          <td class="mono">[-0.0053, +0.3992]</td>
+          <td class="mono">2.398 (p = 0.1215)</td>
+          <td class="mono font-bold">0.3644</td>
+        </tr><tr>
+          <td class="mono font-bold">ARIA_vs_DATA_CFG</td>
+          <td class="mono">15 / 20 (75.0%)</td>
+          <td class="mono">18 / 20 (90.0%)</td>
+          <td class="mono font-bold text-danger">-0.1500</td>
+          <td class="mono">[-0.3803, +0.0940]</td>
+          <td class="mono">[-0.3714, +0.0986]</td>
+          <td class="mono">0.683 (p = 0.4086)</td>
+          <td class="mono font-bold">1.0000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box" style="margin-top: 16px; border-left-color: var(--warning);">
+      <strong>METHODOLOGICAL NOTICE:</strong> Under $N=20$/arm, statistical power is $49.7\%$ for moderate effects ($\Delta = 0.35$) and $<11\%$ for small effects ($\Delta \le 0.20$).
+      A non-significant test ($p > 0.05$) CANNOT be claimed as evidence of channel equivalence.
+    </div>
+  </div>
+
+  <!-- TASK X ARM MATRIX & BASELINE QUALITY CONTROL -->
+  <div class="grid-2">
+    
+    <!-- MATRIX -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>Task &times; Arm Success Matrix (Primary Benchmark T1–T5)</span>
+        <span class="badge badge-synthetic">Synthetic Data</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>BASELINE (ABS)</th>
+            <th>BASELINE_REP (VIS)</th>
+            <th>ARIA</th>
+            <th>DATA-CFG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          <td class="mono font-bold">T1</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">4 / 4</td>
+        </tr><tr>
+          <td class="mono font-bold">T2</td>
+          <td class="mono">1 / 4</td>
+          <td class="mono">3 / 4</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">3 / 4</td>
+        </tr><tr>
+          <td class="mono font-bold">T3</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">3 / 4</td>
+        </tr><tr>
+          <td class="mono font-bold">T4</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">4 / 4</td>
+        </tr><tr>
+          <td class="mono font-bold">T5</td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">3 / 4</td>
+          <td class="mono">3 / 4</td>
+          <td class="mono">4 / 4</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QUALITY CONTROL & SENSITIVITY -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>Baseline Stability & Sensitivity Contrasts</span>
+        <span class="badge badge-offline">Quality Control</span>
+      </div>
+      <div style="font-size:12px; margin-bottom:12px; line-height:1.6;">
+        <div><strong>Within-Condition Stability Test:</strong> Two-sided Fisher's Exact Test comparing BASELINE (ABS) vs BASELINE_REP (VIS).</div>
+        <div>Fisher p-value: <code class="mono font-bold text-accent">0.1760</code> | Criterion: <code class="mono">p >= 0.1</code> (<span class="text-success font-bold">PASSED</span>)</div>
+        <div style="color:var(--text-muted); font-size:11px; margin-top:4px;">No significant drift between duplicate baseline arms; pooling into control group is justified.</div>
+      </div>
+
+      <div style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;">Unpooled Separate-Arm Sensitivity Contrasts:</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Contrast</th>
+            <th>Risk Difference</th>
+            <th>Newcombe 95% CI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          <td class="mono">ARIA_vs_ABS</td>
+          <td class="mono font-bold">+0.2000</td>
+          <td class="mono">[-0.0910, +0.4497]</td>
+        </tr><tr>
+          <td class="mono">ARIA_vs_VIS</td>
+          <td class="mono font-bold">-0.0500</td>
+          <td class="mono">[-0.2992, +0.2065]</td>
+        </tr><tr>
+          <td class="mono">DATA_CFG_vs_ABS</td>
+          <td class="mono font-bold">+0.3500</td>
+          <td class="mono">[+0.0721, +0.5701]</td>
+        </tr><tr>
+          <td class="mono">DATA_CFG_vs_VIS</td>
+          <td class="mono font-bold">+0.1000</td>
+          <td class="mono">[-0.1338, +0.3278]</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- T6 PROBE PANEL -->
+  <div class="panel">
+    <div class="panel-title">
+      <span>Exploratory Negative Information Probe (Task T6: Absent Warranty Duration)</span>
+      <span class="badge badge-offline">Refusal vs Hallucination</span>
+    </div>
+    <div class="panel-subtitle">
+      Warranty duration is completely absent from all website variants.
+      This secondary probe tests whether semantic markup affects grounded refusal ($Y=1$) vs ungrounded hallucination ($Y=0$).
+      Strictly isolated from the primary action benchmark.
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>BASELINE (ABS)</th>
+          <th>BASELINE_REP (VIS)</th>
+          <th>ARIA</th>
+          <th>DATA-CFG</th>
+          <th>Overall ($N=16$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Grounded Refusal ($Y=1$)</strong></td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">4 / 4</td>
+          <td class="mono">3 / 4</td>
+          <td class="mono font-bold text-success">81.2% (13/16)</td>
+        </tr>
+        <tr>
+          <td><strong>Hallucinated Fact ($Y=0$)</strong></td>
+          <td class="mono">2 / 4</td>
+          <td class="mono">0 / 4</td>
+          <td class="mono">0 / 4</td>
+          <td class="mono">1 / 4</td>
+          <td class="mono font-bold text-danger">3 / 16</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

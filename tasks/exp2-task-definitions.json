@@ -1,0 +1,143 @@
+{
+    "_protocol_version":  "exp2-v1",
+    "_note":  "Experiment 2 harder-task calibration definitions. Exp1 task-definitions.json remains frozen.",
+    "tasks":  [
+                  {
+                      "id":  "H1",
+                      "instruction":  "Find the wireless headphone with the highest customer rating, add it to your cart, and make sure you selected the highest-rated one rather than the cheapest one.",
+                      "start_hash":  "#home",
+                      "setup_script":  null,
+                      "success_criterion":  {
+                                                "type":  "cart_contains_sku",
+                                                "target_sku":  "wh-003"
+                                            },
+                      "ground_truth":  {
+                                           "target_sku":  "wh-003",
+                                           "target_name":  "AudioMax BT50",
+                                           "target_rating":  4.8,
+                                           "alternatives":  [
+                                                                {
+                                                                    "sku":  "wh-001",
+                                                                    "rating":  4.2
+                                                                },
+                                                                {
+                                                                    "sku":  "wh-002",
+                                                                    "rating":  4.5
+                                                                },
+                                                                {
+                                                                    "sku":  "wh-003",
+                                                                    "rating":  4.8
+                                                                }
+                                                            ]
+                                       }
+                  },
+                  {
+                      "id":  "H2",
+                      "instruction":  "Find the highest-rated product that costs less than $100 and add it to your cart.",
+                      "start_hash":  "#home",
+                      "setup_script":  null,
+                      "success_criterion":  {
+                                                "type":  "cart_contains_sku",
+                                                "target_sku":  "wh-002"
+                                            },
+                      "ground_truth":  {
+                                           "target_sku":  "wh-002",
+                                           "target_name":  "BudPro Wireless X",
+                                           "target_rating":  4.5,
+                                           "target_price":  89.99,
+                                           "eligible_skus":  [
+                                                                 "wh-001",
+                                                                 "wh-002",
+                                                                 "mse-001",
+                                                                 "acc-001",
+                                                                 "acc-002"
+                                                             ]
+                                       }
+                  },
+                  {
+                      "id":  "H3",
+                      "instruction":  "Find an in-stock product rated at least 4.5 stars that costs less than $150, then add the most highly rated eligible product to your cart.",
+                      "start_hash":  "#home",
+                      "setup_script":  null,
+                      "success_criterion":  {
+                                                "type":  "cart_contains_sku",
+                                                "target_sku":  "mkp-001"
+                                            },
+                      "ground_truth":  {
+                                           "target_sku":  "mkp-001",
+                                           "target_name":  "Mechanical Keyboard Pro",
+                                           "target_rating":  4.7,
+                                           "target_price":  149.99,
+                                           "eligible_skus":  [
+                                                                 "wh-002",
+                                                                 "mkp-001"
+                                                             ],
+                                           "excluded_examples":  [
+                                                                     "wh-003 is above the $150 limit",
+                                                                     "mon-001 is above the $150 limit",
+                                                                     "acc-002 is out of stock and below the rating threshold"
+                                                                 ]
+                                       }
+                  },
+                  {
+                      "id":  "H4",
+                      "instruction":  "Compare the wireless headphones and add the one that has the highest rating while still costing less than $100. Do not simply choose the first result you see.",
+                      "start_hash":  "#search?q=wireless%20headphones",
+                      "setup_script":  null,
+                      "success_criterion":  {
+                                                "type":  "cart_contains_sku",
+                                                "target_sku":  "wh-002"
+                                            },
+                      "ground_truth":  {
+                                           "target_sku":  "wh-002",
+                                           "target_name":  "BudPro Wireless X",
+                                           "target_rating":  4.5,
+                                           "target_price":  89.99,
+                                           "search_results":  [
+                                                                  {
+                                                                      "sku":  "wh-003",
+                                                                      "rating":  4.8,
+                                                                      "price":  129.99
+                                                                  },
+                                                                  {
+                                                                      "sku":  "wh-002",
+                                                                      "rating":  4.5,
+                                                                      "price":  89.99
+                                                                  },
+                                                                  {
+                                                                      "sku":  "wh-001",
+                                                                      "rating":  4.2,
+                                                                      "price":  49.99
+                                                                  }
+                                                              ]
+                                       }
+                  },
+                  {
+                      "id":  "H5",
+                      "instruction":  "Find the cheapest in-stock product with a customer rating of at least 4.5 stars, add it to your cart, then go to the cart and confirm that the item is present.",
+                      "start_hash":  "#home",
+                      "setup_script":  null,
+                      "success_criterion":  {
+                                                "type":  "cart_contains_sku",
+                                                "target_sku":  "wh-002"
+                                            },
+                      "ground_truth":  {
+                                           "target_sku":  "wh-002",
+                                           "target_name":  "BudPro Wireless X",
+                                           "target_rating":  4.5,
+                                           "target_price":  89.99,
+                                           "eligible_skus":  [
+                                                                 "wh-002",
+                                                                 "mkp-001",
+                                                                 "wh-003",
+                                                                 "mon-001"
+                                                             ],
+                                           "excluded_examples":  [
+                                                                     "acc-002 is cheaper but out of stock",
+                                                                     "mse-001 is in stock but rating is below 4.5",
+                                                                     "acc-001 is in stock but rating is below 4.5"
+                                                                 ]
+                                       }
+                  }
+              ]
+}

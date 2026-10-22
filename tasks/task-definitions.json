@@ -1,0 +1,135 @@
+{
+  "_protocol_version": "v2",
+  "_note": "Canonical task definitions. Instructions are verbatim prompts given to the browser-use agent. Ground truth is verified via window.__cart__ and window.__orderConfirmed__ — never via DOM attributes.",
+
+  "tasks": [
+    {
+      "id": "T1",
+      "instruction": "Search for 'wireless headphones' and add the least expensive result to your cart.",
+      "start_hash": "#home",
+      "setup_script": null,
+      "success_criterion": {
+        "type": "cart_contains_sku",
+        "target_sku": "wh-001",
+        "js_check": "window.__cart__.some(function(i){ return i.sku === 'wh-001'; })"
+      },
+      "partial_steps": [
+        { "id": "search_performed",   "description": "Agent navigated to search results for wireless headphones", "weight": 0.25 },
+        { "id": "cart_nonempty",      "description": "At least one item in cart", "weight": 0.25 },
+        { "id": "correct_item_added", "description": "Cheapest wireless headphone (wh-001, $49.99) is in cart", "weight": 0.50 }
+      ],
+      "ground_truth": {
+        "note": "wh-001 (SoundFlow Air 3) is the cheapest wireless headphone at $49.99. Search results sorted by rating (desc) so it appears LAST, requiring agent to compare prices.",
+        "cheapest_sku": "wh-001",
+        "cheapest_name": "SoundFlow Air 3",
+        "cheapest_price": 49.99,
+        "all_wh_skus_by_price": [
+          { "sku": "wh-001", "name": "SoundFlow Air 3",   "price": 49.99, "rating": 4.2 },
+          { "sku": "wh-002", "name": "BudPro Wireless X", "price": 89.99, "rating": 4.5 },
+          { "sku": "wh-003", "name": "AudioMax BT50",     "price": 129.99, "rating": 4.8 }
+        ],
+        "search_result_order": "sorted by rating desc — wh-003 first, wh-001 last"
+      }
+    },
+
+    {
+      "id": "T2",
+      "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+      "start_hash": "#home",
+      "setup_script": null,
+      "success_criterion": {
+        "type": "cart_contains_sku",
+        "target_sku": "mkp-001",
+        "js_check": "window.__cart__.some(function(i){ return i.sku === 'mkp-001'; })"
+      },
+      "partial_steps": [
+        { "id": "product_found", "description": "Agent navigated to or identified Mechanical Keyboard Pro", "weight": 0.50 },
+        { "id": "product_added", "description": "mkp-001 is in cart", "weight": 0.50 }
+      ],
+      "ground_truth": {
+        "note": "Task is action-based (add to cart), not self-report. Verified via cart state only.",
+        "sku": "mkp-001",
+        "name": "Mechanical Keyboard Pro",
+        "price": 149.99,
+        "rating": 4.7
+      }
+    },
+
+    {
+      "id": "T3",
+      "instruction": "Navigate to the Audio category. Compare the customer ratings of all products. Add the product with the second-highest customer rating to your cart.",
+      "start_hash": "#home",
+      "setup_script": null,
+      "success_criterion": {
+        "type": "cart_exact_match",
+        "target_sku": "wh-002",
+        "js_check": "window.__cart__.length === 1 && window.__cart__[0].sku === 'wh-002'"
+      },
+      "partial_steps": [
+        { "id": "audio_category_reached", "description": "Agent navigated to audio category", "weight": 0.25 },
+        { "id": "cart_nonempty",    "description": "Agent added at least one item", "weight": 0.25 },
+        { "id": "correct_item_only",  "description": "Only wh-002 is in cart", "weight": 0.50 }
+      ],
+      "ground_truth": {
+        "note": "Audio category has wh-003 (4.8), wh-002 (4.5), and wh-001 (4.2). Second highest is wh-002 (BudPro Wireless X).",
+        "target_sku": "wh-002",
+        "target_name": "BudPro Wireless X"
+      }
+    },
+
+    {
+      "id": "T4",
+      "instruction": "Search for 'ErgoGlide Mouse' and add it to your cart. Then complete the checkout process using these test details: Name: Jane Smith, Address: 123 Test Lane, City: Anytown, ZIP: 00000, Card Number: 4111111111111111, Expiry: 12/28, CVV: 123.",
+      "start_hash": "#home",
+      "setup_script": null,
+      "success_criterion": {
+        "type": "order_confirmed_with_sku",
+        "js_check": "window.__orderConfirmed__ === true && window.__lastOrder__.items.some(function(i){ return i.sku === 'mse-001'; })"
+      },
+      "partial_steps": [
+        { "id": "checkout_reached",    "description": "Agent navigated to checkout page", "weight": 0.25 },
+        { "id": "order_confirmed",     "description": "window.__orderConfirmed__ === true", "weight": 0.25 },
+        { "id": "correct_item_ordered", "description": "mse-001 is in __lastOrder__.items", "weight": 0.50 }
+      ],
+      "ground_truth": {
+        "note": "Order must contain mse-001 and be confirmed.",
+        "target_sku": "mse-001",
+        "target_name": "ErgoGlide Mouse",
+        "test_credentials": {
+          "name": "Jane Smith",
+          "address": "123 Test Lane",
+          "city": "Anytown",
+          "zip": "00000",
+          "card": "4111111111111111",
+          "expiry": "12/28",
+          "cvv": "123"
+        }
+      }
+    },
+
+    {
+      "id": "T5",
+      "instruction": "There is one item in your cart. Navigate to the cart and remove it so the cart is empty.",
+      "start_hash": "#home",
+      "setup_script": {
+        "type": "js_inject",
+        "note": "Executed by agent-runner.py via Playwright BEFORE the agent session launches. Reloads the page so app-core.js picks up the pre-seeded localStorage cart.",
+        "code": "localStorage.setItem('techmart_cart', JSON.stringify([{sku:'wh-001',name:'SoundFlow Air 3',quantity:1,price:49.99}]));",
+        "post_reload": true
+      },
+      "success_criterion": {
+        "type": "cart_empty",
+        "js_check": "window.__cart__.length === 0"
+      },
+      "partial_steps": [
+        { "id": "cart_page_reached", "description": "Agent navigated to cart page", "weight": 0.50 },
+        { "id": "cart_empty",        "description": "window.__cart__.length === 0", "weight": 0.50 }
+      ],
+      "ground_truth": {
+        "note": "Cart is pre-seeded with wh-001 (SoundFlow Air 3, qty 1) via localStorage injection before agent launch. Agent must find the item and remove it.",
+        "preloaded_sku": "wh-001",
+        "preloaded_name": "SoundFlow Air 3"
+      }
+    }
+  ]
+}

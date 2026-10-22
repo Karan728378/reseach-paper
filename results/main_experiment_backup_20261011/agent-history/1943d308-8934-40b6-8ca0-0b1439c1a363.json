@@ -1,0 +1,248 @@
+{
+  "history": [
+    {
+      "model_output": {
+        "evaluation_previous_goal": "Start",
+        "memory": null,
+        "next_goal": "Initial navigation",
+        "action": [
+          {
+            "navigate": {
+              "url": "http://localhost:8080/variants/v0-baseline/#home",
+              "new_tab": false
+            }
+          }
+        ]
+      },
+      "result": [
+        {
+          "is_done": false,
+          "long_term_memory": "Navigated to http://localhost:8080/variants/v0-baseline/#home",
+          "extracted_content": "🔗 Navigated to http://localhost:8080/variants/v0-baseline/#home",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [],
+        "screenshot_path": null,
+        "interacted_element": [
+          null
+        ],
+        "url": "",
+        "title": "Initial Actions"
+      },
+      "metadata": {
+        "step_start_time": 1791707539.328348,
+        "step_end_time": 1791707539.328348,
+        "step_number": 0,
+        "step_interval": null
+      },
+      "state_message": null
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m40.041448417s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash-lite', 'location': 'global'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55660s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_1.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707539.3313935,
+        "step_end_time": 1791707541.035248,
+        "step_number": 1,
+        "step_interval": 0.0
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n[24]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n[26]<button id=cat-audio />\n\tAudio\n[27]<button id=cat-keyboards />\n\tKeyboards\n[17]<button id=cat-mice />\n\tMice\n[18]<button id=cat-monitors />\n\tMonitors\n[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n[153]<span />\n\tIn Stock\n[156]<a />\n\tView Details\n[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n[175]<span />\n\tIn Stock\n[178]<a />\n\tView Details\n[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n[197]<span />\n\tIn Stock\n[200]<a />\n\tView Details\n[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n[219]<span />\n\tIn Stock\n[222]<a />\n\tView Details\n[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n[242]<span />\n\tIn Stock\n[245]<a />\n\tView Details\n[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n[265]<span />\n\tIn Stock\n[268]<a />\n\tView Details\n[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n[288]<span />\n\tIn Stock\n[291]<a />\n\tView Details\n[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n[314]<a />\n\tView Details\n[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step1 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m39.265801778s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55659s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_2.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707541.0422788,
+        "step_end_time": 1791707541.82911,
+        "step_number": 2,
+        "step_interval": 1.7038545608520508
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n<step>\nAgent failed to output in the right format.\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n*[24]<a id=logo-link />\n\tTechMart\n*[3]<form id=search-form />\n\t|SHADOW(open)|*[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t*[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n*[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n*[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n*[26]<button id=cat-audio />\n\tAudio\n*[27]<button id=cat-keyboards />\n\tKeyboards\n*[17]<button id=cat-mice />\n\tMice\n*[18]<button id=cat-monitors />\n\tMonitors\n*[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n*[153]<span />\n\tIn Stock\n*[156]<a />\n\tView Details\n*[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n*[175]<span />\n\tIn Stock\n*[178]<a />\n\tView Details\n*[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n*[197]<span />\n\tIn Stock\n*[200]<a />\n\tView Details\n*[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n*[219]<span />\n\tIn Stock\n*[222]<a />\n\tView Details\n*[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n*[242]<span />\n\tIn Stock\n*[245]<a />\n\tView Details\n*[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n*[265]<span />\n\tIn Stock\n*[268]<a />\n\tView Details\n*[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n*[288]<span />\n\tIn Stock\n*[291]<a />\n\tView Details\n*[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n*[314]<a />\n\tView Details\n*[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step2 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m38.469177624s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55658s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_3.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707541.8353221,
+        "step_end_time": 1791707542.6076477,
+        "step_number": 3,
+        "step_interval": 0.7868311405181885
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n*[24]<a id=logo-link />\n\tTechMart\n*[3]<form id=search-form />\n\t|SHADOW(open)|*[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t*[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n*[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n*[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n*[26]<button id=cat-audio />\n\tAudio\n*[27]<button id=cat-keyboards />\n\tKeyboards\n*[17]<button id=cat-mice />\n\tMice\n*[18]<button id=cat-monitors />\n\tMonitors\n*[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n*[153]<span />\n\tIn Stock\n*[156]<a />\n\tView Details\n*[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n*[175]<span />\n\tIn Stock\n*[178]<a />\n\tView Details\n*[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n*[197]<span />\n\tIn Stock\n*[200]<a />\n\tView Details\n*[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n*[219]<span />\n\tIn Stock\n*[222]<a />\n\tView Details\n*[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n*[242]<span />\n\tIn Stock\n*[245]<a />\n\tView Details\n*[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n*[265]<span />\n\tIn Stock\n*[268]<a />\n\tView Details\n*[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n*[288]<span />\n\tIn Stock\n*[291]<a />\n\tView Details\n*[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n*[314]<a />\n\tView Details\n*[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step3 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m37.687591354s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash-lite', 'location': 'global'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55657s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_4.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707542.6138268,
+        "step_end_time": 1791707543.389207,
+        "step_number": 4,
+        "step_interval": 0.7723255157470703
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n*[24]<a id=logo-link />\n\tTechMart\n*[3]<form id=search-form />\n\t|SHADOW(open)|*[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t*[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n*[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n*[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n*[26]<button id=cat-audio />\n\tAudio\n*[27]<button id=cat-keyboards />\n\tKeyboards\n*[17]<button id=cat-mice />\n\tMice\n*[18]<button id=cat-monitors />\n\tMonitors\n*[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n*[153]<span />\n\tIn Stock\n*[156]<a />\n\tView Details\n*[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n*[175]<span />\n\tIn Stock\n*[178]<a />\n\tView Details\n*[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n*[197]<span />\n\tIn Stock\n*[200]<a />\n\tView Details\n*[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n*[219]<span />\n\tIn Stock\n*[222]<a />\n\tView Details\n*[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n*[242]<span />\n\tIn Stock\n*[245]<a />\n\tView Details\n*[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n*[265]<span />\n\tIn Stock\n*[268]<a />\n\tView Details\n*[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n*[288]<span />\n\tIn Stock\n*[291]<a />\n\tView Details\n*[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n*[314]<a />\n\tView Details\n*[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step4 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m36.905382234s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55656s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_5.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707543.3954432,
+        "step_end_time": 1791707544.1718304,
+        "step_number": 5,
+        "step_interval": 0.7753801345825195
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n[24]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n[26]<button id=cat-audio />\n\tAudio\n[27]<button id=cat-keyboards />\n\tKeyboards\n[17]<button id=cat-mice />\n\tMice\n[18]<button id=cat-monitors />\n\tMonitors\n[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n[153]<span />\n\tIn Stock\n[156]<a />\n\tView Details\n[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n[175]<span />\n\tIn Stock\n[178]<a />\n\tView Details\n[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n[197]<span />\n\tIn Stock\n[200]<a />\n\tView Details\n[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n[219]<span />\n\tIn Stock\n[222]<a />\n\tView Details\n[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n[242]<span />\n\tIn Stock\n[245]<a />\n\tView Details\n[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n[265]<span />\n\tIn Stock\n[268]<a />\n\tView Details\n[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n[288]<span />\n\tIn Stock\n[291]<a />\n\tView Details\n[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n[314]<a />\n\tView Details\n[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step5 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    },
+    {
+      "model_output": null,
+      "result": [
+        {
+          "is_done": false,
+          "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.5-flash-lite\\nPlease retry in 15h27m36.119063976s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash-lite', 'location': 'global'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55656s'}]}}",
+          "include_extracted_content_only_once": false,
+          "include_in_memory": false
+        }
+      ],
+      "state": {
+        "tabs": [
+          {
+            "url": "http://localhost:8080/variants/v0-baseline/#home",
+            "title": "TechMart",
+            "target_id": "CA40",
+            "parent_target_id": null
+          }
+        ],
+        "screenshot_path": "C:\\Users\\kr728\\AppData\\Local\\Temp\\browser_use_agent_06acb499-25af-75b3-8000-605964c1becd_1791707538\\screenshots\\step_6.png",
+        "interacted_element": [
+          null
+        ],
+        "url": "http://localhost:8080/variants/v0-baseline/#home",
+        "title": "TechMart"
+      },
+      "metadata": {
+        "step_start_time": 1791707544.1788886,
+        "step_end_time": 1791707544.9598541,
+        "step_number": 6,
+        "step_interval": 0.7763872146606445
+      },
+      "state_message": "<user_request>\nFind the product called 'Mechanical Keyboard Pro' and add it to your cart.\n</user_request>\n\n<agent_history>\nAgent initialized\n<step>\nResult\nNavigated to http://localhost:8080/variants/v0-baseline/#home\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n<step>\nAgent failed to output in the right format.\n</agent_history>\n\n<agent_state>\n<file_system>\n\n</file_system>\n<todo_contents>\n[empty todo.md, fill it when applicable]\n</todo_contents>\n</agent_state>\n<browser_state>\n<page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>\nCurrent tab: CA40\nAvailable tabs:\nTab CA40: http://localhost:8080/variants/v0-baseline/#home - TechMart\n\n<page_info>0.0 pages above, 1.1 pages below — scroll down to reveal more content</page_info>\n\nInteractive elements:\n[Start of page]\n[24]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[25]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n[26]<button id=cat-audio />\n\tAudio\n[27]<button id=cat-keyboards />\n\tKeyboards\n[17]<button id=cat-mice />\n\tMice\n[18]<button id=cat-monitors />\n\tMonitors\n[19]<button id=cat-accessories />\n\tAccessories\nFeatured Products\nTop-rated products from our catalog\nAudioMax BT50\nWireless Headphones\n$129.99\n★ 4.8 (2156 reviews)\n[153]<span />\n\tIn Stock\n[156]<a />\n\tView Details\n[28]<button />\n\tAdd to Cart\n⌨️\nMechanical Keyboard Pro\nKeyboards\n$149.99\n★ 4.7 (934 reviews)\n[175]<span />\n\tIn Stock\n[178]<a />\n\tView Details\n[29]<button />\n\tAdd to Cart\n🖥️\nCrystalView 27\nMonitors\n$299.99\n★ 4.6 (678 reviews)\n[197]<span />\n\tIn Stock\n[200]<a />\n\tView Details\n[30]<button />\n\tAdd to Cart\nBudPro Wireless X\nWireless Headphones\n$89.99\n★ 4.5 (1203 reviews)\n[219]<span />\n\tIn Stock\n[222]<a />\n\tView Details\n[31]<button />\n\tAdd to Cart\nSoundFlow Air 3\nWireless Headphones\n$49.99\n★ 4.2 (847 reviews)\n[242]<span />\n\tIn Stock\n[245]<a />\n\tView Details\n[32]<button />\n\tAdd to Cart\nUSB-C Hub Pro\nAccessories\n$39.99\n★ 4.1 (1891 reviews)\n[265]<span />\n\tIn Stock\n[268]<a />\n\tView Details\n[33]<button />\n\tAdd to Cart\n🖱️\nErgoGlide Mouse\nMice\n$59.99\n★ 3.8 (412 reviews)\n[288]<span />\n\tIn Stock\n[291]<a />\n\tView Details\n[34]<button />\n\tAdd to Cart\n🗂️\nDesk Organizer Elite\nAccessories\n$24.99\n★ 3.5 (203 reviews)\nOut of Stock\n[314]<a />\n\tView Details\n[35]<button disabled=true />\n\tOut of Stock\n</browser_state>\n<step_info>Step6 maximum:30\nToday:2026-10-11</step_info>\n\nCurrent screenshot:"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# TechMart Research Runner — Python dependencies
+# Install: pip install -r requirements.txt
+# Then:    playwright install chromium
+
+playwright>=1.40.0
+beautifulsoup4>=4.12.0
+pillow>=10.0.0
+lxml>=4.9.0
+
+# browser-use is installed separately when the experimental LLM is chosen.
+# See runner/agent-runner.py AGENT CONFIGURATION section.
+# pip install browser-use
+# pip install langchain-openai        # if using GPT-4o
+# pip install langchain-anthropic     # if using Claude
+# pip install langchain-google-genai  # if using Gemini

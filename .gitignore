@@ -1,0 +1,56 @@
+# ==============================================================================
+# Git Ignore Configuration — Autonomous Browser Agent Research Workspace
+# ==============================================================================
+
+# Virtual Environments
+.venv/
+.venv*/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Bytecode & Interpreter Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Environment Variables, Secrets & Credentials
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.pfx
+*.p12
+keys.txt
+scratch/keys.txt
+*key*.txt
+
+# IDE & Editor Directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Playwright & Browser Engine Caches
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

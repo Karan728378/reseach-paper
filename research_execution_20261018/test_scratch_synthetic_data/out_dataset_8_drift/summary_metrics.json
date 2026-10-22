@@ -1,0 +1,571 @@
+{
+  "metadata": {
+    "analysis_pipeline": "analyze_v3_results.py (Option A Additive Markup Evaluation)",
+    "pipeline_version": "1.0.0",
+    "is_synthetic_dataset": true,
+    "nominal_alpha": 0.05,
+    "bonferroni_adjusted_alpha": 0.0167,
+    "num_comparisons": 3
+  },
+  "validation_summary": {
+    "total_rows_ingested": 96,
+    "expected_total_runs": 96,
+    "completed_runs": 96,
+    "infra_error_runs": 0,
+    "missing_runs_count": 0,
+    "missing_run_indices": [],
+    "is_complete_schedule": true
+  },
+  "baseline_stability_check": {
+    "abs_successes": 1,
+    "abs_runs": 20,
+    "abs_rate": 0.05,
+    "vis_successes": 18,
+    "vis_runs": 20,
+    "vis_rate": 0.9,
+    "fisher_stability_p_value": 0.0,
+    "poolability_decision": "UNPOOLED_DRIFT_DETECTED",
+    "poolability_alpha_threshold": 0.1
+  },
+  "task_by_arm_summary": [
+    {
+      "task_id": "T1",
+      "arm": "ABS",
+      "n_runs": 4,
+      "successes": 1,
+      "failures": 3,
+      "success_rate": 0.25,
+      "wilson_ci_lower": 0.0456,
+      "wilson_ci_upper": 0.6994
+    },
+    {
+      "task_id": "T1",
+      "arm": "VIS",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T1",
+      "arm": "BASELINE",
+      "n_runs": 8,
+      "successes": 5,
+      "failures": 3,
+      "success_rate": 0.625,
+      "wilson_ci_lower": 0.3057,
+      "wilson_ci_upper": 0.8632
+    },
+    {
+      "task_id": "T1",
+      "arm": "ARIA",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T1",
+      "arm": "DATA-CFG",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T2",
+      "arm": "ABS",
+      "n_runs": 4,
+      "successes": 0,
+      "failures": 4,
+      "success_rate": 0.0,
+      "wilson_ci_lower": 0.0,
+      "wilson_ci_upper": 0.49
+    },
+    {
+      "task_id": "T2",
+      "arm": "VIS",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T2",
+      "arm": "BASELINE",
+      "n_runs": 8,
+      "successes": 4,
+      "failures": 4,
+      "success_rate": 0.5,
+      "wilson_ci_lower": 0.2152,
+      "wilson_ci_upper": 0.7848
+    },
+    {
+      "task_id": "T2",
+      "arm": "ARIA",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T2",
+      "arm": "DATA-CFG",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T3",
+      "arm": "ABS",
+      "n_runs": 4,
+      "successes": 0,
+      "failures": 4,
+      "success_rate": 0.0,
+      "wilson_ci_lower": 0.0,
+      "wilson_ci_upper": 0.49
+    },
+    {
+      "task_id": "T3",
+      "arm": "VIS",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T3",
+      "arm": "BASELINE",
+      "n_runs": 8,
+      "successes": 4,
+      "failures": 4,
+      "success_rate": 0.5,
+      "wilson_ci_lower": 0.2152,
+      "wilson_ci_upper": 0.7848
+    },
+    {
+      "task_id": "T3",
+      "arm": "ARIA",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T3",
+      "arm": "DATA-CFG",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T4",
+      "arm": "ABS",
+      "n_runs": 4,
+      "successes": 0,
+      "failures": 4,
+      "success_rate": 0.0,
+      "wilson_ci_lower": 0.0,
+      "wilson_ci_upper": 0.49
+    },
+    {
+      "task_id": "T4",
+      "arm": "VIS",
+      "n_runs": 4,
+      "successes": 3,
+      "failures": 1,
+      "success_rate": 0.75,
+      "wilson_ci_lower": 0.3006,
+      "wilson_ci_upper": 0.9544
+    },
+    {
+      "task_id": "T4",
+      "arm": "BASELINE",
+      "n_runs": 8,
+      "successes": 3,
+      "failures": 5,
+      "success_rate": 0.375,
+      "wilson_ci_lower": 0.1368,
+      "wilson_ci_upper": 0.6943
+    },
+    {
+      "task_id": "T4",
+      "arm": "ARIA",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T4",
+      "arm": "DATA-CFG",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T5",
+      "arm": "ABS",
+      "n_runs": 4,
+      "successes": 0,
+      "failures": 4,
+      "success_rate": 0.0,
+      "wilson_ci_lower": 0.0,
+      "wilson_ci_upper": 0.49
+    },
+    {
+      "task_id": "T5",
+      "arm": "VIS",
+      "n_runs": 4,
+      "successes": 3,
+      "failures": 1,
+      "success_rate": 0.75,
+      "wilson_ci_lower": 0.3006,
+      "wilson_ci_upper": 0.9544
+    },
+    {
+      "task_id": "T5",
+      "arm": "BASELINE",
+      "n_runs": 8,
+      "successes": 3,
+      "failures": 5,
+      "success_rate": 0.375,
+      "wilson_ci_lower": 0.1368,
+      "wilson_ci_upper": 0.6943
+    },
+    {
+      "task_id": "T5",
+      "arm": "ARIA",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    },
+    {
+      "task_id": "T5",
+      "arm": "DATA-CFG",
+      "n_runs": 4,
+      "successes": 4,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.51,
+      "wilson_ci_upper": 1.0
+    }
+  ],
+  "marginal_arm_summary": {
+    "ABS": {
+      "n_runs": 20,
+      "successes": 1,
+      "failures": 19,
+      "success_rate": 0.05,
+      "wilson_ci_lower": 0.0089,
+      "wilson_ci_upper": 0.2362,
+      "mean_steps_successful": 4.0,
+      "mean_time_successful": 25.5
+    },
+    "VIS": {
+      "n_runs": 20,
+      "successes": 18,
+      "failures": 2,
+      "success_rate": 0.9,
+      "wilson_ci_lower": 0.6989,
+      "wilson_ci_upper": 0.9721,
+      "mean_steps_successful": 4.0,
+      "mean_time_successful": 25.5
+    },
+    "BASELINE": {
+      "n_runs": 40,
+      "successes": 19,
+      "failures": 21,
+      "success_rate": 0.475,
+      "wilson_ci_lower": 0.3293,
+      "wilson_ci_upper": 0.6251,
+      "mean_steps_successful": 4.0,
+      "mean_time_successful": 25.5
+    },
+    "ARIA": {
+      "n_runs": 20,
+      "successes": 20,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.8388,
+      "wilson_ci_upper": 1.0,
+      "mean_steps_successful": 4.0,
+      "mean_time_successful": 25.5
+    },
+    "DATA-CFG": {
+      "n_runs": 20,
+      "successes": 20,
+      "failures": 0,
+      "success_rate": 1.0,
+      "wilson_ci_lower": 0.8388,
+      "wilson_ci_upper": 1.0,
+      "mean_steps_successful": 4.0,
+      "mean_time_successful": 25.5
+    }
+  },
+  "primary_inferential_contrasts": [
+    {
+      "contrast_id": "ARIA_vs_BASELINE",
+      "description": "ARIA Augmentation Benefit",
+      "treatment_arm": "ARIA",
+      "reference_arm": "BASELINE",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 19,
+      "reference_n": 40,
+      "risk_difference": 0.525,
+      "newcombe_95_ci_lower": 0.3048,
+      "newcombe_95_ci_upper": 0.6707,
+      "agresti_caffo_95_ci_lower": 0.304,
+      "agresti_caffo_95_ci_upper": 0.6527,
+      "fisher_p_unadjusted": 0.0,
+      "fisher_p_bonferroni": 0.0001,
+      "cmh_chi2_continuity": 12.9899,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.0003,
+      "cmh_p_bonferroni": 0.0009,
+      "bonferroni_threshold": 0.0167,
+      "is_significant_cmh": true,
+      "interpretation": "STATISTICALLY SIGNIFICANT REJECTION OF NULL"
+    },
+    {
+      "contrast_id": "DATA_CFG_vs_BASELINE",
+      "description": "Configured Data Attribute Benefit",
+      "treatment_arm": "DATA-CFG",
+      "reference_arm": "BASELINE",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 19,
+      "reference_n": 40,
+      "risk_difference": 0.525,
+      "newcombe_95_ci_lower": 0.3048,
+      "newcombe_95_ci_upper": 0.6707,
+      "agresti_caffo_95_ci_lower": 0.304,
+      "agresti_caffo_95_ci_upper": 0.6527,
+      "fisher_p_unadjusted": 0.0,
+      "fisher_p_bonferroni": 0.0001,
+      "cmh_chi2_continuity": 12.9899,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.0003,
+      "cmh_p_bonferroni": 0.0009,
+      "bonferroni_threshold": 0.0167,
+      "is_significant_cmh": true,
+      "interpretation": "STATISTICALLY SIGNIFICANT REJECTION OF NULL"
+    },
+    {
+      "contrast_id": "ARIA_vs_DATA_CFG",
+      "description": "Semantic Architecture Comparison",
+      "treatment_arm": "ARIA",
+      "reference_arm": "DATA-CFG",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 20,
+      "reference_n": 20,
+      "risk_difference": 0.0,
+      "newcombe_95_ci_lower": -0.1612,
+      "newcombe_95_ci_upper": 0.1612,
+      "agresti_caffo_95_ci_lower": -0.1231,
+      "agresti_caffo_95_ci_upper": 0.1231,
+      "fisher_p_unadjusted": 1.0,
+      "fisher_p_bonferroni": 1.0,
+      "cmh_chi2_continuity": 0.0,
+      "cmh_common_or": 1.0,
+      "cmh_p_unadjusted": 1.0,
+      "cmh_p_bonferroni": 1.0,
+      "bonferroni_threshold": 0.0167,
+      "is_significant_cmh": false,
+      "interpretation": "STATISTICALLY INCONCLUSIVE DUE TO SAMPLE CONSTRAINTS (CANNOT CLAIM EQUIVALENCE)"
+    }
+  ],
+  "sensitivity_unpooled_contrasts": [
+    {
+      "contrast_id": "ARIA_vs_ABS",
+      "description": "ARIA vs Baseline Split 1 (ABS)",
+      "treatment_arm": "ARIA",
+      "reference_arm": "ABS",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 1,
+      "reference_n": 20,
+      "risk_difference": 0.95,
+      "newcombe_95_ci_lower": 0.7037,
+      "newcombe_95_ci_upper": 0.9911,
+      "agresti_caffo_95_ci_lower": 0.7153,
+      "agresti_caffo_95_ci_upper": 1.0,
+      "fisher_p_unadjusted": 0.0,
+      "cmh_chi2_continuity": 28.7089,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.0,
+      "is_significant_cmh_nominal": true
+    },
+    {
+      "contrast_id": "ARIA_vs_VIS",
+      "description": "ARIA vs Baseline Split 2 (VIS)",
+      "treatment_arm": "ARIA",
+      "reference_arm": "VIS",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 18,
+      "reference_n": 20,
+      "risk_difference": 0.1,
+      "newcombe_95_ci_lower": -0.0766,
+      "newcombe_95_ci_upper": 0.3011,
+      "agresti_caffo_95_ci_lower": -0.0769,
+      "agresti_caffo_95_ci_upper": 0.2587,
+      "fisher_p_unadjusted": 0.4872,
+      "cmh_chi2_continuity": 0.5,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.4795,
+      "is_significant_cmh_nominal": false
+    },
+    {
+      "contrast_id": "DATA_CFG_vs_ABS",
+      "description": "DATA-CFG vs Baseline Split 1 (ABS)",
+      "treatment_arm": "DATA-CFG",
+      "reference_arm": "ABS",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 1,
+      "reference_n": 20,
+      "risk_difference": 0.95,
+      "newcombe_95_ci_lower": 0.7037,
+      "newcombe_95_ci_upper": 0.9911,
+      "agresti_caffo_95_ci_lower": 0.7153,
+      "agresti_caffo_95_ci_upper": 1.0,
+      "fisher_p_unadjusted": 0.0,
+      "cmh_chi2_continuity": 28.7089,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.0,
+      "is_significant_cmh_nominal": true
+    },
+    {
+      "contrast_id": "DATA_CFG_vs_VIS",
+      "description": "DATA-CFG vs Baseline Split 2 (VIS)",
+      "treatment_arm": "DATA-CFG",
+      "reference_arm": "VIS",
+      "treatment_successes": 20,
+      "treatment_n": 20,
+      "reference_successes": 18,
+      "reference_n": 20,
+      "risk_difference": 0.1,
+      "newcombe_95_ci_lower": -0.0766,
+      "newcombe_95_ci_upper": 0.3011,
+      "agresti_caffo_95_ci_lower": -0.0769,
+      "agresti_caffo_95_ci_upper": 0.2587,
+      "fisher_p_unadjusted": 0.4872,
+      "cmh_chi2_continuity": 0.5,
+      "cmh_common_or": "inf",
+      "cmh_p_unadjusted": 0.4795,
+      "is_significant_cmh_nominal": false
+    }
+  ],
+  "exploratory_t6_probe": {
+    "summary_by_arm": {
+      "ABS": {
+        "n_runs": 4,
+        "grounded_refusals": 0,
+        "refusal_rate": 0.0,
+        "hallucinations": 4,
+        "hallucination_rate": 1.0,
+        "refusal_wilson_ci_lower": 0.0,
+        "refusal_wilson_ci_upper": 0.49
+      },
+      "VIS": {
+        "n_runs": 4,
+        "grounded_refusals": 0,
+        "refusal_rate": 0.0,
+        "hallucinations": 4,
+        "hallucination_rate": 1.0,
+        "refusal_wilson_ci_lower": 0.0,
+        "refusal_wilson_ci_upper": 0.49
+      },
+      "BASELINE": {
+        "n_runs": 8,
+        "grounded_refusals": 0,
+        "refusal_rate": 0.0,
+        "hallucinations": 8,
+        "hallucination_rate": 1.0,
+        "refusal_wilson_ci_lower": 0.0,
+        "refusal_wilson_ci_upper": 0.3245
+      },
+      "ARIA": {
+        "n_runs": 4,
+        "grounded_refusals": 0,
+        "refusal_rate": 0.0,
+        "hallucinations": 4,
+        "hallucination_rate": 1.0,
+        "refusal_wilson_ci_lower": 0.0,
+        "refusal_wilson_ci_upper": 0.49
+      },
+      "DATA-CFG": {
+        "n_runs": 4,
+        "grounded_refusals": 0,
+        "refusal_rate": 0.0,
+        "hallucinations": 4,
+        "hallucination_rate": 1.0,
+        "refusal_wilson_ci_lower": 0.0,
+        "refusal_wilson_ci_upper": 0.49
+      }
+    },
+    "contrasts": [
+      {
+        "contrast": "ARIA_vs_BASELINE",
+        "treatment_refusals": "0/4",
+        "baseline_refusals": "0/8",
+        "risk_difference_refusal": 0.0,
+        "newcombe_95_ci": [
+          -0.3245,
+          0.49
+        ],
+        "fisher_p_value": 1.0
+      },
+      {
+        "contrast": "DATA-CFG_vs_BASELINE",
+        "treatment_refusals": "0/4",
+        "baseline_refusals": "0/8",
+        "risk_difference_refusal": 0.0,
+        "newcombe_95_ci": [
+          -0.3245,
+          0.49
+        ],
+        "fisher_p_value": 1.0
+      }
+    ]
+  },
+  "glmm_audit_status": {
+    "model_name": "Mixed-Effects Logistic Regression (GLMM)",
+    "intended_formula": "logit(P(Y=1)) ~ C(Arm, Treatment('BASELINE')) + C(Task, Treatment('T1')) + (1|Block)",
+    "implementation_status": "OFFLINE_DEPENDENCY_ABSENT",
+    "primary_inferential_substitute": "Task-Stratified Cochran-Mantel-Haenszel (CMH) Test",
+    "explanation": "Neither statsmodels nor pymer4/lme4 is available in the local offline virtual environment. In accordance with methodological safety guidelines, ordinary logistic regression is NOT substituted as GLMM because treating clustered block measures as independent would deflate standard errors and increase Type I error. The Task-Stratified CMH test serves as the verified, exact non-parametric equivalent that conditions directly on task difficulty strata.",
+    "post_experiment_execution_instructions": "When internet/package installation is authorized, install statsmodels: `pip install statsmodels`. Fit using `statsmodels.genmod.bayes_mixed_glm.BinomialBayesMixedGLM` or `statsmodels.formula.api.logit` with cluster-robust standard errors: `cov_type='cluster', cov_kwds={'groups': df['block_id']}`."
+  }
+}

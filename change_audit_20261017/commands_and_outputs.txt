@@ -1,0 +1,105 @@
+=== COMMAND EXECUTION LOG: CHANGE AUDIT 2026-10-17 ===
+Workspace: C:\testing
+Audit Output Directory: C:\testing\change_audit_20261017
+Execution Environment: Windows PowerShell / Python 3.11.9 (.venv / .venv311)
+Credentials/Secrets: Redacted
+
+--------------------------------------------------------------------------------
+COMMAND 1: Check Git Repository Presence
+--------------------------------------------------------------------------------
+Command: powershell -NoProfile -Command "git status"
+Working Directory: C:\testing
+Exit Code: 1
+Output:
+fatal: not a git repository (or any of the parent directories): .git
+
+Notes:
+C:\testing is not initialized as a git repository. Git tracking baseline is unavailable.
+Per operating rules, git was not initialized or modified.
+Sub-commands (git status --short, git diff --stat, git diff --name-status, git ls-files --others)
+cannot be executed because no .git directory exists.
+
+--------------------------------------------------------------------------------
+COMMAND 2: Historical Hash Verification of full-summary.csv
+--------------------------------------------------------------------------------
+Command: C:\testing\.venv\Scripts\python.exe C:\testing\change_audit_20261017\inspect_baselines.py
+Working Directory: C:\testing
+Exit Code: 0
+Output:
+--- 1. SPECIFIC CHECK OF full-summary.csv ---
+Path: C:\testing\results\main_experiment\full-summary.csv
+Current SHA-256:  42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621
+Expected SHA-256: 42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621
+Match? True
+Size: 19249 bytes, mtime UTC: 2026-10-11T08:36:27.942611+00:00
+
+Backup Path: C:\testing\results\main_experiment_backup_20261011\full-summary.csv
+Backup SHA-256:   42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621
+Match expected?   True
+Match primary?    True
+
+--- 2. AUDIT DIRECTORIES IN C:\testing ---
+Dir: audit | Total files: 6 | Last modified: 2026-10-14T12:39:16.174799+00:00
+Dir: change_audit_20261017 | Total files: 1 | Last modified: 2026-10-17T01:35:40.135092+00:00
+Dir: research_audit_20261015_231500 | Total files: 41 | Last modified: 2026-10-17T01:06:32.569095+00:00
+Dir: scratch | Total files: 5 | Last modified: 2026-10-10T06:26:45.561096+00:00
+
+--- 3. INSPECTING PHASE 0 PRE-AUDIT MANIFESTS ---
+  file_manifest.csv: 259746 bytes, mtime: 2026-10-14T14:01:47.024196+00:00
+  generate_manifest.py: 13480 bytes, mtime: 2026-10-14T12:39:54.471708+00:00
+  integrity_proof.txt: 539 bytes, mtime: 2026-10-14T14:01:47.470528+00:00
+  manifest_backup.csv: 118515 bytes, mtime: 2026-10-14T14:01:47.035052+00:00
+  manifest_primary.csv: 111363 bytes, mtime: 2026-10-14T14:01:47.029498+00:00
+  tree_comparison.csv: 102076 bytes, mtime: 2026-10-14T14:01:47.039169+00:00
+Phase 0 file_manifest.csv rows: 894
+Phase 0 columns: dict_keys(['tree', 'relative_path', 'absolute_path', 'item_type', 'size_bytes', 'sha256', 'modified_time_utc', 'read_error'])
+  P0 record: {'tree': 'primary (main_experiment)', 'relative_path': 'full-summary.csv', 'absolute_path': 'C:\\testing\\results\\main_experiment\\full-summary.csv', 'item_type': 'file', 'size_bytes': '19249', 'sha256': '42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621', 'modified_time_utc': '2026-10-11T08:36:27.942611+00:00', 'read_error': ''}
+  P0 record: {'tree': 'backup (main_experiment_backup_20261011)', 'relative_path': 'full-summary.csv', 'absolute_path': 'C:\\testing\\results\\main_experiment_backup_20261011\\full-summary.csv', 'item_type': 'file', 'size_bytes': '19249', 'sha256': '42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621', 'modified_time_utc': '2026-10-11T08:36:27.942611+00:00', 'read_error': ''}
+
+--------------------------------------------------------------------------------
+COMMAND 3: Multi-Baseline Comparison (Manifest, Phase 0, Backup)
+--------------------------------------------------------------------------------
+Command: C:\testing\.venv\Scripts\python.exe C:\testing\change_audit_20261017\compare_all_baselines.py
+Working Directory: C:\testing
+Exit Code: 0
+Output:
+=== 1. VERIFYING ALL 2,012 FILES FROM 01_FILE_HASH_MANIFEST.CSV ===
+Total rows in 01_FILE_HASH_MANIFEST.csv: 2012
+Manifest verification complete:
+  Unchanged: 2012
+  Modified:  0
+  Missing:   0
+
+=== 2. COMPARING AGAINST PHASE 0 BASELINE (audit/phase0/file_manifest.csv) ===
+Phase 0 checked 888 files (from 2026-10-14).
+Phase 0 mismatches: 0
+
+=== 3. COMPARING main_experiment VS main_experiment_backup_20261011 ===
+Primary files: 444, Backup files: 444
+Keys difference: 0
+Content hash differences between primary and backup: 0
+
+=== 4. INVENTORY OF ALL FILES IN research_audit_20261015_231500 ===
+Total files in research_audit_20261015_231500: 41
+
+--------------------------------------------------------------------------------
+COMMAND 4: Full-Repository File Classification
+--------------------------------------------------------------------------------
+Command: C:\testing\.venv\Scripts\python.exe C:\testing\change_audit_20261017\generate_file_status.py
+Working Directory: C:\testing
+Exit Code: 0
+Output:
+Total current project files found (excluding venvs/pycache): 2059
+
+--- CLASSIFICATION SUMMARY ---
+  VERIFIED UNCHANGED       : 2012
+  VERIFIED NEW             : 43
+  UNVERIFIABLE             : 4
+
+Files classified as UNVERIFIABLE (4):
+  scratch/find_key.py (590 bytes, mtime: 2026-10-10T06:26:35.171632+00:00)
+  scratch/keys.txt (96 bytes, mtime: 2026-10-10T06:26:45.561096+00:00)
+  scratch/test_audit_offline.py (9599 bytes, mtime: 2026-10-09T09:08:32.867047+00:00)
+  scratch/test_dummy_agent.py (3387 bytes, mtime: 2026-10-09T07:17:06.145958+00:00)
+
+file_status.csv written successfully to C:\testing\change_audit_20261017\file_status.csv with 2059 rows.

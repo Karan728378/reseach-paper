@@ -1,0 +1,5 @@
+variant,n_completed,naive_steps_mean,adjusted_steps_mean,naive_time_mean_sec,adjusted_time_mean_sec,time_ci95_lower_naive,time_ci95_upper_naive,t4_subsample_n,t4_time_mean_sec,t4_time_sd_sec,simpsons_bias_warning
+v0-baseline,30,5.03,4.8,31.21,29.51,24.25,38.17,7,63.28,8.91,Naive time is skewed by T4 proportion: 7/30 (23.3%)
+v1-jsonld,23,4.17,4.8,25.29,28.51,20.21,30.38,2,54.71,1.03,Naive time is skewed by T4 proportion: 2/23 (8.7%)
+v2-aria,26,5.15,4.74,33.7,30.8,26.19,41.21,7,60.68,6.62,Naive time is skewed by T4 proportion: 7/26 (26.9%)
+v3-data-attrs,26,4.62,4.72,28.22,28.58,22.3,34.13,5,55.72,7.61,Naive time is skewed by T4 proportion: 5/26 (19.2%)

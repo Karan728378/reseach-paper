@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechMart</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+</head>
+<body data-page="home">
+
+  <!--
+    VARIANT: v3-data-attrs
+    EXPERIMENTAL FEATURE: data-* Action Identifiers
+    Protocol v2 — §2, V3 Variant Definition
+
+    PERMITTED CHANGES vs V0 (static HTML elements only):
+      - data-page="home" on <body> (updated dynamically by app-core.js on navigation)
+      - data-action="submit-search" on <form#search-form>
+      - data-field="search-input" data-action="search-query" on <input#search-input>
+      - data-action="submit-search" on <button#search-submit-btn>
+      - data-field="shipping-name|address|city|zip" on checkout inputs
+      - data-field="card-number|card-expiry|card-cvv" on payment inputs
+      - data-action="submit-checkout" on <form#checkout-form>
+      - data-action="place-order" on <button#place-order-btn>
+      - window.__VARIANT_CONFIG__.features.dataAttrs = true
+        (causes app-core.js to add data-* to dynamically rendered elements)
+
+    FORBIDDEN in this variant:
+      - <script type="application/ld+json">
+      - aria-* attributes, role= attributes
+      - <time> elements
+      - Additional <meta> content tags
+
+    All data-* attributes on dynamically rendered elements (product cards,
+    cart items, product detail) are applied by app-core.js based on the
+    dataAttrs:true feature flag — NOT present in this static HTML.
+  -->
+
+  <script>
+  window.__VARIANT_CONFIG__ = {
+    variant: 'v3-data-attrs',
+    features: {
+      jsonld:       false,
+      aria:         false,
+      dataAttrs:    true,   /* ACTIVE — data-* action identifiers */
+      evidenceMeta: false
+    }
+  };
+  </script>
+
+  <div id="app">
+
+    <header id="site-header">
+      <nav id="primary-nav">
+        <a href="#home" id="logo-link" class="logo">TechMart</a>
+
+        <!-- V3: data-action on form and inputs -->
+        <form id="search-form" action="#" data-action="submit-search">
+          <input type="text" id="search-input" placeholder="Search products..." autocomplete="off"
+                 data-field="search-input" data-action="search-query">
+          <button type="submit" id="search-submit-btn" data-action="submit-search">Search</button>
+        </form>
+
+        <div id="cart-nav-item">
+          <a href="#cart" id="cart-nav-link">Cart (<span id="cart-count">0</span>)</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main-content">
+
+      <div id="view-home" class="view active">
+        <section id="hero-section">
+          <div id="hero-content">
+            <h1 id="hero-heading">Discover Premium Tech</h1>
+            <p id="hero-subheading">Find the perfect gear for work, gaming, and everyday life.</p>
+            <div id="hero-actions">
+              <a href="#" id="hero-cta-btn" class="btn-primary">Shop All Products</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="categories-section">
+          <p id="categories-heading">Shop by Category</p>
+          <div id="categories-grid">
+            <!-- V3: data-action and data-category-slug on category buttons -->
+            <button class="category-btn" id="cat-audio" data-action="browse-category" data-category-slug="audio">Audio</button>
+            <button class="category-btn" id="cat-keyboards" data-action="browse-category" data-category-slug="keyboards">Keyboards</button>
+            <button class="category-btn" id="cat-mice" data-action="browse-category" data-category-slug="mice">Mice</button>
+            <button class="category-btn" id="cat-monitors" data-action="browse-category" data-category-slug="monitors">Monitors</button>
+            <button class="category-btn" id="cat-accessories" data-action="browse-category" data-category-slug="accessories">Accessories</button>
+          </div>
+        </section>
+
+        <section id="featured-section">
+          <div id="featured-header">
+            <h2 id="featured-heading">Featured Products</h2>
+            <p id="featured-subheading">Top-rated products from our catalog</p>
+          </div>
+          <div id="featured-products-grid" class="products-grid"></div>
+        </section>
+      </div>
+
+      <div id="view-search" class="view">
+        <section id="search-results-section">
+          <div id="search-results-header">
+            <h2 id="search-results-heading">Search Results</h2>
+          </div>
+          <div id="search-results-grid" class="products-grid"></div>
+          <div id="search-no-results" class="no-results hidden">
+            <p>No products found. Try a different search term.</p>
+          </div>
+        </section>
+      </div>
+
+      <div id="view-product" class="view">
+        <div id="product-detail-container"></div>
+      </div>
+
+      <div id="view-cart" class="view">
+        <div id="cart-container">
+          <div id="cart-header">
+            <h1 id="cart-heading">Your Cart</h1>
+          </div>
+          <div id="cart-items-list"></div>
+          <div id="cart-empty-state" class="hidden">
+            <p id="cart-empty-msg">Your cart is empty.</p>
+            <a href="#home" id="continue-shopping-link" class="btn-secondary">Continue Shopping</a>
+          </div>
+          <div id="cart-summary" class="hidden">
+            <div id="cart-total-row">
+              <span id="cart-total-label">Order Total:</span>
+              <span id="cart-total-amount" data-field="cart-total">$0.00</span>
+            </div>
+            <button id="checkout-btn" class="btn-primary btn-full" data-action="go-to-checkout">Proceed to Checkout</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- V3: data-field on checkout form inputs; data-action on form and submit button -->
+      <div id="view-checkout" class="view">
+        <div id="checkout-container">
+          <h1 id="checkout-heading">Checkout</h1>
+          <form id="checkout-form" class="checkout-form" novalidate data-action="submit-checkout">
+            <fieldset id="shipping-fieldset">
+              <legend id="shipping-legend">Shipping Information</legend>
+              <div class="field-group">
+                <label for="field-name">Full Name</label>
+                <input type="text" id="field-name" name="name" placeholder="Jane Smith"
+                       autocomplete="name" data-field="shipping-name">
+              </div>
+              <div class="field-group">
+                <label for="field-address">Street Address</label>
+                <input type="text" id="field-address" name="address" placeholder="123 Main Street"
+                       autocomplete="street-address" data-field="shipping-address">
+              </div>
+              <div class="field-group">
+                <label for="field-city">City</label>
+                <input type="text" id="field-city" name="city" placeholder="Anytown"
+                       autocomplete="address-level2" data-field="shipping-city">
+              </div>
+              <div class="field-group">
+                <label for="field-zip">ZIP Code</label>
+                <input type="text" id="field-zip" name="zip" placeholder="00000"
+                       autocomplete="postal-code" data-field="shipping-zip">
+              </div>
+            </fieldset>
+            <fieldset id="payment-fieldset">
+              <legend id="payment-legend">Payment Information</legend>
+              <div class="field-group">
+                <label for="field-card">Card Number</label>
+                <input type="text" id="field-card" name="card" placeholder="4111 1111 1111 1111"
+                       autocomplete="cc-number" data-field="card-number">
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="field-expiry">Expiry Date</label>
+                  <input type="text" id="field-expiry" name="expiry" placeholder="MM/YY"
+                         autocomplete="cc-exp" data-field="card-expiry">
+                </div>
+                <div class="field-group">
+                  <label for="field-cvv">CVV</label>
+                  <input type="text" id="field-cvv" name="cvv" placeholder="123"
+                         autocomplete="cc-csc" data-field="card-cvv">
+                </div>
+              </div>
+            </fieldset>
+            <div id="order-summary-mini">
+              <h3 id="order-summary-heading">Order Summary</h3>
+              <div id="order-items-summary"></div>
+              <div id="order-total-row">
+                <span>Total:</span>
+                <span id="checkout-total-amount">$0.00</span>
+              </div>
+            </div>
+            <!-- V3: data-action on place-order button -->
+            <button type="submit" id="place-order-btn" class="btn-primary btn-full"
+                    data-action="place-order">Place Order</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="view-confirmation" class="view">
+        <div id="confirmation-container">
+          <!-- V3: data-field on confirmation area -->
+          <div id="order-confirmation-area" data-field="order-confirmation">
+            <div id="confirmation-icon">&#10003;</div>
+            <h1 id="confirmation-heading">Order Confirmed!</h1>
+            <p id="confirmation-subheading">Thank you for your order. A confirmation has been sent to your email.</p>
+            <div id="order-details">
+              <p id="order-id-row">Order ID: <span id="order-id-display" data-field="order-id">&mdash;</span></p>
+              <p id="order-total-confirm-row">Total: <span id="order-total-display" data-field="order-total">&mdash;</span></p>
+            </div>
+            <a href="#home" id="continue-btn" class="btn-primary">Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="cart-notification" style="display:none"></div>
+
+  <script src="../../shared/products.js"></script>
+  <script src="../../shared/app-core.js"></script>
+</body>
+</html>

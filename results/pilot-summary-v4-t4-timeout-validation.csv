@@ -1,0 +1,2 @@
+run_id,phase,repetition_index,variant,task_id,success,partial_score,total_steps,total_time_seconds,order_confirmed,error_message,timestamp_end
+6aed9a37-6f6e-4169-bcc3-22b6a1d98ee5,pilot,1,v4-evidence-meta,T4,True,1.0,8,48.73399999999674,True,,2026-09-30T08:10:26.217303+00:00

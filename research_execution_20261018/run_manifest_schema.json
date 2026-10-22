@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BrowserAgentRunManifest",
+  "description": "Validation schema for individual browser-agent experimental run manifests.",
+  "type": "object",
+  "required": [
+    "run_id",
+    "scheduled_run_index",
+    "block_id",
+    "within_block_order",
+    "arm",
+    "task_id",
+    "variant",
+    "agent_model",
+    "use_vision",
+    "timestamp_start",
+    "timestamp_end",
+    "total_time_seconds",
+    "total_steps",
+    "success",
+    "partial_score",
+    "verifier_details"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^run_[a-zA-Z0-9_-]+$"
+    },
+    "scheduled_run_index": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 96
+    },
+    "block_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    },
+    "within_block_order": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 24
+    },
+    "arm": {
+      "type": "string",
+      "enum": [
+        "ABS",
+        "VIS",
+        "ARIA",
+        "DATA-CFG"
+      ]
+    },
+    "task_id": {
+      "type": "string",
+      "enum": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6"
+      ]
+    },
+    "variant": {
+      "type": "string",
+      "enum": [
+        "v0-baseline",
+        "v2-aria",
+        "v3-data-attrs"
+      ]
+    },
+    "agent_model": {
+      "type": "string"
+    },
+    "use_vision": {
+      "type": "boolean",
+      "enum": [
+        false
+      ]
+    },
+    "temperature": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "timestamp_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timestamp_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total_time_seconds": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "total_steps": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "partial_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "error_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        null,
+        "HTTP_429",
+        "TIMEOUT",
+        "PRE_STATE_ERROR",
+        "NAV_FAIL",
+        "VERIFIER_FAIL"
+      ]
+    },
+    "raw_cart_state": {
+      "type": "array"
+    },
+    "order_confirmed": {
+      "type": "boolean"
+    },
+    "verifier_details": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,6 @@
+run_id,phase,repetition_index,variant,task_id,success,partial_score,total_steps,total_time_seconds,order_confirmed,error_message,timestamp_end
+7eee848f-e09f-4a95-ad55-bcfc92938e87,full,6,v0-baseline,T1,False,0.0,0,0.0,,dry_run,
+a8a88763-cb7e-497c-b67b-3332d34e0432,full,7,v0-baseline,T1,False,0.0,0,0.0,,dry_run,
+a85e14cf-f7c9-4725-9778-63aeb14e887a,full,8,v0-baseline,T1,False,0.0,0,0.0,,dry_run,
+af4603b1-984e-4d2b-bf84-cddbd30e0f03,full,9,v0-baseline,T1,False,0.0,0,0.0,,dry_run,
+2181fb20-5f1e-4a2e-b551-82d658fcc125,full,10,v0-baseline,T1,False,0.0,0,0.0,,dry_run,

@@ -1,0 +1,44 @@
+{
+  "total_observations_analyzed": 105,
+  "two_way_anova_time": {
+    "ss_total": 28110.93,
+    "ss_task": 24245.3,
+    "df_task": 4,
+    "ms_task": 6061.33,
+    "f_statistic_task": 151.84,
+    "ss_variant_unadjusted": 986.72,
+    "df_variant": 3,
+    "ms_variant": 328.91,
+    "f_statistic_variant_unadjusted": 8.24,
+    "ss_residuals": 3393.09,
+    "df_residuals": 85,
+    "ms_residuals": 39.92,
+    "residual_skewness": 2.453
+  },
+  "assumption_evaluations": [
+    {
+      "test_family": "Success Rate Comparisons (Chi-Square / Fisher's Exact / Logistic Regression)",
+      "status": "DEGENERATE / INVALIDATED",
+      "reason": "100% of the 105 completed runs succeeded. Zero within-sample failures exist. Variance is identically zero. Statistical testing of website feature effect on success rate is mathematically undefined.",
+      "ceiling_effect_explanation": "All four website variants (v0, v1, v2, v3) achieved identical 100% completion on tasks T1-T5. The agent model (gemini-flash-lite-latest) possesses sufficient visual and HTML reasoning to solve all baseline tasks without semantic aids, creating an experimental ceiling effect."
+    },
+    {
+      "test_family": "Step Count Hypothesis Testing (ANOVA / t-tests on Steps)",
+      "status": "VIOLATED (Zero Variance on Simple Tasks)",
+      "reason": "For tasks T1, T2, T3, and T5, step counts have exactly zero variance across all variants (T1=4.0, T2=3.0, T3=4.0, T5=4.0). The normality and homoscedasticity assumptions of ANOVA are completely violated.",
+      "recommendation": "Step counts for T1, T2, T3, T5 should be reported as deterministic constant paths. Only task T4 exhibits variance in step count (8 to 10 steps)."
+    },
+    {
+      "test_family": "Execution Time ANOVA / Regression",
+      "status": "CONDITIONALLY VALID WITH TASK BLOCKING",
+      "reason": "Task complexity accounts for massive variance (F_task = 151.84, p < 0.001), while unadjusted Variant differences are primarily driven by unequal task proportions (Simpson's paradox).",
+      "recommendation": "Must use task-blocked factorial models or report marginal means. Naive one-way ANOVA across variants is invalid."
+    },
+    {
+      "test_family": "Statistical Power at N=5 per cell",
+      "status": "CRITICAL METHODOLOGICAL WARNING",
+      "reason": "A sample size of N=5 per cell does NOT guarantee statistical power. For small effect sizes (e.g. Cohen's d < 0.5) or noisy execution latency (e.g. standard deviations of 5-8s on T4), post-hoc power at N=5 is under 30%. N=5 only provides a minimal floor for estimating sample variance without degrees-of-freedom collapse.",
+      "recommendation": "Do not claim that N=5 or N=2-8 achieves adequate power for confirming equivalence or small latency gains. Acknowledge this study as exploratory / preliminary."
+    }
+  ]
+}

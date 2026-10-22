@@ -1,0 +1,105 @@
+MASTER AUDIT — RAW COMMAND AND ANALYSIS LOG
+Generated: 2026-10-18T08:24:39.230490+00:00
+Mode: 100% Offline, Zero-API, Read-Only
+Project: C:\testing
+Output: C:\testing\master_audit_20261018
+
+================================================================================
+
+================================================================================
+MASTER AUDIT — END-TO-END OFFLINE RESEARCH AUDIT & PROTOCOL READINESS
+Project: C:\testing
+Output:  C:\testing\master_audit_20261018
+Date:    2026-10-18
+Mode:    100% Offline, Zero-API, Read-Only
+================================================================================
+
+=== PHASE A: File Integrity Manifest ===
+  index.html: UNCHANGED
+  runner/agent-runner.py: UNCHANGED
+  runner/verifier.py: UNCHANGED
+  runner/logger.py: UNCHANGED
+  runner/requirements.txt: UNCHANGED
+  tasks/task-definitions.json: UNCHANGED
+  shared/products.js: UNCHANGED
+  shared/app-core.js: UNCHANGED
+  shared/styles.css: UNCHANGED
+  variants/v0-baseline/index.html: UNCHANGED
+  variants/v1-jsonld/index.html: UNCHANGED
+  variants/v2-aria/index.html: UNCHANGED
+  variants/v3-data-attrs/index.html: UNCHANGED
+  variants/v4-evidence-meta/index.html: UNCHANGED
+  results/main_experiment/full-summary.csv: UNCHANGED
+  results/pilot-summary-clean.csv: UNCHANGED
+  results/pilot-summary.csv: UNCHANGED
+  [WRITTEN] file_integrity.csv
+
+=== PHASE B: Historical Experiment Reconstruction ===
+  Total runs: 147  |  Successes: 105  |  Failures: 42
+  Overall success rate: 71.4%
+  Quota failure onset estimated at run index: 106
+
+=== PHASE C: browser-use Observation Pipeline Trace ===
+  DISABLED_ELEMENTS: ['style', 'script', 'head', 'meta', 'link', 'title']
+  script in DISABLED: True
+  meta in DISABLED:   True
+  Custom data-* stripped by default: ['data-warranty', 'data-lot-code', 'data-stock-count', 'data-return-window', 'data-ship-date']
+
+=== PHASE D: Task Definitions & Verifier Correctness ===
+
+=== PHASE E: Treatment Design Evaluation ===
+
+=== PHASE F: Experimental Design & Randomization ===
+
+=== PHASE G: Statistical Power Analysis ===
+  ABS_vs_VIS_presence_vs_absence: N=24/arm -> Power=100.0%
+  ABS_vs_VIS_presence_vs_absence: N=30/arm -> Power=100.0%
+  VIS_vs_ARIA_large_channel_degradation: N=24/arm -> Power=75.1%
+  VIS_vs_ARIA_large_channel_degradation: N=30/arm -> Power=84.3%
+  VIS_vs_DATA_CFG_moderate_channel_effect: N=24/arm -> Power=35.6%
+  VIS_vs_DATA_CFG_moderate_channel_effect: N=30/arm -> Power=43.0%
+  ARIA_vs_DATA_CFG_small_channel_effect: N=24/arm -> Power=23.3%
+  ARIA_vs_DATA_CFG_small_channel_effect: N=30/arm -> Power=28.2%
+
+=== PHASE H: Quota, Cost & Execution Safety ===
+
+=== PHASE I: Literature & Novelty Limitations ===
+
+=== OFFLINE TEST SUITE ===
+  [PASS] A1_variant_html_exists_v0-baseline: C:\testing\variants\v0-baseline\index.html
+  [PASS] A1_variant_html_exists_v1-jsonld: C:\testing\variants\v1-jsonld\index.html
+  [PASS] A1_variant_html_exists_v2-aria: C:\testing\variants\v2-aria\index.html
+  [PASS] A1_variant_html_exists_v3-data-attrs: C:\testing\variants\v3-data-attrs\index.html
+  [PASS] A2_task_definitions_valid_json: 5 tasks found
+  [PASS] A3_summary_csv_columns: rows=147
+  [PASS] B1_quota_failure_runs_detected: Runs with 7 steps & <12s (quota signature): 42
+  [PASS] B2_successful_runs_min_steps: 105 successful runs checked
+  [PASS] C1_serializer_file_exists: C:\testing\.venv311\Lib\site-packages\browser_use\dom\serializer\serializer.py
+  [PASS] C2_script_in_DISABLED_ELEMENTS: 'script' confirmed in DISABLED_ELEMENTS
+  [PASS] C3_aria_label_in_DEFAULT_INCLUDE_ATTRIBUTES: 'aria-label' confirmed in DEFAULT_INCLUDE_ATTRIBUTES
+  [PASS] C4_data_lot_code_NOT_in_default: data-lot-code absent from DEFAULT_INCLUDE_ATTRIBUTES
+  [PASS] D1_T3_target_sku_is_wh002: target_sku=wh-002
+  [PASS] D2_T5_has_setup_script: setup_script present
+  [PASS] F1_block_arithmetic_24x4_96: K=4, J=6, R=4, block_size=24, total=96
+  [PASS] G1_power_ABS_vs_VIS_at_N24_gt99pct: Power=100.0%
+  [PASS] G2_power_ARIA_vs_DATA_at_N24_small_effect: Power=23.3% (confirms N=24 insufficient for delta=0.15 equivalence claims)
+
+  OFFLINE TESTS: 17/17 PASSED
+  [WRITTEN] offline_test_results.json
+  [WRITTEN] power_analysis.json
+  [WRITTEN] protocol_manifest.json
+  [WRITTEN] 00_EXECUTIVE_SUMMARY.md
+  [WRITTEN] 01_AUDIT_PHASES_DETAIL.md
+  [WRITTEN] 02_TREATMENT_DESIGN_MATRIX.md
+  [WRITTEN] 03_VERIFIER_FLAW_REPORT.md
+  [WRITTEN] 04_HISTORICAL_DATA_ANALYSIS.md
+  [WRITTEN] 05_PROTOCOL_v3_READINESS.md
+  [WRITTEN] 06_STATISTICAL_DESIGN.md
+  [WRITTEN] 07_BROWSER_PIPELINE_TRACE.md
+  [WRITTEN] 08_QUOTA_AND_COST_PLAN.md
+  [WRITTEN] 09_NOVELTY_AND_LIMITATIONS.md
+  [WRITTEN] 10_OFFLINE_TEST_SUITE_RESULTS.md
+  [WRITTEN] 11_FINAL_READINESS_VERDICT.md
+
+================================================================================
+END OF LOG

@@ -1,0 +1,202 @@
+{
+  "audit_timestamp_utc": "2026-10-21T18:10:00Z",
+  "auditor": "Antigravity Scientific Methodology & Statistics Team",
+  "design_counts": {
+    "schedule_arms": {
+      "count": 4,
+      "arms": [
+        "BASELINE (nominal ABS)",
+        "BASELINE_REP (nominal VIS)",
+        "ARIA",
+        "DATA-CFG"
+      ],
+      "schedule_reps_per_arm": 24,
+      "total_schedule_runs": 96
+    },
+    "tasks": {
+      "total_tasks_scheduled": 6,
+      "primary_benchmark_tasks": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5"
+      ],
+      "exploratory_probe_tasks": [
+        "T6"
+      ],
+      "primary_benchmark_runs_per_arm": 20,
+      "exploratory_probe_runs_per_arm": 4
+    },
+    "sample_size_reconciliation": {
+      "N_total_schedule": 96,
+      "N_primary_benchmark": 80,
+      "N_exploratory_probe": 16,
+      "n_per_arm_primary_T1_T5": 20,
+      "n_pooled_baseline_primary_T1_T5": 40,
+      "n_per_arm_full_schedule_T1_T6": 24,
+      "n_pooled_baseline_full_schedule_T1_T6": 48
+    },
+    "comparisons": {
+      "familywise_error_rate": 0.05,
+      "planned_confirmatory_contrasts": 3,
+      "contrasts": [
+        "ARIA vs Pooled Baseline",
+        "DATA-CFG vs Pooled Baseline",
+        "ARIA vs DATA-CFG"
+      ],
+      "bonferroni_adjusted_alpha": 0.016667
+    }
+  },
+  "analytical_homogeneous_n40_vs_n20": {
+    "delta_0_70_p0_10_to_0_80": {
+      "delta": 0.7,
+      "p1": 0.1,
+      "p2": 0.8,
+      "power_alpha_0_05": 1.0,
+      "power_alpha_0_0167": 0.9999
+    },
+    "delta_0_35_p0_50_to_0_85": {
+      "delta": 0.35,
+      "p1": 0.5,
+      "p2": 0.85,
+      "power_alpha_0_05": 0.7858,
+      "power_alpha_0_0167": 0.6093
+    },
+    "delta_0_20_p0_65_to_0_85": {
+      "delta": 0.2,
+      "p1": 0.65,
+      "p2": 0.85,
+      "power_alpha_0_05": 0.3513,
+      "power_alpha_0_0167": 0.1923
+    },
+    "delta_0_15_p0_70_to_0_85": {
+      "delta": 0.15,
+      "p1": 0.7,
+      "p2": 0.85,
+      "power_alpha_0_05": 0.2222,
+      "power_alpha_0_0167": 0.1071
+    }
+  },
+  "analytical_homogeneous_n20_vs_n20": {
+    "delta_0_20_p0_65_to_0_85": {
+      "delta": 0.2,
+      "power_alpha_0_0167": 0.1686
+    },
+    "delta_0_15_p0_70_to_0_85": {
+      "delta": 0.15,
+      "power_alpha_0_0167": 0.1004
+    }
+  },
+  "rcbd_simulation_results": {
+    "Large Disparity (Delta=0.70)": {
+      "delta": 0.7,
+      "pooled_fisher_power": 0.988,
+      "stratified_cmh_power": 0.9855,
+      "mcse": 0.0027
+    },
+    "Moderate Effect (Delta=0.35)": {
+      "delta": 0.35,
+      "pooled_fisher_power": 0.4965,
+      "stratified_cmh_power": 0.496,
+      "mcse": 0.0112
+    },
+    "Small Effect (Delta=0.20)": {
+      "delta": 0.2,
+      "pooled_fisher_power": 0.108,
+      "stratified_cmh_power": 0.1085,
+      "mcse": 0.007
+    },
+    "Subtle Effect (Delta=0.15)": {
+      "delta": 0.15,
+      "pooled_fisher_power": 0.0565,
+      "stratified_cmh_power": 0.058,
+      "mcse": 0.0052
+    }
+  },
+  "sample_sizes_for_80pct_superiority": {
+    "delta_0_20_p0_70_to_0_90": {
+      "p1": 0.7,
+      "p2": 0.9,
+      "delta": 0.2,
+      "n_per_arm": 82.4,
+      "N_total_4_arms": 332
+    },
+    "delta_0_20_p0_65_to_0_85": {
+      "p1": 0.65,
+      "p2": 0.85,
+      "delta": 0.2,
+      "n_per_arm": 96.8,
+      "N_total_4_arms": 388
+    },
+    "delta_0_20_p0_50_to_0_70_max_variance": {
+      "p1": 0.5,
+      "p2": 0.7,
+      "delta": 0.2,
+      "n_per_arm": 124.3,
+      "N_total_4_arms": 500
+    },
+    "delta_0_15_p0_70_to_0_85": {
+      "p1": 0.7,
+      "p2": 0.85,
+      "delta": 0.15,
+      "n_per_arm": 160.9,
+      "N_total_4_arms": 644
+    },
+    "delta_0_15_p0_50_to_0_65_max_variance": {
+      "p1": 0.5,
+      "p2": 0.65,
+      "delta": 0.15,
+      "n_per_arm": 226.1,
+      "N_total_4_arms": 908
+    }
+  },
+  "sample_sizes_for_80pct_tost_equivalence": {
+    "equivalence_margin_0_10_p_0_80": {
+      "p": 0.8,
+      "margin": 0.1,
+      "n_per_arm": 274.1,
+      "N_total_4_arms": 1100
+    },
+    "equivalence_margin_0_10_p_0_75": {
+      "p": 0.75,
+      "margin": 0.1,
+      "n_per_arm": 321.3,
+      "N_total_4_arms": 1288
+    },
+    "equivalence_margin_0_10_p_0_70": {
+      "p": 0.7,
+      "margin": 0.1,
+      "n_per_arm": 359.8,
+      "N_total_4_arms": 1440
+    },
+    "equivalence_margin_0_10_p_0_50_max_variance": {
+      "p": 0.5,
+      "margin": 0.1,
+      "n_per_arm": 428.3,
+      "N_total_4_arms": 1716
+    }
+  },
+  "clustering_and_deff": {
+    "m_reps_per_task_arm": 4,
+    "deff_by_icc": {
+      "rho_0_05": 1.15,
+      "rho_0_10": 1.3,
+      "rho_0_20": 1.6,
+      "rho_0_30": 1.9
+    },
+    "effective_sample_size_at_n20": {
+      "rho_0_05": 17.4,
+      "rho_0_10": 15.4,
+      "rho_0_20": 12.5,
+      "rho_0_30": 10.5
+    }
+  },
+  "verified_audit_summary": {
+    "reported_power_delta_0_20_rcbd": "10.85% (VERIFIED: simulation yields 10.8% +- 0.7%)",
+    "reported_power_delta_0_15_rcbd": "5.80% (VERIFIED: simulation yields 5.8% +- 0.5%)",
+    "reported_sample_size_superiority": "120-125/arm (VERIFIED under max variance p=0.50->0.70; ~97/arm under p=0.65->0.85)",
+    "reported_sample_size_equivalence": "340-360/arm (VERIFIED under p=0.70; 274/arm under p=0.80; 428/arm under p=0.50)",
+    "n_discrepancy_verdict": "Fully reconciled: N=96 is full schedule (6 tasks), N=80 is primary benchmark (5 tasks), n=20 is per-arm primary count, n=40 is pooled baseline."
+  }
+}

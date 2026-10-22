@@ -1,0 +1,49 @@
+{
+  "case_name": "full_observable_pipeline",
+  "has_screenshot": true,
+  "screenshot_base64_len": 40766,
+  "dom_representation": "Channel Exposure Verification Page\nWidget Pro\nVISIBLE-TEXT-DESCRIPTION-TOKEN-1122\nPrice: $19.99\n[49]<button id=aria-btn role=button aria-label=ARIA-LABEL-TOKEN-3344 aria-describedby=aria-desc />\n\tAccessible Action Button\nARIA-HIDDEN-TOKEN-5566\n<div id=aria-div aria-label=ARIA-DIV-TOKEN-9900 />\n\tNon-interactive ARIA container\n[67]<button id=data-btn data-action=add-to-cart data-sku=DATA-SKU-TOKEN-8899 data-stock=42 />\n\tAdd to Cart (with data attributes)\n<span id=data-span data-field=custom-meta data-lot-code=DATA-LOT-TOKEN-4455 />\n\tLot info span\n<time id=time-elem datetime=2026-10-15T00:00:00Z />\n\t(verified 2026-10-15)",
+  "injected_metadata": "[Page Structured Data (JSON-LD)]\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Product\",\n  \"name\": \"Widget Pro\",\n  \"sku\": \"wdg-001\",\n  \"description\": \"JSONLD-ONLY-DESCRIPTION-TOKEN-7788\",\n  \"offers\": {\n    \"@type\": \"Offer\",\n    \"price\": \"19.99\",\n    \"priceCurrency\": \"USD\",\n    \"availability\": \"https://schema.org/InStock\"\n  }\n}",
+  "token_results": {
+    "VISIBLE_TEXT": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "ARIA_INTERACTIVE": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "ARIA_HIDDEN": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "ARIA_NON_INTERACTIVE": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "DATA_ATTR_INTERACTIVE": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "DATA_ATTR_NON_INTERACTIVE": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "JSONLD_SCRIPT": {
+      "in_dom_representation": false,
+      "in_model_messages": true
+    },
+    "META_TAG": {
+      "in_dom_representation": false,
+      "in_model_messages": false
+    },
+    "DATETIME_ATTR": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    },
+    "TEMPORAL_TEXT": {
+      "in_dom_representation": true,
+      "in_model_messages": true
+    }
+  }
+}

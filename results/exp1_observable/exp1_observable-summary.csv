@@ -1,0 +1,7 @@
+run_id,phase,repetition_index,variant,task_id,success,partial_score,total_steps,total_time_seconds,order_confirmed,error_message,timestamp_end
+0c27c2da-809d-474e-bfa5-de9d43a9dfff,exp1_observable,1,v0-baseline,T1,False,0.0,0,0.0,,dry_run,
+4e8eaba0-58a3-41a1-ad1a-79f230b91088,exp1_observable,1,v1-jsonld,T1,True,1.0,4,60.061999999918044,False,,2026-10-09T07:10:19.088643+00:00
+2638b2ef-2750-41e2-9a18-78927644b093,exp1_observable,1,v1-jsonld,T1,False,0.0,0,0.0,,dry_run,
+1b511825-1386-4a1f-adf7-9151a343623b,exp1_observable,1,v1-jsonld,T1,True,1.0,4,32.75,False,,2026-10-09T09:02:59.944663+00:00
+709ab8f6-60b4-4bf7-8349-5d7721353e49,exp1_observable,1,v1-jsonld,T1,False,0.0,0,0.0,,dry_run,
+f13b62ee-c1f6-473e-813e-67ab60dcaf2a,exp1_observable,1,v1-jsonld,T1,True,1.0,4,26.92199999978766,False,,2026-10-09T09:11:20.224797+00:00

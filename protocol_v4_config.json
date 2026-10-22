@@ -1,0 +1,51 @@
+{
+  "_schema_version": "4.0-DRAFT",
+  "protocol_name": "Additive Semantic Markup Evaluation on Autonomous Browser Agents",
+  "status": "DRAFT_REQUIRES_HUMAN_REVIEW",
+  "safety_gate": {
+    "live_execution_locked": true,
+    "require_cli_flags": ["--live", "--confirm-live-execution"],
+    "cost_ceiling_usd": 10.0
+  },
+  "design": {
+    "type": "Randomized Complete Block Design (RCBD)",
+    "blocks": 4,
+    "arms_count": 4,
+    "arms": [
+      { "id": "BASELINE", "alias": "ABS", "variant": "v0-baseline", "whitelist": "DEFAULT" },
+      { "id": "BASELINE_REP", "alias": "VIS", "variant": "v0-baseline", "whitelist": "DEFAULT" },
+      { "id": "ARIA", "alias": "ARIA", "variant": "v2-aria", "whitelist": "DEFAULT" },
+      { "id": "DATA-CFG", "alias": "DATA-CFG", "variant": "v3-data-attrs", "whitelist": "EXTENDED" }
+    ],
+    "sample_sizes": {
+      "exploratory_pilot_total_N": 96,
+      "exploratory_pilot_primary_N": 80,
+      "exploratory_pilot_per_arm_n": 20,
+      "confirmatory_superiority_total_N": 480,
+      "confirmatory_superiority_per_arm_n": 120,
+      "confirmatory_equivalence_total_N": 1360,
+      "confirmatory_equivalence_per_arm_n": 340
+    }
+  },
+  "tasks": {
+    "primary_grounded_action": ["T1", "T2", "T3", "T4", "T5"],
+    "exploratory_negative_probe": ["T6"]
+  },
+  "agent_parameters": {
+    "use_vision": false,
+    "max_steps": 30,
+    "timeout_seconds": 120,
+    "temperature": 0.0,
+    "browser": "chromium_headless",
+    "viewport": { "width": 1920, "height": 1080, "device_scale_factor": 1.0 }
+  },
+  "statistical_plan": {
+    "primary_inferential_model": "Task-Stratified Cochran-Mantel-Haenszel (CMH)",
+    "nominal_alpha": 0.05,
+    "planned_contrasts": 3,
+    "bonferroni_adjusted_alpha": 0.016667,
+    "effect_size_metric": "Risk Difference",
+    "ci_methods": ["Newcombe Hybrid Score", "Agresti-Caffo Adjusted Wald"],
+    "mandatory_non_equivalence_rule": true
+  }
+}

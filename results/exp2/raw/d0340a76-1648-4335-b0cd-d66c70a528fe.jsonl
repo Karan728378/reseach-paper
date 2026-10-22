@@ -1,0 +1,1 @@
+{"record_type": "run_header", "run_id": "d0340a76-1648-4335-b0cd-d66c70a528fe", "variant": "v0-baseline", "task_id": "H1", "phase": "pilot", "repetition": 1, "agent_model": "gemini-flash-lite-latest", "agent_temperature": null, "static_verification_passed": true, "timestamp": "2026-10-08T06:04:54.578701+00:00"}

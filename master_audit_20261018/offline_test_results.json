@@ -1,0 +1,96 @@
+{
+  "audit_date": "2026-10-18",
+  "generated_utc": "2026-10-18T08:24:39.230490+00:00",
+  "summary": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0
+  },
+  "tests": [
+    {
+      "test": "A1_variant_html_exists_v0-baseline",
+      "status": "PASS",
+      "details": "C:\\testing\\variants\\v0-baseline\\index.html"
+    },
+    {
+      "test": "A1_variant_html_exists_v1-jsonld",
+      "status": "PASS",
+      "details": "C:\\testing\\variants\\v1-jsonld\\index.html"
+    },
+    {
+      "test": "A1_variant_html_exists_v2-aria",
+      "status": "PASS",
+      "details": "C:\\testing\\variants\\v2-aria\\index.html"
+    },
+    {
+      "test": "A1_variant_html_exists_v3-data-attrs",
+      "status": "PASS",
+      "details": "C:\\testing\\variants\\v3-data-attrs\\index.html"
+    },
+    {
+      "test": "A2_task_definitions_valid_json",
+      "status": "PASS",
+      "details": "5 tasks found"
+    },
+    {
+      "test": "A3_summary_csv_columns",
+      "status": "PASS",
+      "details": "rows=147"
+    },
+    {
+      "test": "B1_quota_failure_runs_detected",
+      "status": "PASS",
+      "details": "Runs with 7 steps & <12s (quota signature): 42"
+    },
+    {
+      "test": "B2_successful_runs_min_steps",
+      "status": "PASS",
+      "details": "105 successful runs checked"
+    },
+    {
+      "test": "C1_serializer_file_exists",
+      "status": "PASS",
+      "details": "C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\dom\\serializer\\serializer.py"
+    },
+    {
+      "test": "C2_script_in_DISABLED_ELEMENTS",
+      "status": "PASS",
+      "details": "'script' confirmed in DISABLED_ELEMENTS"
+    },
+    {
+      "test": "C3_aria_label_in_DEFAULT_INCLUDE_ATTRIBUTES",
+      "status": "PASS",
+      "details": "'aria-label' confirmed in DEFAULT_INCLUDE_ATTRIBUTES"
+    },
+    {
+      "test": "C4_data_lot_code_NOT_in_default",
+      "status": "PASS",
+      "details": "data-lot-code absent from DEFAULT_INCLUDE_ATTRIBUTES"
+    },
+    {
+      "test": "D1_T3_target_sku_is_wh002",
+      "status": "PASS",
+      "details": "target_sku=wh-002"
+    },
+    {
+      "test": "D2_T5_has_setup_script",
+      "status": "PASS",
+      "details": "setup_script present"
+    },
+    {
+      "test": "F1_block_arithmetic_24x4_96",
+      "status": "PASS",
+      "details": "K=4, J=6, R=4, block_size=24, total=96"
+    },
+    {
+      "test": "G1_power_ABS_vs_VIS_at_N24_gt99pct",
+      "status": "PASS",
+      "details": "Power=100.0%"
+    },
+    {
+      "test": "G2_power_ARIA_vs_DATA_at_N24_small_effect",
+      "status": "PASS",
+      "details": "Power=23.3% (confirms N=24 insufficient for delta=0.15 equivalence claims)"
+    }
+  ]
+}

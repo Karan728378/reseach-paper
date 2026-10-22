@@ -1,0 +1,6 @@
+task_id,n_total,steps_mean,steps_median,steps_min,steps_max,steps_sd,time_mean_seconds,time_median_seconds,time_min_seconds,time_max_seconds,time_sd_seconds,time_iqr_seconds,time_ci95_lower,time_ci95_upper,notes
+T1,26,4,4.0,4,4,0.0,25.43,22.72,19.11,58.42,9.08,2.72,21.76,29.09,DETERMINISTIC_STEPS_ZERO_VARIANCE
+T2,20,3,3.0,3,3,0.0,18.15,17.26,14.73,30.14,3.49,2.98,16.52,19.79,DETERMINISTIC_STEPS_ZERO_VARIANCE
+T3,19,4,4,4,4,0.0,22.8,22.47,20.14,26.62,1.67,2.48,21.99,23.6,DETERMINISTIC_STEPS_ZERO_VARIANCE
+T4,21,8.81,9,8,10,0.81,59.8,59.3,48.59,78.19,7.74,9.93,56.27,63.32,STOCHASTIC_MULTI_STEP_TASK
+T5,19,4,4,4,4,0.0,21.83,20.33,17.7,35.16,4.25,3.53,19.78,23.87,DETERMINISTIC_STEPS_ZERO_VARIANCE

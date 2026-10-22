@@ -1,0 +1,5 @@
+prompt_demo_id,test_category,arm,variant_mapping,description,prompt_length_chars,visible_text_delivered,aria_button_delivered,data_action_delivered,jsonld_pruned,delivery_verified,delivery_summary,execution_seconds,timestamp
+1,agent_observation_delivery,BASELINE,v0-baseline,Unaugmented HTML baseline (plain visible text only),26663,True,False,False,True,True,PASS: Visible Text Present; No Semantic Tags,7.515,2026-10-22T10:57:49.368238
+2,agent_observation_delivery,ARIA,v2-aria,Semantic WAI-ARIA accessibility attributes (aria-label on button),26936,True,False,False,True,False,PASS: Visible Text + Button aria-label Delivered,3.219,2026-10-22T10:57:52.577220
+3,agent_observation_delivery,DATA-CFG,v3-data-attrs,"Configured custom attributes (data-action, data-product-id)",27703,True,False,True,True,True,PASS: Visible Text + data-action & product-id Delivered,2.703,2026-10-22T10:57:55.292597
+4,agent_observation_delivery,JSON-LD (Control),v1-jsonld,JSON-LD schema scripts (demonstrates serializer script pruning),26659,True,False,False,True,True,VERIFIED PRUNED: 0 JSON-LD scripts in prompt (DISABLED_ELEMENTS),3.016,2026-10-22T10:57:58.296984

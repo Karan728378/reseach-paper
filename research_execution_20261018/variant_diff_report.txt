@@ -1,0 +1,223 @@
+=== VARIANT COMPARISON REPORT ===
+
+--- 1. v0-baseline vs v2-aria ---
+ARIA/role attributes removed from v2: {'aria-label': 14, 'role': 2, 'aria-live': 1, 'aria-atomic': 1, 'aria-required': 7}
+RESULT: Differences found beyond aria-* / role!
+--- 
++++ 
+@@ -9,23 +9,25 @@
+   <link href="../../shared/styles.css" rel="stylesheet"/>
+  </head>
+  <body>
+-  VARIANT: v0-baseline EXPERIMENTAL FEATURES: none Protocol v2 — §2, V0 Variant Definition This is the canonical reference HTML. All other variants are minimal diffs on this file. Do not add experimental features here.
++  VARIANT: v2-aria EXPERIMENTAL FEATURE: ARIA / Accessibility Semantics Protocol v2 — §2, V2 Variant Definition PERMITTED CHANGES vs V0 (static HTML elements only): - role= attributes on: &lt;nav&gt;, &lt;form#search-form&gt; - aria-label= on: &lt;nav&gt;, &lt;input#search-input&gt;, &lt;button#search-submit-btn&gt;, &lt;div#cart-nav-item&gt;, form inputs, &lt;button#place-order-btn&gt; - aria-live= aria-atomic= on: &lt;span#cart-count&gt; - aria-required= on: checkout form inputs - role="status" on: #order-confirmation-area - window.__VARIANT_CONFIG__.features.aria = true (causes app-core.js to add ARIA to dynamically rendered elements) FORBIDDEN in this variant: - &lt;script type="application/ld+json"&gt; - data-* attributes of any kind - &lt;time&gt; elements - Additional &lt;meta&gt; content tags All ARIA attributes on dynamically rendered elements (product cards, cart items, product detail) are applied by app-core.js based on the aria:true feature flag — NOT present in this static HTML.
+   <script>
+-   window.__VARIANT_CONFIG__ = { variant: 'v0-baseline', features: { jsonld: false, aria: false, dataAttrs: false, evidenceMeta: false } };
++   window.__VARIANT_CONFIG__ = { variant: 'v2-aria', features: { jsonld: false, aria: true, /* ACTIVE — ARIA/accessibility semantics */ dataAttrs: false, evidenceMeta: false } };
+   </script>
+   <div id="app">
+-   ============================================================ HEADER / NAVIGATION V0: no ARIA attributes, no data-* attributes ============================================================
+    <header id="site-header">
++    V2: aria-label added to &lt;nav&gt;
+     <nav id="primary-nav">
+      <a class="logo" href="#home" id="logo-link">
+       TechMart
+      </a>
++     V2: role="search" and aria-label on form and input
+      <form action="#" id="search-form">
+       <input autocomplete="off" id="search-input" placeholder="Search products..." type="text"/>
+       <button id="search-submit-btn" type="submit">
+        Search
+       </button>
+      </form>
++     V2: aria-label on cart nav; aria-live on count badge
+      <div id="cart-nav-item">
+       <a href="#cart" id="cart-nav-link">
+        Cart (
+@@ -37,9 +39,7 @@
+      </div>
+     </nav>
+    </header>
+-   ============================================================ MAIN CONTENT — SPA Views ============================================================
+    <main id="main-content">
+-    HOME VIEW
+     <div class="view active" id="view-home">
+      <section id="hero-section">
+       <div id="hero-content">
+@@ -91,7 +91,6 @@
+       </div>
+      </section>
+     </div>
+-    SEARCH RESULTS VIEW
+     <div class="view" id="view-search">
+      <section id="search-results-section">
+       <div id="search-results-header">
+@@ -108,12 +107,10 @@
+
+--- 2. v0-baseline vs v3-data-attrs ---
+data-* attributes removed from v3: {'data-page': 1, 'data-action': 11, 'data-field': 12, 'data-category-slug': 5}
+RESULT: Differences found beyond data-*!
+--- 
++++ 
+@@ -9,17 +9,17 @@
+   <link href="../../shared/styles.css" rel="stylesheet"/>
+  </head>
+  <body>
+-  VARIANT: v0-baseline EXPERIMENTAL FEATURES: none Protocol v2 — §2, V0 Variant Definition This is the canonical reference HTML. All other variants are minimal diffs on this file. Do not add experimental features here.
++  VARIANT: v3-data-attrs EXPERIMENTAL FEATURE: data-* Action Identifiers Protocol v2 — §2, V3 Variant Definition PERMITTED CHANGES vs V0 (static HTML elements only): - data-page="home" on &lt;body&gt; (updated dynamically by app-core.js on navigation) - data-action="submit-search" on &lt;form#search-form&gt; - data-field="search-input" data-action="search-query" on &lt;input#search-input&gt; - data-action="submit-search" on &lt;button#search-submit-btn&gt; - data-field="shipping-name|address|city|zip" on checkout inputs - data-field="card-number|card-expiry|card-cvv" on payment inputs - data-action="submit-checkout" on &lt;form#checkout-form&gt; - data-action="place-order" on &lt;button#place-order-btn&gt; - window.__VARIANT_CONFIG__.features.dataAttrs = true (causes app-core.js to add data-* to dynamically rendered elements) FORBIDDEN in this variant: - &lt;script type="application/ld+json"&gt; - aria-* attributes, role= attributes - &lt;time&gt; elements - Additional &lt;meta&gt; content tags All data-* attributes on dynamically rendered elements (product cards, cart items, product detail) are applied by app-core.js based on the dataAttrs:true feature flag — NOT present in this static HTML.
+   <script>
+-   window.__VARIANT_CONFIG__ = { variant: 'v0-baseline', features: { jsonld: false, aria: false, dataAttrs: false, evidenceMeta: false } };
++   window.__VARIANT_CONFIG__ = { variant: 'v3-data-attrs', features: { jsonld: false, aria: false, dataAttrs: true, /* ACTIVE — data-* action identifiers */ evidenceMeta: false } };
+   </script>
+   <div id="app">
+-   ============================================================ HEADER / NAVIGATION V0: no ARIA attributes, no data-* attributes ============================================================
+    <header id="site-header">
+     <nav id="primary-nav">
+      <a class="logo" href="#home" id="logo-link">
+       TechMart
+      </a>
++     V3: data-action on form and inputs
+      <form action="#" id="search-form">
+       <input autocomplete="off" id="search-input" placeholder="Search products..." type="text"/>
+       <button id="search-submit-btn" type="submit">
+@@ -37,9 +37,7 @@
+      </div>
+     </nav>
+    </header>
+-   ============================================================ MAIN CONTENT — SPA Views ============================================================
+    <main id="main-content">
+-    HOME VIEW
+     <div class="view active" id="view-home">
+      <section id="hero-section">
+       <div id="hero-content">
+@@ -61,6 +59,7 @@
+        Shop by Category
+       </p>
+       <div id="categories-grid">
++       V3: data-action and data-category-slug on category buttons
+        <button class="category-btn" id="cat-audio">
+         Audio
+        </button>
+@@ -91,7 +90,6 @@
+       </div>
+      </section>
+     </div>
+-    SEARCH RESULTS VIEW
+     <div class="view" id="view-search">
+      <section id="search-results-section">
+       <div id="search-results-header">
+@@ -108,12 +106,10 @@
+
+--- 3. v0-baseline vs v1-jsonld ---
+JSON-LD scripts found in v1: 2
+RESULT: Differences found beyond JSON-LD script!
+--- 
++++ 
+@@ -7,14 +7,15 @@
+    TechMart
+   </title>
+   <link href="../../shared/styles.css" rel="stylesheet"/>
++  V1 EXPERIMENTAL FEATURE: JSON-LD Structured Data Protocol v2 — §2, V1 Variant Definition PERMITTED CHANGES vs V0: - &lt;script type="application/ld+json"&gt; blocks in &lt;head&gt; (static page-level schemas) - window.__VARIANT_CONFIG__.features.jsonld = true (causes app-core.js to inject product/search JSON-LD dynamically) FORBIDDEN in this variant: - aria-* attributes, role= attributes - data-* attributes of any kind - &lt;time&gt; elements - Additional &lt;meta&gt; content tags Static schemas below are page-shell level. Product/search schemas are injected dynamically by app-core.js (id="dynamic-jsonld").
++  V1: WebSite schema (static, page-shell level)
++  V1: BreadcrumbList schema (static, page-shell level)
+  </head>
+  <body>
+-  VARIANT: v0-baseline EXPERIMENTAL FEATURES: none Protocol v2 — §2, V0 Variant Definition This is the canonical reference HTML. All other variants are minimal diffs on this file. Do not add experimental features here.
+   <script>
+-   window.__VARIANT_CONFIG__ = { variant: 'v0-baseline', features: { jsonld: false, aria: false, dataAttrs: false, evidenceMeta: false } };
++   window.__VARIANT_CONFIG__ = { variant: 'v1-jsonld', features: { jsonld: true, /* ACTIVE — JSON-LD structured data */ aria: false, dataAttrs: false, evidenceMeta: false } };
+   </script>
+   <div id="app">
+-   ============================================================ HEADER / NAVIGATION V0: no ARIA attributes, no data-* attributes ============================================================
+    <header id="site-header">
+     <nav id="primary-nav">
+      <a class="logo" href="#home" id="logo-link">
+@@ -37,9 +38,7 @@
+      </div>
+     </nav>
+    </header>
+-   ============================================================ MAIN CONTENT — SPA Views ============================================================
+    <main id="main-content">
+-    HOME VIEW
+     <div class="view active" id="view-home">
+      <section id="hero-section">
+       <div id="hero-content">
+@@ -91,7 +90,6 @@
+       </div>
+      </section>
+     </div>
+-    SEARCH RESULTS VIEW
+     <div class="view" id="view-search">
+      <section id="search-results-section">
+       <div id="search-results-header">
+@@ -108,12 +106,10 @@
+       </div>
+      </section>
+     </div>
+-    PRODUCT DETAIL VIEW
+     <div class="view" id="view-product">
+      <div id="product-detail-container">
+      </div>
+     </div>
+-    CART VIEW
+     <div class="view" id="view-cart">
+
+--- 4. v0-baseline vs v4-evidence-meta ---
+Meta tags in v4: 5
+Extra meta tags in v4: 3
+RESULT: Differences found beyond extra meta tags!
+--- 
++++ 
+@@ -7,14 +7,14 @@
+    TechMart
+   </title>
+   <link href="../../shared/styles.css" rel="stylesheet"/>
++  VARIANT: v4-evidence-meta EXPERIMENTAL FEATURE: Evidence / Temporal Metadata Protocol v2 — §2, V4 Variant Definition PERMITTED CHANGES vs V0: Static HTML (&lt;head&gt;): - &lt;meta name="last-updated" content="..."&gt; - &lt;meta name="data-freshness" content="live"&gt; - &lt;meta name="content-version" content="1.0"&gt; Dynamic (via app-core.js when evidenceMeta:true): - &lt;time class="temporal-meta" datetime="2026-09-01T00:00:00Z"&gt; elements adjacent to price, stock, rating displays (hidden via .temporal-meta CSS rule) FORBIDDEN in this variant — ZERO: - data-* attributes of ANY kind (including data-action, data-field, data-product-id) - aria-* attributes, role= attributes - &lt;script type="application/ld+json"&gt; Protocol v2 §3 (C3 note): .temporal-meta CSS class is defined in shared/styles.css for all variants. No elements use this class in V0, V1, V2, or V3.
++  V4: Page-level temporal/evidence metadata (standard HTML &lt;meta&gt; elements only)
+  </head>
+  <body>
+-  VARIANT: v0-baseline EXPERIMENTAL FEATURES: none Protocol v2 — §2, V0 Variant Definition This is the canonical reference HTML. All other variants are minimal diffs on this file. Do not add experimental features here.
+   <script>
+-   window.__VARIANT_CONFIG__ = { variant: 'v0-baseline', features: { jsonld: false, aria: false, dataAttrs: false, evidenceMeta: false } };
++   window.__VARIANT_CONFIG__ = { variant: 'v4-evidence-meta', features: { jsonld: false, aria: false, dataAttrs: false, evidenceMeta: true /* ACTIVE — evidence/temporal metadata */ } };
+   </script>
+   <div id="app">
+-   ============================================================ HEADER / NAVIGATION V0: no ARIA attributes, no data-* attributes ============================================================
+    <header id="site-header">
+     <nav id="primary-nav">
+      <a class="logo" href="#home" id="logo-link">
+@@ -37,9 +37,7 @@
+      </div>
+     </nav>
+    </header>
+-   ============================================================ MAIN CONTENT — SPA Views ============================================================
+    <main id="main-content">
+-    HOME VIEW
+     <div class="view active" id="view-home">
+      <section id="hero-section">
+       <div id="hero-content">
+@@ -91,7 +89,6 @@
+       </div>
+      </section>
+     </div>
+-    SEARCH RESULTS VIEW
+     <div class="view" id="view-search">
+      <section id="search-results-section">
+       <div id="search-results-header">
+@@ -108,12 +105,10 @@
+       </div>
+      </section>
+     </div>
+-    PRODUCT DETAIL VIEW
+     <div class="view" id="view-product">
+      <div id="product-detail-container">
+      </div>
+     </div>
+-    CART VIEW
+     <div class="view" id="view-cart">
+      <div id="cart-container">
+
+--- 5. Shared Asset Comparison ---
+Shared file: app-core.js exists, size=27961 bytes
+Shared file: products.js exists, size=4857 bytes
+Shared file: styles.css exists, size=20005 bytes

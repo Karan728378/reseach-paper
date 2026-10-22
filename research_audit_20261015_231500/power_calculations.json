@@ -1,0 +1,46 @@
+[
+  {
+    "scenario": "Large effect (90% vs 50%)",
+    "p1": 0.9,
+    "p2": 0.5,
+    "n_for_80pct_power": 20,
+    "n_for_90pct_power": 26,
+    "power_at_n15": 0.684,
+    "power_at_n20": 0.813,
+    "power_at_n25": 0.895,
+    "power_at_n30": 0.943
+  },
+  {
+    "scenario": "Moderate effect (85% vs 60%)",
+    "p1": 0.85,
+    "p2": 0.6,
+    "n_for_80pct_power": 49,
+    "n_for_90pct_power": 65,
+    "power_at_n15": 0.328,
+    "power_at_n20": 0.422,
+    "power_at_n25": 0.508,
+    "power_at_n30": 0.586
+  },
+  {
+    "scenario": "Small effect (85% vs 70%)",
+    "p1": 0.85,
+    "p2": 0.7,
+    "n_for_80pct_power": 121,
+    "n_for_90pct_power": 161,
+    "power_at_n15": 0.161,
+    "power_at_n20": 0.201,
+    "power_at_n25": 0.242,
+    "power_at_n30": 0.282
+  },
+  {
+    "scenario": "Negative control vs channel (10% vs 80%)",
+    "p1": 0.8,
+    "p2": 0.1,
+    "n_for_80pct_power": 7,
+    "n_for_90pct_power": 9,
+    "power_at_n15": 0.996,
+    "power_at_n20": 1.0,
+    "power_at_n25": 1.0,
+    "power_at_n30": 1.0
+  }
+]

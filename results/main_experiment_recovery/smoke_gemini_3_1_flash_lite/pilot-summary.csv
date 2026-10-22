@@ -1,0 +1,2 @@
+scheduled_run_index,run_id,phase,repetition_index,variant,task_id,success,partial_score,total_steps,total_time_seconds,order_confirmed,error_message,timestamp_end
+1,d8d17798-290f-4948-bf83-eee322c64e9d,pilot,1,v0-baseline,T1,False,0,6,107.375,False,,2026-10-13T18:25:14.651193+00:00

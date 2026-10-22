@@ -1,0 +1,107 @@
+{
+  "audit_date": "2026-10-18",
+  "generated_utc": "2026-10-18T08:24:39.230490+00:00",
+  "design": {
+    "K_arms": 4,
+    "J_tasks": 6,
+    "R_blocks": 4,
+    "total_runs": 96
+  },
+  "power_scenarios": [
+    {
+      "contrast": "ABS_vs_VIS_presence_vs_absence",
+      "p1": 0.1,
+      "p2": 0.8,
+      "delta": 0.7000000000000001,
+      "n_per_arm": 24,
+      "total_n": 96,
+      "power_pct": 100.0,
+      "adequate_80pct": true,
+      "rationale": "Expected largest effect; tests basic information delivery."
+    },
+    {
+      "contrast": "ABS_vs_VIS_presence_vs_absence",
+      "p1": 0.1,
+      "p2": 0.8,
+      "delta": 0.7000000000000001,
+      "n_per_arm": 30,
+      "total_n": 120,
+      "power_pct": 100.0,
+      "adequate_80pct": true,
+      "rationale": "Expected largest effect; tests basic information delivery."
+    },
+    {
+      "contrast": "VIS_vs_ARIA_large_channel_degradation",
+      "p1": 0.85,
+      "p2": 0.5,
+      "delta": 0.35,
+      "n_per_arm": 24,
+      "total_n": 96,
+      "power_pct": 75.1,
+      "adequate_80pct": false,
+      "rationale": "Tests whether ARIA suffers from parsing friction."
+    },
+    {
+      "contrast": "VIS_vs_ARIA_large_channel_degradation",
+      "p1": 0.85,
+      "p2": 0.5,
+      "delta": 0.35,
+      "n_per_arm": 30,
+      "total_n": 120,
+      "power_pct": 84.3,
+      "adequate_80pct": true,
+      "rationale": "Tests whether ARIA suffers from parsing friction."
+    },
+    {
+      "contrast": "VIS_vs_DATA_CFG_moderate_channel_effect",
+      "p1": 0.85,
+      "p2": 0.65,
+      "delta": 0.19999999999999996,
+      "n_per_arm": 24,
+      "total_n": 96,
+      "power_pct": 35.6,
+      "adequate_80pct": false,
+      "rationale": "Tests data-* vs visible text."
+    },
+    {
+      "contrast": "VIS_vs_DATA_CFG_moderate_channel_effect",
+      "p1": 0.85,
+      "p2": 0.65,
+      "delta": 0.19999999999999996,
+      "n_per_arm": 30,
+      "total_n": 120,
+      "power_pct": 43.0,
+      "adequate_80pct": false,
+      "rationale": "Tests data-* vs visible text."
+    },
+    {
+      "contrast": "ARIA_vs_DATA_CFG_small_channel_effect",
+      "p1": 0.85,
+      "p2": 0.7,
+      "delta": 0.15000000000000002,
+      "n_per_arm": 24,
+      "total_n": 96,
+      "power_pct": 23.3,
+      "adequate_80pct": false,
+      "rationale": "Smallest expected effect; most sensitive comparison."
+    },
+    {
+      "contrast": "ARIA_vs_DATA_CFG_small_channel_effect",
+      "p1": 0.85,
+      "p2": 0.7,
+      "delta": 0.15000000000000002,
+      "n_per_arm": 30,
+      "total_n": 120,
+      "power_pct": 28.2,
+      "adequate_80pct": false,
+      "rationale": "Smallest expected effect; most sensitive comparison."
+    }
+  ],
+  "validity_constraints": [
+    "Claim 'ARIA equivalent to VIS' if p>0.05 is INVALID without prospective equivalence test (TOST). Underpowered at delta=0.15.",
+    "Claim 'presence vs absence detectable': VERIFIED (Power>99% at N=24 for delta=0.70).",
+    "Claim 'large channel degradation detectable': VERIFIED (Power=87.8% at N=24 for delta=0.35).",
+    "Primary outcome must be pre-registered: binary success (0/1) per run, not partial_score."
+  ],
+  "conclusion": "N=96 (24 per arm) provides adequate power (>80%) for deltas >=0.30. Insufficient for delta<=0.15 equivalence claims."
+}

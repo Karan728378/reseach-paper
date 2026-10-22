@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechMart — Research Study Hub</title>
+  <link rel="stylesheet" href="shared/styles.css">
+  <style>
+    /* Hub-only styles — not part of any experimental variant */
+    body { padding: 0; }
+    .hub-main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+    .hub-hero { padding: 64px 0 40px; text-align: center; }
+    .hub-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.03em;
+      background: linear-gradient(135deg, #f0f4ff, #818cf8, #22d3ee);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 12px; }
+    .hub-hero p { color: var(--text-2); font-size: 1.05rem; max-width: 600px; margin: 0 auto 8px; line-height: 1.7; }
+    .rq-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px 28px; margin: 28px auto; max-width: 780px; text-align: left; }
+    .rq-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--text-3); margin-bottom: 8px; }
+    .rq-text { font-size: .95rem; color: var(--text-1); line-height: 1.7; font-style: italic; }
+    .section-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-3); margin: 48px 0 16px; }
+    .hub-card a.btn-primary { margin-top: 4px; }
+    .pilot-status { background: var(--bg-card); border: 1px solid rgba(251,191,36,.3);
+      border-radius: var(--radius); padding: 16px 24px; margin-bottom: 32px;
+      display: flex; align-items: center; gap: 14px; }
+    .pilot-dot { width: 10px; height: 10px; background: #fbbf24; border-radius: 50%;
+      box-shadow: 0 0 8px #fbbf24; flex-shrink: 0; }
+    .pilot-text { font-size: .9rem; color: var(--text-2); }
+    .pilot-text strong { color: var(--warning); }
+    .task-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .task-table th, .task-table td { padding: 10px 14px; text-align: left; font-size: .875rem;
+      border-bottom: 1px solid var(--border); }
+    .task-table th { color: var(--text-3); font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; font-size: .75rem; }
+    .task-table td { color: var(--text-2); }
+    .task-table td:first-child { color: var(--accent-light); font-weight: 700; font-family: monospace; }
+    .protocol-link { display: inline-flex; align-items: center; gap: 6px;
+      color: var(--accent-light); font-size: .875rem; }
+  </style>
+</head>
+<body>
+  <header id="site-header">
+    <nav id="primary-nav" style="justify-content: space-between;">
+      <span class="logo">TechMart</span>
+      <span style="color: var(--text-3); font-size: .85rem; font-weight: 500;">Research Study Hub &mdash; Protocol v2</span>
+    </nav>
+  </header>
+
+  <main class="hub-main">
+
+    <div class="hub-hero">
+      <h1>Agent-Ready Web Interfaces</h1>
+      <p>Undergraduate research experiment examining how individual HTML/metadata features affect LLM-based browser-agent task performance.</p>
+    </div>
+
+    <div class="rq-box">
+      <div class="rq-label">Research Question</div>
+      <p class="rq-text">"How does each individual agent-ready web feature&mdash;JSON-LD, ARIA semantics, data-* action identifiers, and evidence/temporal metadata&mdash;affect LLM-based browser-agent task performance when tested independently on an otherwise identical e-commerce website?"</p>
+    </div>
+
+    <div class="pilot-status">
+      <div class="pilot-dot"></div>
+      <div class="pilot-text">
+        <strong>Awaiting Pilot Run</strong> &mdash; 5 variants &times; 5 tasks &times; 5 repetitions = 125 runs.
+        Run <code>python runner/verifier.py</code> to confirm pre-flight checks before starting.
+      </div>
+    </div>
+
+    <p class="section-title">Experimental Variants</p>
+    <div class="hub-grid">
+
+      <div class="hub-card">
+        <div class="hub-card-variant">Variant V0</div>
+        <div class="hub-card-badge badge-baseline">Baseline</div>
+        <div class="hub-card-title">No Agent Features</div>
+        <div class="hub-card-desc">Canonical reference. Semantically impoverished HTML — no ARIA, no JSON-LD, no data-*, no temporal metadata. Agent relies on visible text and layout alone.</div>
+        <a href="variants/v0-baseline/index.html" class="btn-primary" id="link-v0" target="_blank">Open V0 &rarr;</a>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-variant">Variant V1</div>
+        <div class="hub-card-badge badge-jsonld">JSON-LD</div>
+        <div class="hub-card-title">Structured Data Only</div>
+        <div class="hub-card-desc">Adds <code>schema.org</code> JSON-LD blocks for WebSite, Product, Offer, AggregateRating, and SearchAction. Visually and functionally identical to V0.</div>
+        <a href="variants/v1-jsonld/index.html" class="btn-primary" id="link-v1" target="_blank">Open V1 &rarr;</a>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-variant">Variant V2</div>
+        <div class="hub-card-badge badge-aria">ARIA Semantics</div>
+        <div class="hub-card-title">Accessibility Semantics Only</div>
+        <div class="hub-card-desc">Adds <code>role=</code>, <code>aria-label=</code>, <code>aria-live=</code>, and <code>aria-required=</code> attributes. No new elements. Visually identical to V0.</div>
+        <a href="variants/v2-aria/index.html" class="btn-primary" id="link-v2" target="_blank">Open V2 &rarr;</a>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-variant">Variant V3</div>
+        <div class="hub-card-badge badge-dataattrs">data-* Identifiers</div>
+        <div class="hub-card-title">Action Identifiers Only</div>
+        <div class="hub-card-desc">Adds <code>data-action=</code>, <code>data-field=</code>, <code>data-product-id=</code> attributes to interactive elements. Zero visual change.</div>
+        <a href="variants/v3-data-attrs/index.html" class="btn-primary" id="link-v3" target="_blank">Open V3 &rarr;</a>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-variant">Variant V4</div>
+        <div class="hub-card-badge badge-evidence">Temporal Metadata</div>
+        <div class="hub-card-title">Evidence / Temporal Only</div>
+        <div class="hub-card-desc">Adds <code>&lt;meta&gt;</code> freshness tags in <code>&lt;head&gt;</code> and hidden <code>&lt;time datetime=""&gt;</code> elements adjacent to price/stock/rating. No data-* of any kind.</div>
+        <a href="variants/v4-evidence-meta/index.html" class="btn-primary" id="link-v4" target="_blank">Open V4 &rarr;</a>
+      </div>
+
+    </div>
+
+    <p class="section-title">Task Battery (T1 – T5)</p>
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Instruction to Agent</th>
+            <th>Success Criterion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>T1</td>
+            <td>Search for 'wireless headphones' and add the least expensive result to your cart.</td>
+            <td>window.__cart__ contains sku: 'wh-001' ($49.99)</td>
+          </tr>
+          <tr>
+            <td>T2</td>
+            <td>Find the product called 'Mechanical Keyboard Pro' and add it to your cart.</td>
+            <td>window.__cart__ contains sku: 'mkp-001'</td>
+          </tr>
+          <tr>
+            <td>T3</td>
+            <td>Add any product with a customer rating of 4 stars or higher to your cart.</td>
+            <td>window.__cart__ contains any eligible sku (rating &ge; 4.0)</td>
+          </tr>
+          <tr>
+            <td>T4</td>
+            <td>Add any product to cart, then complete checkout with provided test details.</td>
+            <td>window.__orderConfirmed__ === true</td>
+          </tr>
+          <tr>
+            <td>T5</td>
+            <td>There is one item in your cart. Navigate to the cart and remove it so the cart is empty.</td>
+            <td>window.__cart__.length === 0 (pre-loaded by runner)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="section-title">Quick Commands</p>
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px;">
+      <pre style="color: var(--text-2); font-size: .875rem; line-height: 1.8; overflow-x: auto;"><code># 1. Install dependencies
+pip install -r runner/requirements.txt
+playwright install chromium
+
+# 2. Start local server (from C:\testing\)
+python -m http.server 8080
+
+# 3. Run static pre-flight verification
+python runner/verifier.py
+
+# 4. Generate visual verification screenshots (requires server running)
+python runner/verifier.py --visual
+
+# 5. When ready: run the 125-run pilot (DO NOT RUN YET — await approval)
+# python runner/agent-runner.py --phase pilot</code></pre>
+    </div>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechMart</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+
+  <!--
+    V1 EXPERIMENTAL FEATURE: JSON-LD Structured Data
+    Protocol v2 — §2, V1 Variant Definition
+
+    PERMITTED CHANGES vs V0:
+      - <script type="application/ld+json"> blocks in <head> (static page-level schemas)
+      - window.__VARIANT_CONFIG__.features.jsonld = true
+        (causes app-core.js to inject product/search JSON-LD dynamically)
+
+    FORBIDDEN in this variant:
+      - aria-* attributes, role= attributes
+      - data-* attributes of any kind
+      - <time> elements
+      - Additional <meta> content tags
+
+    Static schemas below are page-shell level.
+    Product/search schemas are injected dynamically by app-core.js (id="dynamic-jsonld").
+  -->
+
+  <!-- V1: WebSite schema (static, page-shell level) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "TechMart",
+    "description": "Premium technology products — keyboards, monitors, audio, and accessories.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8080/variants/v1-jsonld/#search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- V1: BreadcrumbList schema (static, page-shell level) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "TechMart",
+    "description": "Your destination for premium tech gear.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "TechMart Product Catalog",
+      "numberOfItems": 8
+    }
+  }
+  </script>
+
+</head>
+<body>
+
+  <script>
+  window.__VARIANT_CONFIG__ = {
+    variant: 'v1-jsonld',
+    features: {
+      jsonld:       true,   /* ACTIVE — JSON-LD structured data */
+      aria:         false,
+      dataAttrs:    false,
+      evidenceMeta: false
+    }
+  };
+  </script>
+
+  <div id="app">
+
+    <header id="site-header">
+      <nav id="primary-nav">
+        <a href="#home" id="logo-link" class="logo">TechMart</a>
+
+        <form id="search-form" action="#">
+          <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
+          <button type="submit" id="search-submit-btn">Search</button>
+        </form>
+
+        <div id="cart-nav-item">
+          <a href="#cart" id="cart-nav-link">Cart (<span id="cart-count">0</span>)</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main-content">
+
+      <div id="view-home" class="view active">
+        <section id="hero-section">
+          <div id="hero-content">
+            <h1 id="hero-heading">Discover Premium Tech</h1>
+            <p id="hero-subheading">Find the perfect gear for work, gaming, and everyday life.</p>
+            <div id="hero-actions">
+              <a href="#" id="hero-cta-btn" class="btn-primary">Shop All Products</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="categories-section">
+          <p id="categories-heading">Shop by Category</p>
+          <div id="categories-grid">
+            <button class="category-btn" id="cat-audio">Audio</button>
+            <button class="category-btn" id="cat-keyboards">Keyboards</button>
+            <button class="category-btn" id="cat-mice">Mice</button>
+            <button class="category-btn" id="cat-monitors">Monitors</button>
+            <button class="category-btn" id="cat-accessories">Accessories</button>
+          </div>
+        </section>
+
+        <section id="featured-section">
+          <div id="featured-header">
+            <h2 id="featured-heading">Featured Products</h2>
+            <p id="featured-subheading">Top-rated products from our catalog</p>
+          </div>
+          <div id="featured-products-grid" class="products-grid"></div>
+        </section>
+      </div>
+
+      <div id="view-search" class="view">
+        <section id="search-results-section">
+          <div id="search-results-header">
+            <h2 id="search-results-heading">Search Results</h2>
+          </div>
+          <div id="search-results-grid" class="products-grid"></div>
+          <div id="search-no-results" class="no-results hidden">
+            <p>No products found. Try a different search term.</p>
+          </div>
+        </section>
+      </div>
+
+      <div id="view-product" class="view">
+        <div id="product-detail-container"></div>
+      </div>
+
+      <div id="view-cart" class="view">
+        <div id="cart-container">
+          <div id="cart-header">
+            <h1 id="cart-heading">Your Cart</h1>
+          </div>
+          <div id="cart-items-list"></div>
+          <div id="cart-empty-state" class="hidden">
+            <p id="cart-empty-msg">Your cart is empty.</p>
+            <a href="#home" id="continue-shopping-link" class="btn-secondary">Continue Shopping</a>
+          </div>
+          <div id="cart-summary" class="hidden">
+            <div id="cart-total-row">
+              <span id="cart-total-label">Order Total:</span>
+              <span id="cart-total-amount">$0.00</span>
+            </div>
+            <button id="checkout-btn" class="btn-primary btn-full">Proceed to Checkout</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-checkout" class="view">
+        <div id="checkout-container">
+          <h1 id="checkout-heading">Checkout</h1>
+          <form id="checkout-form" class="checkout-form" novalidate>
+            <fieldset id="shipping-fieldset">
+              <legend id="shipping-legend">Shipping Information</legend>
+              <div class="field-group">
+                <label for="field-name">Full Name</label>
+                <input type="text" id="field-name" name="name" placeholder="Jane Smith" autocomplete="name">
+              </div>
+              <div class="field-group">
+                <label for="field-address">Street Address</label>
+                <input type="text" id="field-address" name="address" placeholder="123 Main Street" autocomplete="street-address">
+              </div>
+              <div class="field-group">
+                <label for="field-city">City</label>
+                <input type="text" id="field-city" name="city" placeholder="Anytown" autocomplete="address-level2">
+              </div>
+              <div class="field-group">
+                <label for="field-zip">ZIP Code</label>
+                <input type="text" id="field-zip" name="zip" placeholder="00000" autocomplete="postal-code">
+              </div>
+            </fieldset>
+            <fieldset id="payment-fieldset">
+              <legend id="payment-legend">Payment Information</legend>
+              <div class="field-group">
+                <label for="field-card">Card Number</label>
+                <input type="text" id="field-card" name="card" placeholder="4111 1111 1111 1111" autocomplete="cc-number">
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="field-expiry">Expiry Date</label>
+                  <input type="text" id="field-expiry" name="expiry" placeholder="MM/YY" autocomplete="cc-exp">
+                </div>
+                <div class="field-group">
+                  <label for="field-cvv">CVV</label>
+                  <input type="text" id="field-cvv" name="cvv" placeholder="123" autocomplete="cc-csc">
+                </div>
+              </div>
+            </fieldset>
+            <div id="order-summary-mini">
+              <h3 id="order-summary-heading">Order Summary</h3>
+              <div id="order-items-summary"></div>
+              <div id="order-total-row">
+                <span>Total:</span>
+                <span id="checkout-total-amount">$0.00</span>
+              </div>
+            </div>
+            <button type="submit" id="place-order-btn" class="btn-primary btn-full">Place Order</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="view-confirmation" class="view">
+        <div id="confirmation-container">
+          <div id="order-confirmation-area">
+            <div id="confirmation-icon">&#10003;</div>
+            <h1 id="confirmation-heading">Order Confirmed!</h1>
+            <p id="confirmation-subheading">Thank you for your order. A confirmation has been sent to your email.</p>
+            <div id="order-details">
+              <p id="order-id-row">Order ID: <span id="order-id-display">&mdash;</span></p>
+              <p id="order-total-confirm-row">Total: <span id="order-total-display">&mdash;</span></p>
+            </div>
+            <a href="#home" id="continue-btn" class="btn-primary">Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="cart-notification" style="display:none"></div>
+
+  <script src="../../shared/products.js"></script>
+  <script src="../../shared/app-core.js"></script>
+</body>
+</html>

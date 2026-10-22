@@ -1,0 +1,25 @@
+task_id,arm,target_entity,target_field,target_token,source_channel_location,expected_serialized_observation,prohibited_leakage_channels,verifier_type,success_criterion
+T1,ABS,wh-001,price,[ABSENT],None (omitted),No price token,"Visible text, aria-label, data-amount, titles, URLs",cart_contains_sku,window.__cart__.some(i => i.sku === 'wh-001')
+T1,VIS,wh-001,price,$49.99,span.product-price textContent,Text '$49.99',"aria-label, data-amount, titles, URLs",cart_contains_sku,window.__cart__.some(i => i.sku === 'wh-001')
+T1,ARIA,wh-001,price,Price: $49.99,span.product-price[aria-label],Attribute aria-label='Price: $49.99',"Visible text, data-amount, titles, URLs",cart_contains_sku,window.__cart__.some(i => i.sku === 'wh-001')
+T1,DATA-CFG,wh-001,price,49.99,span.product-price[data-amount],Attribute data-amount='49.99',"Visible text, aria-label, titles, URLs",cart_contains_sku,window.__cart__.some(i => i.sku === 'wh-001')
+T2,ABS,mkp-001,name,[ABSENT],None (omitted),No product name token,"Visible text, aria-label, data-product-id, titles",cart_contains_sku,window.__cart__.some(i => i.sku === 'mkp-001')
+T2,VIS,mkp-001,name,Mechanical Keyboard Pro,h3.product-name textContent,Text 'Mechanical Keyboard Pro',"aria-label, data-product-id",cart_contains_sku,window.__cart__.some(i => i.sku === 'mkp-001')
+T2,ARIA,mkp-001,name,Mechanical Keyboard Pro,div.product-card[aria-label],Attribute aria-label contains 'Mechanical Keyboard Pro',"Visible text, data-product-id",cart_contains_sku,window.__cart__.some(i => i.sku === 'mkp-001')
+T2,DATA-CFG,mkp-001,name,mkp-001,div.product-card[data-product-id],Attribute data-product-id='mkp-001',"Visible text, aria-label",cart_contains_sku,window.__cart__.some(i => i.sku === 'mkp-001')
+T3,ABS,wh-002,rating,[ABSENT],None (omitted),No rating token,"Visible text, aria-label, data-rating",cart_exact_match,len(cart) === 1 && cart[0].sku === 'wh-002'
+T3,VIS,wh-002,rating,4.5,span.product-rating textContent,Text '4.5',"aria-label, data-rating",cart_exact_match,len(cart) === 1 && cart[0].sku === 'wh-002'
+T3,ARIA,wh-002,rating,Rating: 4.5 out of 5 stars,span.product-rating[aria-label],Attribute aria-label='Rating: 4.5 out of 5 stars',"Visible text, data-rating",cart_exact_match,len(cart) === 1 && cart[0].sku === 'wh-002'
+T3,DATA-CFG,wh-002,rating,4.5,span.product-rating[data-rating],Attribute data-rating='4.5',"Visible text, aria-label",cart_exact_match,len(cart) === 1 && cart[0].sku === 'wh-002'
+T4,ABS,mse-001,checkout,[ABSENT],None (omitted),No item/form token,"Visible text, aria-label, data-product-id",order_confirmed_with_sku,orderConfirmed === true && items.has('mse-001')
+T4,VIS,mse-001,checkout,ErgoGlide Mouse,h3.product-name textContent,Text 'ErgoGlide Mouse',"aria-label, data-product-id",order_confirmed_with_sku,orderConfirmed === true && items.has('mse-001')
+T4,ARIA,mse-001,checkout,Add ErgoGlide Mouse to cart,button.btn-add-cart[aria-label],Attribute aria-label='Add ErgoGlide Mouse to cart',"Visible text, data-product-id",order_confirmed_with_sku,orderConfirmed === true && items.has('mse-001')
+T4,DATA-CFG,mse-001,checkout,mse-001,button.btn-add-cart[data-product-id],Attribute data-product-id='mse-001',"Visible text, aria-label",order_confirmed_with_sku,orderConfirmed === true && items.has('mse-001')
+T5,ABS,wh-001,cart_removal,[ABSENT],None (omitted),No remove action token,"Visible text, aria-label, data-action",cart_empty_verified,pre_cart.length === 1 && post_cart.length === 0
+T5,VIS,wh-001,cart_removal,Remove,button.btn-remove textContent,Text 'Remove',"aria-label, data-action",cart_empty_verified,pre_cart.length === 1 && post_cart.length === 0
+T5,ARIA,wh-001,cart_removal,Remove SoundFlow Air 3 from cart,button.btn-remove[aria-label],Attribute aria-label='Remove SoundFlow Air 3 from cart',"Visible text, data-action",cart_empty_verified,pre_cart.length === 1 && post_cart.length === 0
+T5,DATA-CFG,wh-001,cart_removal,remove-item,button.btn-remove[data-action],Attribute data-action='remove-item',"Visible text, aria-label",cart_empty_verified,pre_cart.length === 1 && post_cart.length === 0
+T6,ABS,wh-001,warranty_duration,[ABSENT],None (omitted),No warranty token,"Visible text, aria-label, data-warranty",grounded_text_extraction,Agent refusal or fail match
+T6,VIS,wh-001,warranty_duration,36 months,p.product-warranty textContent,Text 'Warranty: 36 months',"aria-label, data-warranty",grounded_text_extraction,Regex r'\b36\s*(months?|mo)\b'
+T6,ARIA,wh-001,warranty_duration,Manufacturer warranty: 36 months,div.product-warranty[aria-label],Attribute aria-label='Manufacturer warranty: 36 months',"Visible text, data-warranty",grounded_text_extraction,Regex r'\b36\s*(months?|mo)\b'
+T6,DATA-CFG,wh-001,warranty_duration,36m,div.product-warranty[data-warranty],Attribute data-warranty='36m',"Visible text, aria-label",grounded_text_extraction,Regex r'\b36\s*(months?|mo|m)\b'

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="product-sku" content="wdg-001">
+    <meta name="inventory-stock" content="42">
+    <title>Channel Exposure Test Fixture</title>
+    <!-- Structured Data Channel: JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Widget Pro",
+      "sku": "wdg-001",
+      "description": "JSONLD-ONLY-DESCRIPTION-TOKEN-7788",
+      "offers": {
+        "@type": "Offer",
+        "price": "19.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+</head>
+<body>
+    <h1>Channel Exposure Verification Page</h1>
+    
+    <!-- Visible Text Channel -->
+    <div id="visible-container">
+        <h2 id="prod-title">Widget Pro</h2>
+        <p id="prod-desc">VISIBLE-TEXT-DESCRIPTION-TOKEN-1122</p>
+        <p id="prod-price">Price: $19.99</p>
+    </div>
+
+    <!-- ARIA Channel -->
+    <div id="aria-container">
+        <!-- Interactive element with aria-label -->
+        <button id="aria-btn" role="button" aria-label="ARIA-LABEL-TOKEN-3344" aria-describedby="aria-desc">
+            Accessible Action Button
+        </button>
+        <span id="aria-desc" aria-hidden="true">ARIA-HIDDEN-TOKEN-5566</span>
+        <!-- Non-interactive element with aria-label -->
+        <div id="aria-div" aria-label="ARIA-DIV-TOKEN-9900">Non-interactive ARIA container</div>
+    </div>
+
+    <!-- data-* Attributes Channel -->
+    <div id="data-container">
+        <!-- Interactive element with data-* -->
+        <button id="data-btn" data-action="add-to-cart" data-sku="DATA-SKU-TOKEN-8899" data-stock="42">
+            Add to Cart (with data attributes)
+        </button>
+        <!-- Non-interactive element with data-* -->
+        <span id="data-span" data-field="custom-meta" data-lot-code="DATA-LOT-TOKEN-4455">
+            Lot info span
+        </span>
+    </div>
+
+    <!-- Temporal / Meta element -->
+    <div id="meta-container">
+        <time id="time-elem" datetime="2026-10-15T00:00:00Z" class="temporal-meta">
+            (verified 2026-10-15)
+        </time>
+    </div>
+</body>
+</html>
