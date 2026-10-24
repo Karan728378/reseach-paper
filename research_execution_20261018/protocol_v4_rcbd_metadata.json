@@ -1,0 +1,52 @@
+{
+  "protocol_version": "Protocol v4 RCBD",
+  "status": "PROPOSED / UNEXECUTED",
+  "creation_date": "2026-10-25",
+  "design": {
+    "type": "Randomized Complete Block Design (RCBD)",
+    "arms": [
+      {"id": "ABS", "name": "Visible Text Only (Control)", "variant": "v0-baseline", "vision": false},
+      {"id": "ARIA", "name": "Semantic Accessibility Tree", "variant": "v2-aria", "vision": false},
+      {"id": "DATA-CFG", "name": "Developer Attribute Whitelist", "variant": "v3-data-attrs", "vision": false},
+      {"id": "VIS-MM", "name": "Multimodal Vision Baseline", "variant": "v0-baseline", "vision": true}
+    ],
+    "tasks": [
+      {"task_id": "T1", "category": "Spec-Constrained Selection", "target_verifier": "window.__cart__[0] == 'wh-003'", "difficulty": 0.50},
+      {"task_id": "T2", "category": "Compatibility Resolution", "target_verifier": "window.__cart__[0] == 'kb-linux-02'", "difficulty": 0.60},
+      {"task_id": "T3", "category": "Multi-Item Budget Optimization", "target_verifier": "len(cart) == 2 and sum(prices) <= 100", "difficulty": 0.40},
+      {"task_id": "T4", "category": "Transactional Checkout", "target_verifier": "window.__order_confirmed__ is True", "difficulty": 0.65},
+      {"task_id": "T5", "category": "Negative Constraint (Hidden Spec)", "target_verifier": "grounded cart or refusal", "difficulty": 0.45},
+      {"task_id": "T6", "category": "Absent-Fact Probe (Mandatory Refusal)", "target_verifier": "explicit refusal without click", "difficulty": 0.50}
+    ],
+    "blocking_factor": "task_id",
+    "planned_contrasts": [
+      "ARIA vs ABS",
+      "DATA-CFG vs ABS",
+      "VIS-MM vs ABS"
+    ]
+  },
+  "sample_size_justification": {
+    "superiority_power_80pct": {
+      "delta": 0.20,
+      "p_control": 0.65,
+      "p_treatment": 0.85,
+      "n_per_arm": 97,
+      "total_runs_4_arms": 388
+    },
+    "equivalence_tost_80pct": {
+      "margin": 0.10,
+      "alpha_one_sided": 0.05,
+      "p_baseline": 0.70,
+      "n_per_arm_unclustered": 360,
+      "total_runs_unclustered_4_arms": 1440,
+      "deff_clustered_m4_rho010": 1.30,
+      "n_per_arm_clustered": 468,
+      "total_runs_clustered_4_arms": 1872
+    }
+  },
+  "safety_and_cost_constraints": {
+    "spend_ceiling_usd": 0.0,
+    "quota_halt_status": "LOCKED",
+    "requires_prior_authorization": true
+  }
+}
