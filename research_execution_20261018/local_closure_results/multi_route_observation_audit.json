@@ -1,0 +1,737 @@
+{
+  "multi_route_census": {
+    "route_home": {
+      "route_path": "variants/v0-baseline/index.html#home",
+      "total_ax_nodes": 336,
+      "ax_nodes_with_backend_id": 256,
+      "total_selector_elements": 34,
+      "matched_selector_elements": 27,
+      "unmatched_selector_elements": 7,
+      "unmatched_details": [
+        {
+          "selector_index": 69,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 69,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 84,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 84,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 99,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 99,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 114,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 114,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 129,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 129,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 144,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 144,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 159,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 159,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        }
+      ],
+      "total_semantic_controls": 26,
+      "matched_semantic_controls": 26,
+      "operational_correspondence_rate": 0.7941,
+      "operational_wilson_ci": [
+        0.632,
+        0.8965
+      ],
+      "semantic_control_correspondence_rate": 1.0,
+      "semantic_control_wilson_ci": [
+        0.8713,
+        1.0
+      ],
+      "hashes": {
+        "default_prompt_sha256": "b65cfce2a904048d9e7f4248f7109145f126990a2d00630270ecbc2b4da1f41d",
+        "selector_indices_sha256": "ccaa6ef02fbc152b15a450a85e82eb19f1074675b8e98b3a67654c61f9f1e25b",
+        "ax_backend_ids_sha256": "10405f86241b6e188ce40032fb0b4848834f7a4ecffe9e01e351294697e1c261"
+      },
+      "sample_selectors": [
+        {
+          "selector_index": 37,
+          "tag": "a",
+          "id": "logo-link",
+          "classes": "logo",
+          "is_semantic_control": true,
+          "backend_node_id": 37,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "TechMart"
+        },
+        {
+          "selector_index": 3,
+          "tag": "form",
+          "id": "search-form",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 3,
+          "has_ax_node": true,
+          "ax_role": "form",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 4,
+          "tag": "input",
+          "id": "search-input",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 4,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Search products..."
+        },
+        {
+          "selector_index": 13,
+          "tag": "button",
+          "id": "search-submit-btn",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 13,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Search"
+        },
+        {
+          "selector_index": 41,
+          "tag": "a",
+          "id": "cart-nav-link",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 41,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "Cart ( 0 )"
+        },
+        {
+          "selector_index": 16,
+          "tag": "a",
+          "id": "hero-cta-btn",
+          "classes": "btn-primary",
+          "is_semantic_control": true,
+          "backend_node_id": 16,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "Shop All Products"
+        },
+        {
+          "selector_index": 53,
+          "tag": "button",
+          "id": "cat-audio",
+          "classes": "category-btn",
+          "is_semantic_control": true,
+          "backend_node_id": 53,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Audio"
+        },
+        {
+          "selector_index": 54,
+          "tag": "button",
+          "id": "cat-keyboards",
+          "classes": "category-btn",
+          "is_semantic_control": true,
+          "backend_node_id": 54,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Keyboards"
+        }
+      ],
+      "default_obs_len": 1751,
+      "extended_obs_len": 1751,
+      "default_obs_sample": "[37]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[41]<a id=cart-nav-link />\n\tCart (\nDiscover Premium Tech\nFind the perfect gear for work, gaming, and everyday life.\n[16]<a id=hero-cta-btn />\n\tShop All Products\nShop by Category\n[53]<button id=cat-audio />\n\tAudio\n[54]<button id=cat-keyboards />\n\tKeyboards\n[17]<button id=cat-mice ",
+      "route_name": "route_home",
+      "iteration": 1
+    },
+    "route_cart_populated": {
+      "route_path": "variants/v0-baseline/index.html#cart",
+      "total_ax_nodes": 87,
+      "ax_nodes_with_backend_id": 74,
+      "total_selector_elements": 8,
+      "matched_selector_elements": 8,
+      "unmatched_selector_elements": 0,
+      "unmatched_details": [],
+      "total_semantic_controls": 7,
+      "matched_semantic_controls": 7,
+      "operational_correspondence_rate": 1.0,
+      "operational_wilson_ci": [
+        0.6756,
+        1.0
+      ],
+      "semantic_control_correspondence_rate": 1.0,
+      "semantic_control_wilson_ci": [
+        0.6457,
+        1.0
+      ],
+      "hashes": {
+        "default_prompt_sha256": "2211235982611cb3c4f5f59723bb2799ff02f56a5fb737e27625a073ac396bdb",
+        "selector_indices_sha256": "f2e3c649a486b84f5d7d35550c5586d10c0453e6c85de5026b20d0e1b4abaa45",
+        "ax_backend_ids_sha256": "49cee999bebc6a4f018428673e894badb656b2f9290d6e9a2968504e077fd58d"
+      },
+      "sample_selectors": [
+        {
+          "selector_index": 37,
+          "tag": "a",
+          "id": "logo-link",
+          "classes": "logo",
+          "is_semantic_control": true,
+          "backend_node_id": 37,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "TechMart"
+        },
+        {
+          "selector_index": 3,
+          "tag": "form",
+          "id": "search-form",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 3,
+          "has_ax_node": true,
+          "ax_role": "form",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 4,
+          "tag": "input",
+          "id": "search-input",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 4,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Search products..."
+        },
+        {
+          "selector_index": 13,
+          "tag": "button",
+          "id": "search-submit-btn",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 13,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Search"
+        },
+        {
+          "selector_index": 41,
+          "tag": "a",
+          "id": "cart-nav-link",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 41,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "Cart ( 1 )"
+        },
+        {
+          "selector_index": 572,
+          "tag": "input",
+          "id": "",
+          "classes": "qty-input",
+          "is_semantic_control": true,
+          "backend_node_id": 572,
+          "has_ax_node": true,
+          "ax_role": "spinbutton",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 573,
+          "tag": "button",
+          "id": "",
+          "classes": "btn-remove-cart",
+          "is_semantic_control": true,
+          "backend_node_id": 573,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Remove"
+        },
+        {
+          "selector_index": 199,
+          "tag": "button",
+          "id": "checkout-btn",
+          "classes": "btn-primary btn-full",
+          "is_semantic_control": true,
+          "backend_node_id": 199,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Proceed to Checkout"
+        }
+      ],
+      "default_obs_len": 582,
+      "extended_obs_len": 582,
+      "default_obs_sample": "[37]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[41]<a id=cart-nav-link />\n\tCart (\nYour Cart\nKeyChron K2\n$79.99\n|SHADOW(open)|*[572]<input type=number min=1 value=1 valuemin=1 valuemax=0 valuetext=1 compound_components=(name=Increment,role=button),(name=Decrement,role=button),(name=Value,role=textbox,min=1.0) />\n[573]<button /",
+      "route_name": "route_cart_populated",
+      "iteration": 1
+    },
+    "route_checkout": {
+      "route_path": "variants/v0-baseline/index.html#checkout",
+      "total_ax_nodes": 113,
+      "ax_nodes_with_backend_id": 92,
+      "total_selector_elements": 13,
+      "matched_selector_elements": 13,
+      "unmatched_selector_elements": 0,
+      "unmatched_details": [],
+      "total_semantic_controls": 12,
+      "matched_semantic_controls": 12,
+      "operational_correspondence_rate": 1.0,
+      "operational_wilson_ci": [
+        0.7719,
+        1.0
+      ],
+      "semantic_control_correspondence_rate": 1.0,
+      "semantic_control_wilson_ci": [
+        0.7575,
+        1.0
+      ],
+      "hashes": {
+        "default_prompt_sha256": "a1612d4d220dda7845cb1d62f8667b9716c051829fff0fe91d104c7f33c4b156",
+        "selector_indices_sha256": "e5e8a7139ffbe293a05b770dc3353401ddfffad1ebd1b1c7a16205e01c1bfd48",
+        "ax_backend_ids_sha256": "42185a3cae6628b89899b1e9a42943e5fbb5dd56612ee93af1c4f2260365accf"
+      },
+      "sample_selectors": [
+        {
+          "selector_index": 37,
+          "tag": "a",
+          "id": "logo-link",
+          "classes": "logo",
+          "is_semantic_control": true,
+          "backend_node_id": 37,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "TechMart"
+        },
+        {
+          "selector_index": 3,
+          "tag": "form",
+          "id": "search-form",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 3,
+          "has_ax_node": true,
+          "ax_role": "form",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 4,
+          "tag": "input",
+          "id": "search-input",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 4,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Search products..."
+        },
+        {
+          "selector_index": 13,
+          "tag": "button",
+          "id": "search-submit-btn",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 13,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Search"
+        },
+        {
+          "selector_index": 41,
+          "tag": "a",
+          "id": "cart-nav-link",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 41,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "Cart ( 1 )"
+        },
+        {
+          "selector_index": 5,
+          "tag": "input",
+          "id": "field-name",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 5,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Full Name"
+        },
+        {
+          "selector_index": 6,
+          "tag": "input",
+          "id": "field-address",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 6,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Street Address"
+        },
+        {
+          "selector_index": 7,
+          "tag": "input",
+          "id": "field-city",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 7,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "City"
+        }
+      ],
+      "default_obs_len": 1233,
+      "extended_obs_len": 1233,
+      "default_obs_sample": "[37]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[41]<a id=cart-nav-link />\n\tCart (\nCheckout\nShipping Information\nFull Name\n|SHADOW(open)|[5]<input type=text id=field-name name=name placeholder=Jane Smith autocomplete=name />\nStreet Address\n|SHADOW(open)|[6]<input type=text id=field-address name=address placeholder=123 Main Str",
+      "route_name": "route_checkout",
+      "iteration": 1
+    },
+    "route_search_audio": {
+      "route_path": "variants/v0-baseline/index.html#search?q=audio",
+      "total_ax_nodes": 153,
+      "ax_nodes_with_backend_id": 122,
+      "total_selector_elements": 19,
+      "matched_selector_elements": 16,
+      "unmatched_selector_elements": 3,
+      "unmatched_details": [
+        {
+          "selector_index": 677,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 677,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 692,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 692,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        },
+        {
+          "selector_index": 707,
+          "tag": "span",
+          "id": "",
+          "classes": "product-stock in-stock",
+          "is_semantic_control": false,
+          "backend_node_id": 707,
+          "has_ax_node": false,
+          "ax_role": null,
+          "ax_name": null
+        }
+      ],
+      "total_semantic_controls": 10,
+      "matched_semantic_controls": 10,
+      "operational_correspondence_rate": 0.8421,
+      "operational_wilson_ci": [
+        0.6243,
+        0.9448
+      ],
+      "semantic_control_correspondence_rate": 1.0,
+      "semantic_control_wilson_ci": [
+        0.7225,
+        1.0
+      ],
+      "hashes": {
+        "default_prompt_sha256": "b7d373af2b7a11b6a4ced6b8b64f8e3857225ea4d14852ff4db13dc6602317ab",
+        "selector_indices_sha256": "d10c0abdad655f7602762437406f4604bdf5c2ea119514f5e96fd58328a57b4d",
+        "ax_backend_ids_sha256": "edc1bef3532f422814678892aafec66f179c41b89fd707d22ddb943bfe0a7210"
+      },
+      "sample_selectors": [
+        {
+          "selector_index": 37,
+          "tag": "a",
+          "id": "logo-link",
+          "classes": "logo",
+          "is_semantic_control": true,
+          "backend_node_id": 37,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "TechMart"
+        },
+        {
+          "selector_index": 3,
+          "tag": "form",
+          "id": "search-form",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 3,
+          "has_ax_node": true,
+          "ax_role": "form",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 4,
+          "tag": "input",
+          "id": "search-input",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 4,
+          "has_ax_node": true,
+          "ax_role": "textbox",
+          "ax_name": "Search products..."
+        },
+        {
+          "selector_index": 13,
+          "tag": "button",
+          "id": "search-submit-btn",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 13,
+          "has_ax_node": true,
+          "ax_role": "button",
+          "ax_name": "Search"
+        },
+        {
+          "selector_index": 41,
+          "tag": "a",
+          "id": "cart-nav-link",
+          "classes": "",
+          "is_semantic_control": true,
+          "backend_node_id": 41,
+          "has_ax_node": true,
+          "ax_role": "link",
+          "ax_name": "Cart ( 0 )"
+        },
+        {
+          "selector_index": 178,
+          "tag": "div",
+          "id": "view-search",
+          "classes": "view active",
+          "is_semantic_control": false,
+          "backend_node_id": 178,
+          "has_ax_node": true,
+          "ax_role": "generic",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 179,
+          "tag": "section",
+          "id": "search-results-section",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 179,
+          "has_ax_node": true,
+          "ax_role": "generic",
+          "ax_name": ""
+        },
+        {
+          "selector_index": 180,
+          "tag": "div",
+          "id": "search-results-header",
+          "classes": "",
+          "is_semantic_control": false,
+          "backend_node_id": 180,
+          "has_ax_node": true,
+          "ax_role": "generic",
+          "ax_name": ""
+        }
+      ],
+      "default_obs_len": 1007,
+      "extended_obs_len": 1007,
+      "default_obs_sample": "[37]<a id=logo-link />\n\tTechMart\n[3]<form id=search-form />\n\t|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off value=audio />\n\t[13]<button type=submit id=search-submit-btn />\n\t\tSearch\n[41]<a id=cart-nav-link />\n\tCart (\n[178]<div id=view-search />\n\t[179]<section id=search-results-section />\n\t\t[180]<div id=search-results-header />\n\t\t\t[181]<h2 id=search-results-heading level=2 />\n\t\t\t\t3 results for \u201caudio\u201d\n\t\t[182]<div id=search-results-grid />\n\t\t\tAudio",
+      "route_name": "route_search_audio",
+      "iteration": 1
+    }
+  },
+  "determinism_audit": {
+    "route_home": {
+      "prompt_deterministic": true,
+      "selector_map_deterministic": true,
+      "ax_tree_deterministic": false,
+      "overall_deterministic": false,
+      "sha256_prompt": "b65cfce2a904048d9e7f4248f7109145f126990a2d00630270ecbc2b4da1f41d",
+      "run_counts": {
+        "ax_counts": [
+          336,
+          336,
+          336
+        ],
+        "selector_counts": [
+          34,
+          34,
+          34
+        ],
+        "matched_counts": [
+          27,
+          27,
+          27
+        ]
+      }
+    },
+    "route_cart_populated": {
+      "prompt_deterministic": false,
+      "selector_map_deterministic": false,
+      "ax_tree_deterministic": false,
+      "overall_deterministic": false,
+      "sha256_prompt": "2211235982611cb3c4f5f59723bb2799ff02f56a5fb737e27625a073ac396bdb",
+      "run_counts": {
+        "ax_counts": [
+          87,
+          87,
+          87
+        ],
+        "selector_counts": [
+          8,
+          8,
+          8
+        ],
+        "matched_counts": [
+          8,
+          8,
+          8
+        ]
+      }
+    },
+    "route_checkout": {
+      "prompt_deterministic": true,
+      "selector_map_deterministic": true,
+      "ax_tree_deterministic": false,
+      "overall_deterministic": false,
+      "sha256_prompt": "a1612d4d220dda7845cb1d62f8667b9716c051829fff0fe91d104c7f33c4b156",
+      "run_counts": {
+        "ax_counts": [
+          113,
+          113,
+          113
+        ],
+        "selector_counts": [
+          13,
+          13,
+          13
+        ],
+        "matched_counts": [
+          13,
+          13,
+          13
+        ]
+      }
+    },
+    "route_search_audio": {
+      "prompt_deterministic": true,
+      "selector_map_deterministic": true,
+      "ax_tree_deterministic": false,
+      "overall_deterministic": false,
+      "sha256_prompt": "b7d373af2b7a11b6a4ced6b8b64f8e3857225ea4d14852ff4db13dc6602317ab",
+      "run_counts": {
+        "ax_counts": [
+          153,
+          153,
+          153
+        ],
+        "selector_counts": [
+          19,
+          19,
+          19
+        ],
+        "matched_counts": [
+          16,
+          16,
+          16
+        ]
+      }
+    }
+  },
+  "colocation_report": {
+    "button_sample_count": 14,
+    "sample_buttons": [
+      {
+        "selector_index": 13,
+        "aria_label": "Search",
+        "co_located_target_name": false
+      },
+      {
+        "selector_index": 53,
+        "aria_label": "",
+        "co_located_target_name": false
+      },
+      {
+        "selector_index": 54,
+        "aria_label": "",
+        "co_located_target_name": false
+      },
+      {
+        "selector_index": 17,
+        "aria_label": "",
+        "co_located_target_name": false
+      },
+      {
+        "selector_index": 18,
+        "aria_label": "",
+        "co_located_target_name": false
+      },
+      {
+        "selector_index": 19,
+        "aria_label": "",
+        "co_located_target_name": false
+      }
+    ],
+    "price_aria_in_ax_tree": true,
+    "price_aria_in_serialized_prompt": false,
+    "container_tag_stripped": true,
+    "action_label_colocation_mechanism": "In v2-aria, button accessible names encode the specific product name directly (e.g., 'Add SoundFlow Air 3 to cart'). In serialized prompts, this co-locates the entity identifier within the clickable element line, bypassing multi-node association."
+  }
+}

@@ -15,7 +15,10 @@
 - **Treatment Arms:** 4 (`ABS`, `VIS`, `ARIA`, `DATA-CFG`).
 - **Allocation:** Exactly 24 runs per arm, 16 runs per task, across 4 temporal blocks of 24 runs.
 - **Multiplicity:** $\binom{4}{2} = 6$ pairwise contrasts; Bonferroni $\alpha = 0.05 / 6 = 0.0083$.
-- **Methodological Limitation:** Penalizes statistical power due to duplicate baseline replicate.
+### Documentary Preregistration Audit
+- **Public Third-Party Registry Status:** **No Evidence of External Preregistration.** Neither protocol ($N=72$ or $N=96$) was submitted to an independent, timestamped public registry (such as the Open Science Framework [OSF], AsPredicted, or an institutional registry).
+- **Internal Version Control Provenance:** Both CSV schedule files are tracked under local Git version control in `C:\testing`. While commit history proves internal freezing prior to live runs, this constitutes an *internally frozen protocol*, **not a preregistered study**. 
+- **Scientific Labeling Constraint:** In the manuscript and audit documentation, these protocols must strictly be described as *internally frozen experimental designs*, never as *preregistered*.
 
 ## 2. Statistical Pipeline Offline Certification
 - **Engine:** `analyze_v3_results.py`

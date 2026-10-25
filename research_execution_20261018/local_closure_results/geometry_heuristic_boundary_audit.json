@@ -1,0 +1,74 @@
+[
+  {
+    "case_id": "case-w9-h30",
+    "rendered_width": 9,
+    "rendered_height": 30,
+    "within_10_to_50_bounds": false,
+    "detected_interactive": false,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w10-h10",
+    "rendered_width": 10,
+    "rendered_height": 10,
+    "within_10_to_50_bounds": true,
+    "detected_interactive": true,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w30-h30",
+    "rendered_width": 30,
+    "rendered_height": 30,
+    "within_10_to_50_bounds": true,
+    "detected_interactive": true,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w50-h50",
+    "rendered_width": 50,
+    "rendered_height": 50,
+    "within_10_to_50_bounds": true,
+    "detected_interactive": true,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w51-h30",
+    "rendered_width": 51,
+    "rendered_height": 30,
+    "within_10_to_50_bounds": false,
+    "detected_interactive": false,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w30-h9",
+    "rendered_width": 30,
+    "rendered_height": 9,
+    "within_10_to_50_bounds": false,
+    "detected_interactive": false,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-w30-h51",
+    "rendered_width": 30,
+    "rendered_height": 51,
+    "within_10_to_50_bounds": false,
+    "detected_interactive": false,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-instock-empirical",
+    "rendered_width": 48.625,
+    "rendered_height": 15,
+    "within_10_to_50_bounds": true,
+    "detected_interactive": true,
+    "matched_heuristic_rule": true
+  },
+  {
+    "case_id": "case-outofstock-empirical",
+    "rendered_width": 74.766,
+    "rendered_height": 15,
+    "within_10_to_50_bounds": false,
+    "detected_interactive": false,
+    "matched_heuristic_rule": true
+  }
+]
