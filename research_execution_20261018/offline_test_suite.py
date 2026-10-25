@@ -115,13 +115,29 @@ def test_historical_vs_strict_t4_verifier():
 def test_historical_vs_strict_t5_verifier():
     """
     Demonstrate T5 verifier behavior:
-    Empty cart results in success=True. Protocol v3 runner enforces pre-state assertion.
+    Empty cart results in success=True ONLY if pre_cart_count == 1.
+    Missing precondition (pre_cart_count=None) or unseeded (pre_cart_count=0) strictly fails.
     """
-    v3_empty = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[])
-    assert v3_empty["success"] is True
-    v3_nonempty = protocol_v3_runner.verify_task_result("T5", cart=[{"sku": "wh-001"}], order_confirmed=False, last_order_items=[])
-    assert v3_nonempty["success"] is False
-    return True, "T5 verifier strictly checks empty cart; pre-state assertion documented (CONFIRMED)"
+    # 1. Missing precondition (pre_cart_count=None) must FAIL
+    v3_missing = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[], pre_cart_count=None)
+    assert v3_missing["success"] is False, "Protocol v3/v4 must fail T5 when pre_cart_count is missing (None)"
+    assert v3_missing["details"]["precondition_ok"] is False
+
+    # 2. Unseeded precondition (pre_cart_count=0) must FAIL
+    v3_unseeded = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[], pre_cart_count=0)
+    assert v3_unseeded["success"] is False, "Protocol v3/v4 must fail T5 when pre_cart_count is 0"
+    assert v3_unseeded["details"]["precondition_ok"] is False
+
+    # 3. Valid seeded precondition (pre_cart_count=1) with empty cart must PASS
+    v3_valid_empty = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[], pre_cart_count=1)
+    assert v3_valid_empty["success"] is True, "Protocol v3/v4 must pass T5 when pre_cart_count is 1 and cart is empty"
+    assert v3_valid_empty["score"] == 1.0
+
+    # 4. Valid seeded precondition with unremoved item in cart must FAIL
+    v3_nonempty = protocol_v3_runner.verify_task_result("T5", cart=[{"sku": "wh-001"}], order_confirmed=False, last_order_items=[], pre_cart_count=1)
+    assert v3_nonempty["success"] is False, "Protocol v3/v4 must fail T5 when cart is non-empty"
+    
+    return True, "T5 verifier strictly requires pre_cart_count == 1; rejects missing or unseeded pre-state (CONFIRMED)"
 
 def test_t6_strict_grounded_refusal_verifier():
     """
@@ -286,9 +302,10 @@ def test_runner_retry_logic_survivorship_flaw():
     return True, "Runner survivorship bias flaw verified; Protocol v3 preserves valid failures (CONFIRMED)"
 
 def test_schedule_rcbd_balance():
-    """Verify proposed_randomized_schedule.csv balance."""
+    """Verify proposed schedule balance (supports 72-run 3-arm and 96-run 4-arm RCBD)."""
     schedule = protocol_v3_runner.load_schedule()
-    assert len(schedule) == 96, f"Expected 96 runs, got {len(schedule)}"
+    n = len(schedule)
+    assert n in (72, 96), f"Expected 72 or 96 runs, got {n}"
     blocks = {}
     arms = {}
     tasks = {}
@@ -299,10 +316,16 @@ def test_schedule_rcbd_balance():
         blocks[b] = blocks.get(b, 0) + 1
         arms[a] = arms.get(a, 0) + 1
         tasks[t] = tasks.get(t, 0) + 1
-    assert all(count == 24 for count in blocks.values()), "Blocks must have 24 runs"
-    assert all(count == 24 for count in arms.values()), "Arms must have 24 runs"
-    assert all(count == 16 for count in tasks.values()), "Tasks must have 16 runs"
-    return True, "RCBD schedule is perfectly balanced: 4 blocks of 24, 24/arm, 16/task (CONFIRMED)"
+    if n == 72:
+        assert all(count == 18 for count in blocks.values()), "Blocks must have 18 runs"
+        assert all(count == 24 for count in arms.values()), "Arms must have 24 runs"
+        assert all(count == 12 for count in tasks.values()), "Tasks must have 12 runs"
+        return True, "3-arm RCBD schedule is perfectly balanced: 4 blocks of 18, 24/arm, 12/task (CONFIRMED)"
+    else:
+        assert all(count == 24 for count in blocks.values()), "Blocks must have 24 runs"
+        assert all(count == 24 for count in arms.values()), "Arms must have 24 runs"
+        assert all(count == 16 for count in tasks.values()), "Tasks must have 16 runs"
+        return True, "4-arm RCBD schedule is perfectly balanced: 4 blocks of 24, 24/arm, 16/task (CONFIRMED)"
 
 def test_original_files_unmodified():
     """Verify that original source files match baseline authentic SHA-256 hashes."""

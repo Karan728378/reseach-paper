@@ -1,0 +1,198 @@
+{
+  "total_suites": 17,
+  "total_tests_ran": 121,
+  "total_passed": 121,
+  "total_failed": 0,
+  "total_errors": 0,
+  "overall_status": "ALL_PASSED",
+  "total_duration_s": 34.64,
+  "suite_results": [
+    {
+      "file": "test_forensic_audit_regressions.py",
+      "status": "PASS",
+      "tests_ran": 12,
+      "passed": 12,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.156,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_power_audit.py",
+      "status": "PASS",
+      "tests_ran": 7,
+      "passed": 7,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.031,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_schedule_validity.py",
+      "status": "PASS",
+      "tests_ran": 6,
+      "passed": 6,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.031,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_budget_controls.py",
+      "status": "PASS",
+      "tests_ran": 7,
+      "passed": 7,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.0,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_budget_guard_repairs.py",
+      "status": "PASS",
+      "tests_ran": 6,
+      "passed": 6,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.031,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_treatment_leakage_and_integrity.py",
+      "status": "PASS",
+      "tests_ran": 6,
+      "passed": 6,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.062,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_observation_pipeline_stages.py",
+      "status": "PASS",
+      "tests_ran": 5,
+      "passed": 5,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.016,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_aria_baseline_prompt_divergence.py",
+      "status": "PASS",
+      "tests_ran": 5,
+      "passed": 5,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.062,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_baseline_pooling_consistency.py",
+      "status": "PASS",
+      "tests_ran": 5,
+      "passed": 5,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.063,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_browser_lifecycle_and_recovery.py",
+      "status": "PASS",
+      "tests_ran": 10,
+      "passed": 10,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 11.687,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_verifier_ground_truth_battery.py",
+      "status": "PASS",
+      "tests_ran": 12,
+      "passed": 12,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.0,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_sentinel_pipeline.py",
+      "status": "PASS",
+      "tests_ran": 5,
+      "passed": 5,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.047,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_runner_guard_integration.py",
+      "status": "PASS",
+      "tests_ran": 5,
+      "passed": 5,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.578,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_live_instrumentation_offline.py",
+      "status": "PASS",
+      "tests_ran": 3,
+      "passed": 3,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 18.89,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_implementation_fixes.py",
+      "status": "PASS",
+      "tests_ran": 6,
+      "passed": 6,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.125,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_mutation_audit.py",
+      "status": "PASS",
+      "tests_ran": 10,
+      "passed": 10,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.016,
+      "failure_details": [],
+      "error_details": []
+    },
+    {
+      "file": "test_analyze_v3_results.py",
+      "status": "PASS",
+      "tests_ran": 11,
+      "passed": 11,
+      "failures": 0,
+      "errors": 0,
+      "duration_s": 0.39,
+      "failure_details": [],
+      "error_details": []
+    }
+  ]
+}

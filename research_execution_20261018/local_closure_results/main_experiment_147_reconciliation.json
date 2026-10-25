@@ -1,0 +1,136 @@
+{
+  "total_records": 147,
+  "status_breakdown": {
+    "UNSPECIFIED": 147
+  },
+  "success_breakdown": {
+    "True": 105,
+    "False": 42
+  },
+  "variant_breakdown": {
+    "v1-jsonld": 33,
+    "v0-baseline": 39,
+    "v2-aria": 37,
+    "v3-data-attrs": 38
+  },
+  "task_breakdown": {
+    "T2": 26,
+    "T3": 28,
+    "T4": 30,
+    "T5": 32,
+    "T1": 31
+  },
+  "frequent_errors": [],
+  "completed_count": 0,
+  "aborted_count": 0,
+  "cell_breakdown": {
+    "v1-jsonld": {
+      "T2": {
+        "total": 6,
+        "success": 0,
+        "aborted": 6
+      },
+      "T3": {
+        "total": 6,
+        "success": 0,
+        "aborted": 6
+      },
+      "T4": {
+        "total": 4,
+        "success": 0,
+        "aborted": 4
+      },
+      "T1": {
+        "total": 9,
+        "success": 0,
+        "aborted": 9
+      },
+      "T5": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      }
+    },
+    "v0-baseline": {
+      "T2": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      },
+      "T3": {
+        "total": 7,
+        "success": 0,
+        "aborted": 7
+      },
+      "T5": {
+        "total": 9,
+        "success": 0,
+        "aborted": 9
+      },
+      "T4": {
+        "total": 7,
+        "success": 0,
+        "aborted": 7
+      },
+      "T1": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      }
+    },
+    "v2-aria": {
+      "T4": {
+        "total": 9,
+        "success": 0,
+        "aborted": 9
+      },
+      "T2": {
+        "total": 4,
+        "success": 0,
+        "aborted": 4
+      },
+      "T1": {
+        "total": 6,
+        "success": 0,
+        "aborted": 6
+      },
+      "T5": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      },
+      "T3": {
+        "total": 10,
+        "success": 0,
+        "aborted": 10
+      }
+    },
+    "v3-data-attrs": {
+      "T2": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      },
+      "T4": {
+        "total": 10,
+        "success": 0,
+        "aborted": 10
+      },
+      "T5": {
+        "total": 7,
+        "success": 0,
+        "aborted": 7
+      },
+      "T1": {
+        "total": 8,
+        "success": 0,
+        "aborted": 8
+      },
+      "T3": {
+        "total": 5,
+        "success": 0,
+        "aborted": 5
+      }
+    }
+  }
+}
