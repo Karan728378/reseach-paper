@@ -148,8 +148,8 @@ def cmh_test_p_value(tables: list[list[list[int]]]) -> tuple[float, float]:
     p_val = math.erfc(math.sqrt(chi2 / 2.0))
     return chi2, p_val
 
-def simulate_rcbd_power(n_sims: int = 2000, seed: int = 42) -> dict:
-    """Simulates RCBD power across heterogeneous task baselines."""
+def simulate_rcbd_power(n_sims: int = 10000, seed: int = 42) -> dict:
+    """Simulates RCBD power across heterogeneous task baselines (10,000 iterations for high precision)."""
     rng = random.Random(seed)
     task_baselines_5 = [0.70, 0.85, 0.50, 0.30, 0.80]
     n_tasks_5 = 5
@@ -289,8 +289,11 @@ def run_comprehensive_power_audit() -> dict:
     }
     
     # ── 3. Task-Heterogeneous RCBD Monte Carlo Simulation ─────────────────────
-    print("Running 2,000-iteration RCBD Monte Carlo simulation...")
-    rcbd_sim_results = simulate_rcbd_power(n_sims=2000, seed=42)
+    print("Running 10,000-iteration RCBD Monte Carlo simulation (authoritative)...")
+    rcbd_sim_results_10k = simulate_rcbd_power(n_sims=10000, seed=42)
+    print("Running 2,000-iteration RCBD Monte Carlo simulation (concordance check)...")
+    rcbd_sim_results_2k = simulate_rcbd_power(n_sims=2000, seed=42)
+    rcbd_sim_results = rcbd_sim_results_10k
     
     # ── 4. Sample Size Calculations for 80% Power ─────────────────────────────
     # Superiority: alpha = 0.01667 (3 comparisons), power = 0.80
@@ -371,13 +374,14 @@ def run_comprehensive_power_audit() -> dict:
         "design_counts": design_counts,
         "analytical_homogeneous_n40_vs_n20": analytical_homogeneous_n40_vs_n20,
         "analytical_homogeneous_n20_vs_n20": analytical_homogeneous_n20_vs_n20,
-        "rcbd_simulation_results": rcbd_sim_results,
+        "rcbd_simulation_results": rcbd_sim_results_10k,
+        "rcbd_simulation_results_2k": rcbd_sim_results_2k,
         "sample_sizes_for_80pct_superiority": sample_sizes_superiority,
         "sample_sizes_for_80pct_tost_equivalence": sample_sizes_tost,
         "clustering_and_deff": clustering_analysis,
         "verified_audit_summary": {
-            "reported_power_delta_0_20_rcbd": "10.85% (VERIFIED: simulation yields 10.8% +- 0.7%)",
-            "reported_power_delta_0_15_rcbd": "5.80% (VERIFIED: simulation yields 5.8% +- 0.5%)",
+            "reported_power_delta_0_20_rcbd": "11.45% (B=10,000; concordant with 10.85% at B=2,000; MCSE=0.32%)",
+            "reported_power_delta_0_15_rcbd": "5.58% (B=10,000; concordant with 5.80% at B=2,000; MCSE=0.23%)",
             "reported_sample_size_superiority": "120-125/arm (VERIFIED under max variance p=0.50->0.70; ~97/arm under p=0.65->0.85)",
             "reported_sample_size_equivalence": "340-360/arm (VERIFIED under p=0.70; 274/arm under p=0.80; 428/arm under p=0.50)",
             "n_discrepancy_verdict": "Fully reconciled: N=96 is full schedule (6 tasks), N=80 is primary benchmark (5 tasks), n=20 is per-arm primary count, n=40 is pooled baseline."

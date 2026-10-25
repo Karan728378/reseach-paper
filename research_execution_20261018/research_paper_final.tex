@@ -287,10 +287,10 @@ Critically, this $100\%$ completion rate represents an acute \textbf{task-batter
 \label{sec:power}
 
 \subsection{Task-Stratified CMH and Newcombe Hybrid Score Intervals}
-To analyze multi-arm agent experiments without assuming normal approximations near probability boundaries, we implemented exact statistical estimators in pure Python:
+To analyze multi-arm agent experiments without assuming normal approximations near probability boundaries, we implemented asymptotic and closed-form statistical procedures in pure Python:
 \begin{itemize}
     \item \textbf{Cochran--Mantel--Haenszel (CMH) Test:} Tests conditional independence across task strata $k=1, \dots, K$. Audited against the Agresti (2002)~\cite{agresti2002categorical} multicenter clinical benchmark ($K=8$), our implementation yields $\chi^2 = 6.3841, p = 0.01151$, matching published figures to 4 decimal places.
-    \item \textbf{Newcombe Hybrid Score Interval (Method 10):} Constructs closed-form risk difference intervals by combining Wilson bounds. Audited against Newcombe (1998)~\cite{newcombe1998interval} ($56/70$ vs. $38/80$), our implementation yields $\hat{\theta} = 0.3250$, 95\% CI: $[+0.1764, +0.4578]$, matching published benchmarks exactly.
+    \item \textbf{Newcombe Hybrid Score Interval (Method 10):} Constructs closed-form risk difference intervals by combining Wilson bounds~\cite{wilson1927probable}. Evaluated on $56/70$ vs. $38/80$~\cite{newcombe1998interval}, our implementation yields $\hat{\theta} = 0.3250$, 95\% CI: $[+0.1721, +0.4558]$ (or $[+0.172, +0.456]$), precisely matching the Method 10 uncorrected Wilson score combination.
 \end{itemize}
 
 \textbf{Multiple Comparisons Adjustment:} To control family-wise error rates, Bonferroni correction must distinguish comparison families:
@@ -300,13 +300,13 @@ To analyze multi-arm agent experiments without assuming normal approximations ne
 \end{itemize}
 
 \subsection{Monte Carlo Power Simulations}
-Using a Randomized Complete Block Design (RCBD) across 5 tasks with task-level variance $\sigma^2 = 0.09$ (logit scale), we executed 10,000-trial Monte Carlo power simulations (random seed 42) in `power\_analysis.py` ($n=20$ per arm, $\alpha = 0.0167$):
+Using a Randomized Complete Block Design (RCBD) across 5 tasks with heterogeneous task baselines ($[0.70, 0.85, 0.50, 0.30, 0.80]$), we executed Monte Carlo power simulations (random seed 42) in pure Python ($n=20$ per treatment arm, $n=40$ pooled baseline, Bonferroni $\alpha = 0.0167$). Across 10,000 iterations (and concordant 2,000-iteration realization):
 \begin{itemize}
-    \item Large Disparity ($\Delta = 0.70$, $p_0=0.85 \to p_1=0.15$): Power $= 98.6\% \pm 0.3\%$.
-    \item Moderate Effect ($\Delta = 0.35$, $p_0=0.80 \to p_1=0.45$): Power $= 49.6\% \pm 1.1\%$.
-    \item Small Effect ($\Delta = 0.20$, $p_0=0.80 \to p_1=0.60$): Power $= \mathbf{10.8\% \pm 0.6\%}$.
+    \item Large Disparity ($\Delta = 0.70$): Power $= 98.77\% \pm 0.11\%$ ($98.55\% \pm 0.27\%$ at $B=2,000$).
+    \item Moderate Effect ($\Delta = 0.35$): Power $= 48.51\% \pm 0.50\%$ ($49.60\% \pm 1.12\%$ at $B=2,000$).
+    \item Small Effect ($\Delta = 0.20$): Power $= \mathbf{11.45\% \pm 0.32\%}$ ($\mathbf{10.85\% \pm 0.70\%}$ at $B=2,000$).
 \end{itemize}
-These effect sizes serve as illustrative sensitivity scenarios: at small sample sizes ($n=20$), power to detect a realistic 20-percentage-point difference is only $10.8\%$. Over $89\%$ of such trials will yield a false negative ($p > 0.05$).
+Both the 10,000-trial ($11.45\%$) and 2,000-trial ($10.85\%$) results agree within Monte Carlo standard error ($\text{MCSE} = 0.70\%$). These scenarios demonstrate that at small sample sizes ($n=20$), power to detect a realistic 20-percentage-point difference is only $\approx 11\%$ ($10.8\%$--$11.5\%$). Over $88\%$ of such trials will yield a false negative ($p > 0.05$).
 
 \subsection{Sample Size Requirements for TOST Equivalence}
 \label{sec:tost}
