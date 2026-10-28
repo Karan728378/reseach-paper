@@ -1,0 +1,65 @@
+{
+  "total_runs": 5,
+  "model": "qwen3:4b",
+  "durations_seconds": [
+    3.343,
+    1013.094,
+    288.61,
+    185.5,
+    188.563
+  ],
+  "cold_start_duration_s": 1013.094,
+  "mean_steady_state_duration_s": 220.891,
+  "records": [
+    {
+      "run_index": null,
+      "model": "qwen3:4b",
+      "arm": "DATA-CFG",
+      "task_id": "T2",
+      "status": "failed",
+      "duration_seconds": 3.343,
+      "total_steps": "0",
+      "error_message": "max_history_items must be None or greater than 5"
+    },
+    {
+      "run_index": null,
+      "model": "qwen3:4b",
+      "arm": "DATA-CFG",
+      "task_id": "T2",
+      "status": "timeout_partial",
+      "duration_seconds": 1013.094,
+      "total_steps": "2",
+      "error_message": "Step 3 LLM read timeout; cart verified via CDP"
+    },
+    {
+      "run_index": null,
+      "model": "qwen3:4b",
+      "arm": "DATA-CFG",
+      "task_id": "T2",
+      "status": "timed_out",
+      "duration_seconds": 288.61,
+      "total_steps": "2",
+      "error_message": "Step 2 timed out after 180 seconds"
+    },
+    {
+      "run_index": null,
+      "model": "qwen3:4b",
+      "arm": "ABS",
+      "task_id": "T2",
+      "status": "timed_out",
+      "duration_seconds": 185.5,
+      "total_steps": "1",
+      "error_message": "Step 1 timed out after 180 seconds"
+    },
+    {
+      "run_index": null,
+      "model": "qwen3:4b",
+      "arm": "ABS",
+      "task_id": "T2",
+      "status": "timed_out",
+      "duration_seconds": 188.563,
+      "total_steps": "1",
+      "error_message": "Step 1 timed out after 180 seconds"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-26",
+  "provider": "groq",
+  "cumulative_requests": 6,
+  "cumulative_cost_usd": 0.006469,
+  "cumulative_prompt_tokens": 2072,
+  "cumulative_completion_tokens": 610,
+  "cumulative_total_tokens": 2682,
+  "runs_completed": 1,
+  "model_name": "openai/gpt-oss-120b",
+  "cost_ceiling_usd": 0.0,
+  "max_requests_ceiling": 6,
+  "max_tokens_ceiling": null,
+  "is_free_tier": true,
+  "halted_due_to_ceiling": true,
+  "last_updated": "2026-10-26T02:57:50.701649",
+  "accounting_scope_and_limitations": {
+    "counted": "In-process steps, persisted offsets from today's summary CSVs/ledger, conservative token estimates",
+    "not_counted": "Provider-side hidden retries, out-of-band requests from external scripts, provider billing meter",
+    "guarantee": "Fail-closed client-side bounded requests; does not replace provider cloud console quotas"
+  }
+}

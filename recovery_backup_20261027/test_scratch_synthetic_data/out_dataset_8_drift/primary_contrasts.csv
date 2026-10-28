@@ -1,0 +1,4 @@
+contrast_id,treatment_arm,reference_arm,treatment_successes,treatment_n,reference_successes,reference_n,risk_difference,newcombe_95_ci_lower,newcombe_95_ci_upper,agresti_caffo_95_ci_lower,agresti_caffo_95_ci_upper,fisher_p_unadjusted,fisher_p_bonferroni,cmh_chi2,cmh_common_or,cmh_p_unadjusted,cmh_p_bonferroni,is_significant_cmh,interpretation
+ARIA_vs_BASELINE,ARIA,BASELINE,20,20,19,40,0.525,0.3048,0.6707,0.304,0.6527,0.0,0.0001,12.9899,inf,0.0003,0.0009,True,STATISTICALLY SIGNIFICANT REJECTION OF NULL
+DATA_CFG_vs_BASELINE,DATA-CFG,BASELINE,20,20,19,40,0.525,0.3048,0.6707,0.304,0.6527,0.0,0.0001,12.9899,inf,0.0003,0.0009,True,STATISTICALLY SIGNIFICANT REJECTION OF NULL
+ARIA_vs_DATA_CFG,ARIA,DATA-CFG,20,20,20,20,0.0,-0.1612,0.1612,-0.1231,0.1231,1.0,1.0,0.0,1.0,1.0,1.0,False,STATISTICALLY INCONCLUSIVE DUE TO SAMPLE CONSTRAINTS (CANNOT CLAIM EQUIVALENCE)

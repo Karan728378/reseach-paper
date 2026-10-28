@@ -1,0 +1,79 @@
+================================================================================
+BROWSER-USE 0.13.10 SOURCE LINE EVIDENCE
+================================================================================
+Package directory: C:\testing\.venv311\Lib\site-packages\browser_use
+serializer.py: C:\testing\.venv311\Lib\site-packages\browser_use\dom\serializer\serializer.py
+views.py     : C:\testing\.venv311\Lib\site-packages\browser_use\dom\views.py
+--------------------------------------------------------------------------------
+--- 1. DISABLED_ELEMENTS in serializer.py ---
+Line 18: DISABLED_ELEMENTS = {'style', 'script', 'head', 'meta', 'link', 'title'}
+Line 19: URL_C0_CONTROL_OR_SPACE = ''.join(chr(codepoint) for codepoint in range(0x21))
+Line 20: 
+Line 21: # SVG child elements to skip (decorative only, no interaction value)
+Line 22: SVG_ELEMENTS = {
+Line 23: 	'path',
+
+--- 2. DISABLED_ELEMENTS usage in serializer.py ---
+Line 479: 		elif node.node_type == NodeType.ELEMENT_NODE:
+Line 480: 			# Skip non-content elements
+Line 481: 			if node.node_name.lower() in DISABLED_ELEMENTS:
+Line 482: 				return None
+Line 483: 
+Line 484: 			# Skip SVG child elements entirely (path, rect, g, circle, etc.)
+Line 485: 			if node.node_name.lower() in SVG_ELEMENTS:
+
+--- 3. Serializer container / aria-label / text representation gate in serializer.py ---
+Line 867: 		# 4. Keep if has aria-label suggesting it's independently interactive
+Line 869: 			aria_label = node.original_node.attributes.get('aria-label')
+Line 871: 				# Has meaningful aria-label, likely interactive
+Line 950: 				('aria-label', 'image_label'),
+Line 1049: 				or node.original_node.tag_name.upper() == 'IFRAME'
+Line 1122: 				elif node.original_node.tag_name.upper() == 'IFRAME':
+Line 1124: 					line = f'{depth_str}{shadow_prefix}|IFRAME|<{node.original_node.tag_name}'
+Line 1188: 				and node.original_node.tag_name.upper() in ('IFRAME', 'FRAME')
+Line 1354: 			protected_attrs = {'format', 'expected_format', 'placeholder', 'value', 'aria-label', 'title'}
+Line 1389: 		attrs_to_remove_if_text_matches = ['aria-label', 'placeholder', 'title']
+
+--- 4. Lines 1035 to 1060 in serializer.py ---
+Line 1036: 				if attributes_html_str:
+Line 1037: 					line += f' {attributes_html_str}'
+Line 1038: 				line += ' /> <!-- SVG content collapsed -->'
+Line 1039: 				formatted_text.append(line)
+Line 1040: 				# Don't process children for SVG
+Line 1041: 				return '\n'.join(formatted_text)
+Line 1042: 
+Line 1043: 			# Add element if clickable, scrollable, or iframe
+Line 1044: 			is_any_scrollable = node.original_node.is_actually_scrollable or node.original_node.is_scrollable
+Line 1045: 			should_show_scroll = node.original_node.should_show_scroll_info
+Line 1046: 			if (
+Line 1047: 				node.is_interactive
+Line 1048: 				or is_any_scrollable
+Line 1049: 				or node.original_node.tag_name.upper() == 'IFRAME'
+Line 1050: 				or node.original_node.tag_name.upper() == 'FRAME'
+Line 1051: 			):
+Line 1052: 				next_depth += 1
+Line 1053: 
+Line 1054: 				# Build attributes string with compound component info
+Line 1055: 				text_content = ''
+Line 1056: 				attributes_html_str = DOMTreeSerializer._build_attributes_string(
+Line 1057: 					node.original_node, include_attributes, text_content
+Line 1058: 				)
+Line 1059: 				if node.is_interactive:
+Line 1060: 					image_context = DOMTreeSerializer._get_child_image_context(node)
+
+--- 5. DEFAULT_INCLUDE_ATTRIBUTES in views.py ---
+Line 18: DEFAULT_INCLUDE_ATTRIBUTES = [
+Line 19: 	'title',
+Line 20: 	'type',
+Line 21: 	'checked',
+Line 22: 	# 'class',
+Line 23: 	'id',
+Line 24: 	'name',
+Line 25: 	'role',
+Line 26: 	'value',
+Line 27: 	'placeholder',
+Line 28: 	'data-date-format',
+Line 29: 	'alt',
+Line 30: 	'aria-label',
+Line 31: 	'aria-expanded',
+Line 32: 	'data-state',

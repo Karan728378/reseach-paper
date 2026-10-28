@@ -69,7 +69,7 @@ EXTENDED_ATTRIBUTES = list(DEFAULT_INCLUDE_ATTRIBUTES) + [
 ]
 
 PORT = 8098
-WORKSPACE_ROOT = Path(r"C:\testing")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 RESEARCH_DIR = WORKSPACE_ROOT / "research_execution_20261018"
 OUTPUT_JSON_PATH = RESEARCH_DIR / "accessibility_tree_comparison.json"
 OUTPUT_MD_PATH = RESEARCH_DIR / "ACCESSIBILITY_TREE_COMPARISON.md"

@@ -1,0 +1,180 @@
+{
+  "dataset_1_valid_complete.csv": {
+    "rows": 96,
+    "size_bytes": 8139,
+    "sha256": "a94bb88eeab24ae44807682dd589d0234156c47bfd60bbcf8807f6a192fd9a45",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_2_known_diff.csv": {
+    "rows": 96,
+    "size_bytes": 8170,
+    "sha256": "17dbe5406911c82e7720864e79566bbbc398e4eed0abee8f6fa85cf6f6d04fe2",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_3_missing_runs.csv": {
+    "rows": 50,
+    "size_bytes": 4093,
+    "sha256": "a0e464d5a5c69b385bf34fad8b6d87c4c2b590b72706bb9deaf878fe7f7f8ff7",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_4_duplicates.csv": {
+    "rows": 3,
+    "size_bytes": 400,
+    "sha256": "1b01788c1abfff9c41cb98e52283e31da28c1e0d1aab9db10605b9d5b5952c50",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_5_infra_errors.csv": {
+    "rows": 6,
+    "size_bytes": 700,
+    "sha256": "f33514083e6d216726f35b065dcc382fc6203bce987609b7dbebb4dd688e71eb",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_6_t6_probe.csv": {
+    "rows": 16,
+    "size_bytes": 1473,
+    "sha256": "c40e21049519865b214458641e3cb0eb36d1cff33d2f578a3e5bb39f753efaa8",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_7_boundary.csv": {
+    "rows": 80,
+    "size_bytes": 6828,
+    "sha256": "369d6668311c0404a6b7018fd5cd024d899e665c22bccd537c7dafbec2fa48c5",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "dataset_8_drift.csv": {
+    "rows": 96,
+    "size_bytes": 8153,
+    "sha256": "45302eb875847d5c232d898345d319620235008f76556337c5129bfb9965486e",
+    "columns": [
+      "run_index",
+      "block_id",
+      "within_block_order",
+      "arm",
+      "task_id",
+      "variant_mapping",
+      "target_entity",
+      "success",
+      "score",
+      "total_steps",
+      "total_time_seconds",
+      "status",
+      "error_message",
+      "timestamp_end"
+    ]
+  },
+  "proposed_randomized_schedule.csv": {
+    "rows": 96,
+    "size_bytes": 3524,
+    "sha256": "107c790e8de411849120e580dd987fe641a9112585667a0f7dc26bd913f778ce"
+  },
+  "proposed_3arm_schedule.csv": {
+    "rows": 72,
+    "size_bytes": 2676,
+    "sha256": "17a97aa8b8c2782108603b3daf65f4c104691ee9b46189c086cc06fdbb9b77e1"
+  }
+}

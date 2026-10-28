@@ -1,0 +1,14 @@
+# PILOT BALANCE TABLES (CANONICAL_RUN_LEDGER.csv, N=39 primary-eligible runs)
+# Table 1: Treatment Arm by Task ID
+treatment_arm,T1,T2,T3,T4,T5,T6,All
+ABS,2,2,3,2,2,2,13
+ARIA,3,2,2,2,2,2,13
+DATA-CFG,2,1,3,3,2,2,13
+All,7,5,8,7,6,6,39
+
+# Table 2: Treatment Arm by Block ID
+treatment_arm,1,2,3,All
+ABS,6,6,1,13
+ARIA,6,6,1,13
+DATA-CFG,6,5,2,13
+All,18,17,4,39

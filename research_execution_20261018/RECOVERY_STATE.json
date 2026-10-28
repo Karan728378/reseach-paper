@@ -1,0 +1,108 @@
+{
+  "session_number": 1,
+  "last_updated_utc": "2026-10-27T13:43:16.812481+00:00",
+  "current_phase": "PHASE_7_COMPLETE",
+  "phases": {
+    "PHASE_0": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T13:43:08.671555+00:00"
+    },
+    "PHASE_1": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T13:43:08.671555+00:00",
+      "deliverables": [
+        "RECOVERY_BASELINE.md",
+        "RECOVERY_FILE_MANIFEST.csv"
+      ]
+    },
+    "PHASE_2": {
+      "status": "not_started"
+    },
+    "PHASE_3": {
+      "status": "not_started"
+    },
+    "PHASE_4": {
+      "status": "not_started"
+    },
+    "PHASE_5": {
+      "status": "not_started"
+    },
+    "PHASE_6": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T13:43:16.354748+00:00",
+      "deliverables": [
+        "RUN_ACCOUNTING_RECONCILIATION.csv",
+        "RUN_ACCOUNTING_AUDIT.md",
+        "EVIDENCE_CLASS_LEDGER.csv",
+        "test_run_accounting_and_provenance.py"
+      ],
+      "reconciled_traces_count": 46,
+      "classified_records_count": 72
+    },
+    "PHASE_7": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T13:43:16.812481+00:00",
+      "deliverables": [
+        "STATISTICAL_AUDIT_AND_REPRODUCTION.md"
+      ],
+      "simulation_b_iterations": 10000
+    },
+    "PHASE_8": {
+      "status": "not_started"
+    },
+    "PHASE_9": {
+      "status": "not_started"
+    },
+    "PHASE_10": {
+      "status": "not_started"
+    },
+    "PHASE_11": {
+      "status": "not_started"
+    },
+    "PHASE_12": {
+      "status": "not_started"
+    },
+    "PHASE_13": {
+      "status": "not_started"
+    },
+    "PHASE_14": {
+      "status": "not_started"
+    },
+    "PHASE_15": {
+      "status": "not_started"
+    },
+    "PHASE_16": {
+      "status": "not_started"
+    },
+    "PHASE_17": {
+      "status": "not_started"
+    }
+  },
+  "issue_register_pointer": "RECOVERY_ISSUE_REGISTER.csv",
+  "authorization_ledger": {
+    "authorizations": [],
+    "total_calls_consumed": 0,
+    "total_spend_usd": 0.0
+  },
+  "authoritative_manuscript": "research_paper_final.tex",
+  "backup_directory": "C:\\testing\\recovery_backup_20261027",
+  "open_questions": [],
+  "final_independent_audit_utc": "2026-10-27T13:52:31.413731+00:00",
+  "independent_audit": {
+    "status": "VERIFIED_AND_ACCEPTED",
+    "verification_report_sha256": "a7609fc140e7dcdc954e3f3130e9a91ca9208788f62cbf4256df750c72e172b6",
+    "test_results_sha256": "1f42807a2dd8e24589911e9fc220706d9861be5aabfb998fef861de080d59056",
+    "pipeline_audit_sha256": "2e99351634232ca2c484604e5d3541945bb8a5736a2bf3afb8b1e6b30e9f1a13",
+    "statistical_audit_sha256": "a3692809044002561df26a715862952f437a262064ef8e095309c211cb7b1b62",
+    "contribution_decision_sha256": "a5ffad12b1275813f1e5a4a47102b170a17e8495459c1058fd25f04ed309f041",
+    "citation_report_sha256": "548ab4de3bd55e239d4c1e2cf2ba48d701f19cffa4b807f7164d5eca718904a9",
+    "skeptical_review_sha256": "6f028e96e3d3634d1250f2b36866455b79b09dc50a1dfb3193c34f370873fd01",
+    "final_recovery_report_sha256": "57d9fcd0d2088bb67eb464272b76beff9011efcfb70ed759a1ce19fbe3c9eedf",
+    "zip_sha256": "708c8a89efcd739007575fc463f5b5a7ff285e053163b8a5380dda5e86122b75",
+    "total_tests_passing": 207,
+    "total_tests_failing": 0,
+    "registered_issues_count": 33,
+    "resolved_issues_count": 33,
+    "visual_qa_status": "UNVERIFIED_PENDING_EXTERNAL_OVERLEAF_RENDER"
+  }
+}

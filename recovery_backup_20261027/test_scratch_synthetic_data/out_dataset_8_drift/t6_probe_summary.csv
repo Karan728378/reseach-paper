@@ -1,0 +1,6 @@
+arm,n_runs,grounded_refusals,refusal_rate,hallucinations,hallucination_rate,refusal_wilson_ci_lower,refusal_wilson_ci_upper
+ABS,4,0,0.0,4,1.0,0.0,0.49
+VIS,4,0,0.0,4,1.0,0.0,0.49
+BASELINE,8,0,0.0,8,1.0,0.0,0.3245
+ARIA,4,0,0.0,4,1.0,0.0,0.49
+DATA-CFG,4,0,0.0,4,1.0,0.0,0.49

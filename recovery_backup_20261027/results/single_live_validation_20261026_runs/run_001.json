@@ -1,0 +1,52 @@
+{
+  "run_index": 1,
+  "attempt_number": 1,
+  "block_id": 1,
+  "within_block_order": 1,
+  "arm": "DATA-CFG",
+  "task_id": "T2",
+  "variant_mapping": "v3-data-attrs",
+  "target_entity": "mkp-001",
+  "model": "openai/gpt-oss-120b",
+  "timestamps": {
+    "start": "2026-10-26T02:42:01.036362",
+    "end": "2026-10-26T02:42:05.487348"
+  },
+  "total_time_seconds": 4.453,
+  "total_steps": 0,
+  "status": "failed",
+  "termination_reason": "exception",
+  "error_message": "max_history_items must be None or greater than 5",
+  "error_traceback": "Traceback (most recent call last):\n  File \"C:\\testing\\research_execution_20261018\\protocol_v3_runner.py\", line 684, in run_single_live_trial\n    agent = Agent(\n            ^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\utils.py\", line 463, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\agent\\service.py\", line 506, in __init__\n    self._message_manager = MessageManager(\n                            ^^^^^^^^^^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\agent\\message_manager\\service.py\", line 141, in __init__\n    assert max_history_items is None or max_history_items > 5, 'max_history_items must be None or greater than 5'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: max_history_items must be None or greater than 5\n",
+  "agent_final_text": "",
+  "pre_state": {
+    "pre_cart_count": null
+  },
+  "terminal_browser_state": {
+    "url": "",
+    "title": "",
+    "cart": [],
+    "order_confirmed": false,
+    "last_order_items": []
+  },
+  "verifier_result": {
+    "success": false,
+    "score": 0.0,
+    "details": {
+      "error": "max_history_items must be None or greater than 5",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\testing\\research_execution_20261018\\protocol_v3_runner.py\", line 684, in run_single_live_trial\n    agent = Agent(\n            ^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\utils.py\", line 463, in wrapper\n    result = func(*args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\agent\\service.py\", line 506, in __init__\n    self._message_manager = MessageManager(\n                            ^^^^^^^^^^^^^^^\n  File \"C:\\testing\\.venv311\\Lib\\site-packages\\browser_use\\agent\\message_manager\\service.py\", line 141, in __init__\n    assert max_history_items is None or max_history_items > 5, 'max_history_items must be None or greater than 5'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: max_history_items must be None or greater than 5\n"
+    }
+  },
+  "treatment_delivery": {
+    "arm": "DATA-CFG",
+    "treatment_attribute_observed": false,
+    "evidence": "DATA-CFG in serialized observation (complete_delivery=False): data-action=False, data-product-id=False, data-amount=False, data-rating=False"
+  },
+  "token_and_cost_estimates": {
+    "estimated_input_tokens": 0,
+    "estimated_output_tokens": 0,
+    "estimated_cost_usd": 0.0
+  },
+  "captured_observations": [],
+  "action_history": []
+}

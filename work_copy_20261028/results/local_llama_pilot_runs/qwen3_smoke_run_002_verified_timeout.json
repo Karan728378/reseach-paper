@@ -1,0 +1,65 @@
+{
+  "trial_type": "local_qwen3_smoke_test",
+  "run_id": "qwen3_smoke_run_002_verified_timeout",
+  "model_id": "qwen3:4b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "context_window": 4096,
+  "task_id": "T2",
+  "arm": "DATA-CFG",
+  "variant": "v3-data-attrs",
+  "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+  "timestamps": {
+    "start": "2026-10-24T12:52:22.302127",
+    "end": "2026-10-24T13:09:15.398893",
+    "duration_seconds": 1013.094
+  },
+  "total_steps": 2,
+  "status": "partial_timeout",
+  "termination_reason": "llm_timeout_max_steps_reached",
+  "error_message": "Step 3 LLM read timeout; agent did not mark task done cleanly, but button click succeeded in step 2",
+  "agent_final_text": "Clicked button \"Add to Cart\"",
+  "actions_executed": [
+    {
+      "step": 1,
+      "thinking": "thinking=None evaluation_previous_goal='Start' memory='' next_goal='Initial navigation'",
+      "actions": [
+        "root=NavigateActionModel(navigate=NavigateAction(url='http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home', new_tab=False))"
+      ]
+    },
+    {
+      "step": 2,
+      "thinking": "thinking=None evaluation_previous_goal='Successfully navigated to the homepage and identified the product.' memory=\"Found 'Mechanical Keyboard Pro' on homepage with $149.99 price and 4.7 stars. In stock. Add to Cart button (data-product-id=mkp-001) is clickable.\" next_goal=\"Click the 'Add to Cart' button for the 'Mechanical Keyboard Pro' product (data-product-id=mkp-001) to add it to the cart.\"",
+      "actions": [
+        "root=ClickActionModel(click=ClickElementActionIndexOnly(index=33))"
+      ]
+    }
+  ],
+  "terminal_cart_state": [
+    {
+      "sku": "mkp-001",
+      "name": "Mechanical Keyboard Pro",
+      "quantity": 1,
+      "price": 149.99
+    }
+  ],
+  "verifier_outcome": {
+    "success": true,
+    "score": 1.0,
+    "details": {
+      "target_sku": "mkp-001",
+      "cart_skus": [
+        "mkp-001"
+      ]
+    }
+  },
+  "financial_cost_usd": 0.0,
+  "resource_snapshot": {
+    "free_ram_mb": 4131.4,
+    "gpu_vram": {
+      "available": true,
+      "total_vram_mb": 4096.0,
+      "used_vram_mb": 2739.0,
+      "free_vram_mb": 1224.0
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Independent Accessibility-Tree Comparison Report
 
-**Generated:** 2026-10-21T06:37:38.992476+00:00  
+**Generated:** 2026-10-24T20:30:06.194439+00:00  
 **Workspace:** `C:\testing`  
 **Target Environment:** Windows 11 (win32), Python 3.11.9  
 **Automation Stack:** `browser-use 0.13.10`, `cdp-use 1.4.5`  

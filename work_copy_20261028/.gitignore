@@ -1,0 +1,24 @@
+# Secrets and API credentials
+groq_key.txt
+*.key
+*.token
+.env
+.env.*
+
+# Python environment and cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv*/
+venv/
+ENV/
+
+# Testing & logs
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# OS artifacts
+.DS_Store
+Thumbs.db

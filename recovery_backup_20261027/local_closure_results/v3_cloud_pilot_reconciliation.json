@@ -1,0 +1,45 @@
+{
+  "summary_rows_count": 44,
+  "raw_rows_count": 46,
+  "completed_count": 41,
+  "aborted_count": 3,
+  "arm_distribution": {
+    "DATA-CFG": 15,
+    "ABS": 13,
+    "ARIA": 13
+  },
+  "task_distribution": {
+    "T2": 6,
+    "T1": 7,
+    "T5": 6,
+    "T4": 7,
+    "T6": 7,
+    "T3": 8
+  },
+  "aborted_details": [
+    {
+      "run_index": "26",
+      "arm": "ABS",
+      "task_id": "T6",
+      "status": "infrastructure_aborted",
+      "error_message": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+      "timestamp": null
+    },
+    {
+      "run_index": "26",
+      "arm": "ABS",
+      "task_id": "T6",
+      "status": "infrastructure_aborted",
+      "error_message": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+      "timestamp": null
+    },
+    {
+      "run_index": "26",
+      "arm": "ABS",
+      "task_id": "T6",
+      "status": "infrastructure_aborted",
+      "error_message": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+      "timestamp": null
+    }
+  ]
+}

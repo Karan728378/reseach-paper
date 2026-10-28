@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geometry Heuristic Boundary Cases</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .test-box {
+      display: inline-block;
+      box-sizing: border-box;
+      margin: 10px;
+      vertical-align: top;
+      background: #e0e0e0;
+      border: 1px solid #999;
+      overflow: hidden;
+      font-size: 10px;
+      line-height: 1;
+    }
+    /* Case 1: Below min width (w=9, h=30) -> Expected: Non-interactive */
+    #case-w9-h30 { width: 9px; height: 30px; }
+
+    /* Case 2: Exact min width & height corner (w=10, h=10) -> Expected: Interactive */
+    #case-w10-h10 { width: 10px; height: 10px; }
+
+    /* Case 3: Nominal icon size (w=30, h=30) -> Expected: Interactive */
+    #case-w30-h30 { width: 30px; height: 30px; }
+
+    /* Case 4: Exact max width & height corner (w=50, h=50) -> Expected: Interactive */
+    #case-w50-h50 { width: 50px; height: 50px; }
+
+    /* Case 5: Above max width (w=51, h=30) -> Expected: Non-interactive */
+    #case-w51-h30 { width: 51px; height: 30px; }
+
+    /* Case 6: Below min height (w=30, h=9) -> Expected: Non-interactive */
+    #case-w30-h9 { width: 30px; height: 9px; }
+
+    /* Case 7: Above max height (w=30, h=51) -> Expected: Non-interactive */
+    #case-w30-h51 { width: 30px; height: 51px; }
+
+    /* Case 8: Empirical In-Stock badge from benchmark (w=48.625, h=15.0) -> Expected: Interactive */
+    #case-instock-empirical { width: 48.625px; height: 15.0px; }
+
+    /* Case 9: Empirical Out-of-Stock badge from benchmark (w=74.766, h=15.0) -> Expected: Non-interactive */
+    #case-outofstock-empirical { width: 74.766px; height: 15.0px; }
+  </style>
+</head>
+<body>
+  <h1>Geometry Heuristic Boundary Cases Testbench</h1>
+  <p>Testing ClickableElementDetector 10 &lt;= width &lt;= 50 and 10 &lt;= height &lt;= 50 heuristic.</p>
+
+  <span id="case-w9-h30" class="test-box badge" aria-label="W9-H30"></span>
+  <span id="case-w10-h10" class="test-box badge" aria-label="W10-H10"></span>
+  <span id="case-w30-h30" class="test-box badge" aria-label="W30-H30"></span>
+  <span id="case-w50-h50" class="test-box badge" aria-label="W50-H50"></span>
+  <span id="case-w51-h30" class="test-box badge" aria-label="W51-H30"></span>
+  <span id="case-w30-h9" class="test-box badge" aria-label="W30-H9"></span>
+  <span id="case-w30-h51" class="test-box badge" aria-label="W30-H51"></span>
+  <span id="case-instock-empirical" class="test-box product-stock in-stock" aria-label="In Stock">In</span>
+  <span id="case-outofstock-empirical" class="test-box product-stock out-of-stock" aria-label="Out of Stock">Out</span>
+</body>
+</html>

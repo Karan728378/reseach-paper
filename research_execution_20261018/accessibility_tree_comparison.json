@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T06:37:38.992476+00:00",
+  "timestamp": "2026-10-24T20:30:06.194439+00:00",
   "tooling_metadata": {
     "python_version": "3.11.9",
     "browser_use_version": "0.13.10",
@@ -26,9 +26,9 @@
       "interactive_matched_to_ax": 27,
       "matched_sample": [
         {
-          "selector_index": 35,
+          "selector_index": 37,
           "tag": "a",
-          "backend_node_id": 35,
+          "backend_node_id": 37,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "TechMart",
@@ -70,9 +70,9 @@
           }
         },
         {
-          "selector_index": 39,
+          "selector_index": 41,
           "tag": "a",
-          "backend_node_id": 39,
+          "backend_node_id": 41,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "Cart ( 0 )",
@@ -101,9 +101,9 @@
       "interactive_matched_to_ax": 27,
       "matched_sample": [
         {
-          "selector_index": 35,
+          "selector_index": 13,
           "tag": "a",
-          "backend_node_id": 35,
+          "backend_node_id": 13,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "TechMart",
@@ -136,9 +136,9 @@
           }
         },
         {
-          "selector_index": 13,
+          "selector_index": 14,
           "tag": "button",
-          "backend_node_id": 13,
+          "backend_node_id": 14,
           "has_ax_node": true,
           "ax_role": "button",
           "ax_name": "Search",
@@ -159,9 +159,9 @@
           }
         },
         {
-          "selector_index": 16,
+          "selector_index": 17,
           "tag": "a",
-          "backend_node_id": 16,
+          "backend_node_id": 17,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "Shop All Products",
@@ -179,9 +179,9 @@
       "interactive_matched_to_ax": 27,
       "matched_sample": [
         {
-          "selector_index": 38,
+          "selector_index": 36,
           "tag": "a",
-          "backend_node_id": 38,
+          "backend_node_id": 36,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "TechMart",
@@ -226,9 +226,9 @@
           }
         },
         {
-          "selector_index": 42,
+          "selector_index": 40,
           "tag": "a",
-          "backend_node_id": 42,
+          "backend_node_id": 40,
           "has_ax_node": true,
           "ax_role": "link",
           "ax_name": "Cart ( 0 )",

@@ -1,0 +1,6 @@
+run_id,model,task_id,arm,variant,success,score,total_steps,duration_seconds,status,termination_reason,error_message,cart_skus,cost_usd,timestamp
+qwen3_smoke_001_init_failed,qwen3:4b,T2,DATA-CFG,v3-data-attrs,False,0.0,0,3.343,failed,init_exception,max_history_items must be None or greater than 5,[],0.0,2026-10-24T12:48:03.058233
+qwen3_smoke_002_timeout_verified,qwen3:4b,T2,DATA-CFG,v3-data-attrs,True,1.0,2,1013.094,timeout_partial,llm_timeout_max_steps_reached,Step 3 LLM read timeout; cart verified via CDP,['mkp-001'],0.0,2026-10-24T13:09:15.398893
+qwen3_smoke_003,qwen3:4b,T2,DATA-CFG,v3-data-attrs,True,1.0,2,288.61,timed_out,llm_or_step_timeout,Step 2 timed out after 180 seconds,['mkp-001'],0.0,2026-10-24T14:02:10.647704
+qwen3_smoke_004,qwen3:4b,T2,ABS,v3-data-attrs,False,0.0,1,185.5,timed_out,llm_or_step_timeout,Step 1 timed out after 180 seconds,[],0.0,2026-10-24T14:19:47.298908
+qwen3_smoke_005,qwen3:4b,T2,ABS,v3-data-attrs,False,0.0,1,188.563,timed_out,llm_or_step_timeout,Step 1 timed out after 180 seconds,[],0.0,2026-10-24T18:40:14.546196

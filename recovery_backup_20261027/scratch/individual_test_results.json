@@ -1,0 +1,312 @@
+[
+  {
+    "module": "test_accessibility_tree_comparison",
+    "file": "test_accessibility_tree_comparison.py",
+    "tests": 10,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.328,
+    "stdout": "",
+    "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.002s\n\nOK"
+  },
+  {
+    "module": "test_agent_prompt_pipeline",
+    "file": "test_agent_prompt_pipeline.py",
+    "tests": 0,
+    "status": "N/A",
+    "exit_code": 0,
+    "duration_sec": 3.4621,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nOK"
+  },
+  {
+    "module": "test_analyze_v3_results",
+    "file": "test_analyze_v3_results.py",
+    "tests": 11,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.4304,
+    "stdout": "[+] Successfully generated analysis outputs in: C:\\testing\\research_execution_20261018\\test_scratch_synthetic_data\\out_dataset_8_drift\n    - JSON:     summary_metrics.json\n    - CSV:      primary_contrasts.csv, sensitivity_contrasts.csv, task_by_arm_summary.csv, t6_probe_summary.csv\n    - Markdown: analysis_report.md\n[+] Successfully generated analysis outputs in: C:\\testing\\research_execution_20261018\\test_scratch_synthetic_data\\out_dataset_1\n    - JSON:     summary_metrics.json\n    - CSV:      primary_contrasts.csv, sensitivity_contrasts.csv, task_by_arm_summary.csv, t6_probe_summary.csv\n    - Markdown: analysis_report.md",
+    "stderr": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.249s\n\nOK"
+  },
+  {
+    "module": "test_aria_baseline_prompt_divergence",
+    "file": "test_aria_baseline_prompt_divergence.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1808,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.007s\n\nOK"
+  },
+  {
+    "module": "test_baseline_pooling_consistency",
+    "file": "test_baseline_pooling_consistency.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1805,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.011s\n\nOK"
+  },
+  {
+    "module": "test_browser_lifecycle_and_recovery",
+    "file": "test_browser_lifecycle_and_recovery.py",
+    "tests": 10,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 6.976,
+    "stdout": "-> Effective agent step budget: 30 steps (step 30 is finalization/done).",
+    "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 5.676s\n\nOK"
+  },
+  {
+    "module": "test_budget_controls",
+    "file": "test_budget_controls.py",
+    "tests": 7,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.2048,
+    "stdout": "",
+    "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.000s\n\nOK"
+  },
+  {
+    "module": "test_budget_guard_repairs",
+    "file": "test_budget_guard_repairs.py",
+    "tests": 6,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.3209,
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.043s\n\nOK"
+  },
+  {
+    "module": "test_confirmatory_protocol_dryrun",
+    "file": "test_confirmatory_protocol_dryrun.py",
+    "tests": 4,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1741,
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK"
+  },
+  {
+    "module": "test_data_reconciliation_and_provenance",
+    "file": "test_data_reconciliation_and_provenance.py",
+    "tests": 20,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.6388,
+    "stdout": "",
+    "stderr": "....................\n----------------------------------------------------------------------\nRan 20 tests in 0.441s\n\nOK"
+  },
+  {
+    "module": "test_disambiguation_probes",
+    "file": "test_disambiguation_probes.py",
+    "tests": 7,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.0991,
+    "stdout": "",
+    "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.078s\n\nOK"
+  },
+  {
+    "module": "test_forensic_audit_regressions",
+    "file": "test_forensic_audit_regressions.py",
+    "tests": 12,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1785,
+    "stdout": "",
+    "stderr": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.005s\n\nOK"
+  },
+  {
+    "module": "test_format_inspection",
+    "file": "test_format_inspection.py",
+    "tests": 0,
+    "status": "N/A",
+    "exit_code": 0,
+    "duration_sec": 1.6803,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nOK"
+  },
+  {
+    "module": "test_groq_backend",
+    "file": "test_groq_backend.py",
+    "tests": 14,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 10.374,
+    "stdout": "",
+    "stderr": ".........INFO     [service] Using anonymized telemetry, see https://docs.browser-use.com/development/monitoring/telemetry.\n.....\n----------------------------------------------------------------------\nRan 14 tests in 6.901s\n\nOK"
+  },
+  {
+    "module": "test_groq_connection",
+    "file": "test_groq_connection.py",
+    "tests": 0,
+    "status": "N/A",
+    "exit_code": 0,
+    "duration_sec": 0.1631,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nOK"
+  },
+  {
+    "module": "test_implementation_fixes",
+    "file": "test_implementation_fixes.py",
+    "tests": 6,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.0629,
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.062s\n\nOK"
+  },
+  {
+    "module": "test_live_instrumentation_offline",
+    "file": "test_live_instrumentation_offline.py",
+    "tests": 3,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 16.5174,
+    "stdout": "",
+    "stderr": ".INFO     [BrowserSession] Setting viewport to 1920x1080 with device scale factor 1.0 whereas original device scale factor was 1.0\nINFO     [service] Using anonymized telemetry, see https://docs.browser-use.com/development/monitoring/telemetry.\nINFO     [Agent] \u001b[34m\\U0001f3af Task: Find wireless headphones\u001b[0m\nINFO     [Agent] \\U0001f4e6 Newer version available: 0.13.14 (current: 0.13.10). Upgrade with: uv add browser-use==0.13.14\nINFO     [Agent] Starting a browser-use agent with version 0.13.10, with provider=google and model=gemini-flash-lite-latest\nINFO     [Agent]   \\u25b6\\ufe0f   \u001b[34mnavigate\u001b[0m: \u001b[35murl\u001b[0m: http://127.0.0.1:8094/variants/v0-baseline/index.html#home, \u001b[35mnew_tab\u001b[0m: False\nINFO     [tools] \\U0001f517 Navigated to http://127.0.0.1:8094/variants/v0-baseline/index.html#home\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 1:\nWARNING  [Agent] \\u274c Result failed 1/6 times: items\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 2:\nWARNING  [Agent] \\u274c Result failed 2/6 times: items\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 3:\nWARNING  [Agent] \\u274c Result failed 3/6 times: items\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 4:\nWARNING  [Agent] \\u274c Result failed 4/6 times: items\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 5:\nINFO     [Agent] \\U0001f4cb Exploration nudge injected after 5 steps without a plan\nWARNING  [Agent] \\u274c Result failed 5/6 times: items\nINFO     [Agent] \n\nINFO     [Agent] \\U0001f4cd Step 6:\nINFO     [Agent] \\U0001f4cb Exploration nudge injected after 6 steps without a plan\nINFO     [Agent] \\U0001f501 Loop detection nudge injected (repetition=0, stagnation=5)\nERROR    [Agent] \\u274c Result failed 6/6 times: items\nERROR    [Agent] \\u274c Stopping due to 5 consecutive failures\nINFO     [Agent] \nINFO     [Agent] Did the Agent not work as expected? Let us fix this!\nINFO     [Agent]    Open a short issue on GitHub: https://github.com/browser-use/browser-use/issues\nINFO     [BrowserSession] \\U0001f4e2 on_BrowserStopEvent - Calling reset() (force=True, keep_alive=None)\nINFO     [BrowserSession] [SessionManager] Cleared all owned data (targets, sessions, mappings)\nINFO     [BrowserSession] \\u2705 Browser session reset complete\nINFO     [BrowserSession] \\u2705 Browser session reset complete\nINFO     [BrowserSession] \\U0001f4e2 on_BrowserStopEvent - Calling reset() (force=False, keep_alive=None)\nINFO     [BrowserSession] \\u2705 Browser session reset complete\nINFO     [BrowserSession] \\u2705 Browser session reset complete\n..\n----------------------------------------------------------------------\nRan 3 tests in 12.336s\n\nOK"
+  },
+  {
+    "module": "test_manuscript_consistency",
+    "file": "test_manuscript_consistency.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1916,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.003s\n\nOK"
+  },
+  {
+    "module": "test_mutation_audit",
+    "file": "test_mutation_audit.py",
+    "tests": 10,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.038,
+    "stdout": "======================================================================\nPROTOCOL V3/V4 EXPERIMENTAL RUNNER\nMode: LIVE\nBackend: GEMINI\nSchedule: C:\\testing\\research_execution_20261018\\proposed_3arm_schedule.csv\nModel: gemini-3.1-flash-lite\nMax Steps Per Run: 4\nMax Requests Ceiling: 16\nSummary Output: C:\\testing\\research_execution_20261018\\results\\v3_3arm_summary.csv\nPer-Run Detail Directory: Disabled\nCost Constraint: $0.00 USD (Free-tier locked: True)\nVision Confound Enforcement: use_vision=False (STRICT)\n======================================================================",
+    "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.003s\n\nOK"
+  },
+  {
+    "module": "test_observation_pipeline_stages",
+    "file": "test_observation_pipeline_stages.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.2928,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.043s\n\nOK"
+  },
+  {
+    "module": "test_phase9_strengthening",
+    "file": "test_phase9_strengthening.py",
+    "tests": 4,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.1047,
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.053s\n\nOK"
+  },
+  {
+    "module": "test_power_audit",
+    "file": "test_power_audit.py",
+    "tests": 7,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1976,
+    "stdout": "",
+    "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.024s\n\nOK"
+  },
+  {
+    "module": "test_run_accounting_and_provenance",
+    "file": "test_run_accounting_and_provenance.py",
+    "tests": 3,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.2379,
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.038s\n\nOK"
+  },
+  {
+    "module": "test_runner_guard_integration",
+    "file": "test_runner_guard_integration.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 2.4737,
+    "stdout": "-> Effective agent step budget: 2 steps (step 2 is finalization/done).\n       -> Effective agent step budget: 5 steps (step 5 is finalization/done).",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 1.232s\n\nOK"
+  },
+  {
+    "module": "test_schedule_validity",
+    "file": "test_schedule_validity.py",
+    "tests": 6,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.2696,
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.031s\n\nOK"
+  },
+  {
+    "module": "test_sentinel_pipeline",
+    "file": "test_sentinel_pipeline.py",
+    "tests": 5,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.1803,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.008s\n\nOK"
+  },
+  {
+    "module": "test_single_smoke_request",
+    "file": "test_single_smoke_request.py",
+    "tests": 0,
+    "status": "N/A",
+    "exit_code": 0,
+    "duration_sec": 0.1739,
+    "stdout": "",
+    "stderr": "----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nOK"
+  },
+  {
+    "module": "test_step_limits_and_budget_audit",
+    "file": "test_step_limits_and_budget_audit.py",
+    "tests": 12,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 4.6494,
+    "stdout": "======================================================================\nPROTOCOL V3/V4 EXPERIMENTAL RUNNER\nMode: MOCK\nBackend: GEMINI\nSchedule: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_2hzuuh_5\\multi_schedule.csv\nModel: gemini-3.1-flash-lite\nMax Steps Per Run: 4\nMax Requests Ceiling: 16\nSummary Output: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_2hzuuh_5\\test_summary.csv\nPer-Run Detail Directory: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_2hzuuh_5\\test_runs\nCost Constraint: $0.00 USD (Free-tier locked: True)\nVision Confound Enforcement: use_vision=False (STRICT)\n======================================================================\nLoaded 3 runs from schedule.\nFound 0 already completed runs in summary CSV.\n\n[Run 01/3] Block 1 | Arm ABS | Task T1 | Variant v0-baseline\n       -> Result: success=True (score=1.0) | logged to summary\nReached max_runs limit (1). Stopping.\n\n======================================================================\nRunner finished. Executed 1 runs. Total completed: 1/3\nCumulative Estimated Cost: $0.0044 USD\nCumulative Requests Used: 4/16\n======================================================================\n======================================================================\nPROTOCOL V3/V4 EXPERIMENTAL RUNNER\nMode: MOCK\nBackend: GEMINI\nSchedule: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_72rasvip\\single_schedule.csv\nModel: gemini-3.1-flash-lite\nMax Steps Per Run: 7\nMax Requests Ceiling: 16\nSummary Output: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_72rasvip\\test_summary.csv\nPer-Run Detail Directory: C:\\Users\\kr728\\AppData\\Local\\Temp\\test_audit_72rasvip\\test_runs\nCost Constraint: $0.00 USD (Free-tier locked: True)\nVision Confound Enforcement: use_vision=False (STRICT)\n======================================================================\nLoaded 1 runs from schedule.\nFound 0 already completed runs in summary CSV.\n\n[Run 01/1] Block 1 | Arm ABS | Task T1 | Variant v0-baseline\n       -> Result: success=True (score=1.0) | logged to summary\nReached max_runs limit (1). Stopping.\n\n======================================================================\nRunner finished. Executed 1 runs. Total completed: 1/1\nCumulative Estimated Cost: $0.0078 USD\nCumulative Requests Used: 7/16\n======================================================================",
+    "stderr": "............\n----------------------------------------------------------------------\nRan 12 tests in 3.632s\n\nOK"
+  },
+  {
+    "module": "test_t6_verifier_isolated",
+    "file": "test_t6_verifier_isolated.py",
+    "tests": 7,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.2605,
+    "stdout": "",
+    "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.002s\n\nOK"
+  },
+  {
+    "module": "test_treatment_leakage_and_integrity",
+    "file": "test_treatment_leakage_and_integrity.py",
+    "tests": 6,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 0.2984,
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.039s\n\nOK"
+  },
+  {
+    "module": "test_verifier_ground_truth_battery",
+    "file": "test_verifier_ground_truth_battery.py",
+    "tests": 12,
+    "status": "PASS",
+    "exit_code": 0,
+    "duration_sec": 1.3169,
+    "stdout": "",
+    "stderr": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.001s\n\nOK"
+  }
+]

@@ -27,8 +27,8 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-PROJECT_ROOT = Path("C:/testing")
-EXECUTION_DIR = Path("C:/testing/research_execution_20261018")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+EXECUTION_DIR = Path(__file__).resolve().parent
 RUNNER_DIR = PROJECT_ROOT / "runner"
 
 sys.path.insert(0, str(RUNNER_DIR))

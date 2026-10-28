@@ -12,7 +12,7 @@ Target Architecture: LaTeX (article class, standard packages + tabularx + tikz)
 FILES IN THIS PACKAGE:
 1. research_paper_final.tex          - Complete LaTeX source manuscript.
 2. architecture_pipeline_figure.tex  - TikZ architecture pipeline diagram (required by \input).
-3. references.bib                    - Complete BibTeX bibliography (21 verified entries).
+3. references.bib                    - Complete BibTeX bibliography (22 entries; 20 cited in manuscript, 2 defined but uncited: wai_aria11, mantel1959statistical).
 4. README_OVERLEAF.md                - Detailed Overleaf compilation and visual inspection checklist.
 5. REVISION_EVIDENCE_AUDIT.md        - Complete claim-to-evidence forensic audit.
 6. STATISTICAL_AUDIT.md              - Independent statistical recalculations and TOST sample sizes.

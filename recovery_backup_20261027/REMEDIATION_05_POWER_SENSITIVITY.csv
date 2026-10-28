@@ -1,0 +1,9 @@
+Scenario,Baseline_p1,Treatment_p2,Delta,Power_n13_alpha05,Power_n13_Bonferroni,Power_n20_alpha05,Power_n20_Bonferroni,Required_n_per_arm_80pct_Superiority,Required_N_total_4arms_Superiority,Required_n_per_arm_80pct_TOST_margin10,Required_N_total_4arms_TOST
+Subtle Effect (Delta=0.10),0.70,0.80,0.10,8.4%,3.5%,10.8%,4.7%,294,1176,260,1040
+Subtle Effect (Delta=0.15),0.70,0.85,0.15,14.4%,6.6%,20.1%,10.0%,121,484,260,1040
+"Small Effect (Delta=0.20, Pilot p=0.65->0.85)",0.65,0.85,0.20,21.1%,10.6%,30.4%,16.9%,73,292,282,1128
+"Small Effect (Delta=0.20, Max Var p=0.50->0.70)",0.50,0.70,0.20,17.4%,8.3%,24.7%,13.0%,93,372,310,1240
+Moderate Effect (Delta=0.25),0.60,0.85,0.25,29.0%,15.7%,42.2%,25.8%,49,196,297,1188
+"Moderate Effect (Delta=0.35, Pilot p=0.50->0.85)",0.50,0.85,0.35,47.6%,29.9%,66.8%,48.7%,27,108,310,1240
+Large Disparity (Delta=0.50),0.30,0.80,0.50,75.7%,57.7%,92.1%,81.8%,15,60,260,1040
+Large Disparity (Delta=0.70),0.10,0.80,0.70,98.9%,95.3%,100.0%,99.8%,7,28,112,448

@@ -1,0 +1,71 @@
+{
+  "trial_type": "local_qwen3_smoke_test",
+  "run_id": "qwen3_smoke_003",
+  "model_id": "qwen3:4b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "context_window": 4096,
+  "task_id": "T2",
+  "arm": "DATA-CFG",
+  "variant": "v3-data-attrs",
+  "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+  "timestamps": {
+    "start": "2026-10-24T13:57:22.040493",
+    "end": "2026-10-24T14:02:10.647704",
+    "duration_seconds": 288.61
+  },
+  "step_durations_seconds": [
+    0.0,
+    102.909
+  ],
+  "total_steps": 2,
+  "status": "timed_out",
+  "termination_reason": "llm_or_step_timeout",
+  "error_message": "Step 2 timed out after 180 seconds",
+  "agent_final_text": "Clicked button \"Add to Cart\"",
+  "actions_executed": [
+    {
+      "step": 1,
+      "duration_seconds": 0.0,
+      "thinking": "thinking=None evaluation_previous_goal='Start' memory='' next_goal='Initial navigation'",
+      "actions": [
+        "root=NavigateActionModel(navigate=NavigateAction(url='http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home', new_tab=False))"
+      ]
+    },
+    {
+      "step": 2,
+      "duration_seconds": 102.909,
+      "thinking": "thinking=None evaluation_previous_goal=\"Successfully identified the 'Mechanical Keyboard Pro' product with the correct Add to Cart button.\" memory=\"Product 'Mechanical Keyboard Pro' found on homepage with $149.99 price and 4.7 stars. Add to Cart button (data-product-id=mkp-001) is enabled and in stock.\" next_goal=\"Click the 'Add to Cart' button for the Mechanical Keyboard Pro product (data-product-id=mkp-001) to add it to the cart.\"",
+      "actions": [
+        "root=ClickActionModel(click=ClickElementActionIndexOnly(index=33))"
+      ]
+    }
+  ],
+  "terminal_cart_state": [
+    {
+      "sku": "mkp-001",
+      "name": "Mechanical Keyboard Pro",
+      "quantity": 1,
+      "price": 149.99
+    }
+  ],
+  "verifier_outcome": {
+    "success": true,
+    "score": 1.0,
+    "details": {
+      "target_sku": "mkp-001",
+      "cart_skus": [
+        "mkp-001"
+      ]
+    }
+  },
+  "financial_cost_usd": 0.0,
+  "resource_snapshot": {
+    "free_ram_mb": 4616.9,
+    "gpu_vram": {
+      "available": true,
+      "total_vram_mb": 4096.0,
+      "used_vram_mb": 2917.0,
+      "free_vram_mb": 1046.0
+    }
+  }
+}

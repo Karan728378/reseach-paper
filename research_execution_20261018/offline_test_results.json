@@ -3,7 +3,7 @@
     "name": "test_serializer_disabled_elements",
     "status": "PASS",
     "message": "DISABLED_ELEMENTS contains 'script' and 'meta' (CONFIRMED)",
-    "duration_ms": 6.4
+    "duration_ms": 4.2
   },
   {
     "name": "test_views_default_include_attributes",
@@ -32,49 +32,49 @@
   {
     "name": "test_historical_vs_strict_t5_verifier",
     "status": "PASS",
-    "message": "T5 verifier strictly checks empty cart; pre-state assertion documented (CONFIRMED)",
+    "message": "T5 verifier strictly requires pre_cart_count == 1; rejects missing or unseeded pre-state (CONFIRMED)",
     "duration_ms": 0.0
   },
   {
     "name": "test_t6_strict_grounded_refusal_verifier",
     "status": "PASS",
     "message": "T6 grounded refusal correctly scores valid refusal and rejects hallucination (CONFIRMED)",
-    "duration_ms": 0.0
+    "duration_ms": 0.1
   },
   {
     "name": "test_t6_regression_battery",
     "status": "PASS",
     "message": "T6 comprehensive regression battery passed (44 diverse test cases validated in active runner) (CONFIRMED)",
-    "duration_ms": 0.2
+    "duration_ms": 0.3
   },
   {
     "name": "test_treatment_leakage_in_variants",
     "status": "PASS",
     "message": "Treatment leakage confirmed: visible text is rendered across v0, v2, v3 via shared app-core.js (CONFIRMED)",
-    "duration_ms": 0.9
+    "duration_ms": 1.6
   },
   {
     "name": "test_runner_retry_logic_survivorship_flaw",
     "status": "PASS",
     "message": "Runner survivorship bias flaw verified; Protocol v3 preserves valid failures (CONFIRMED)",
-    "duration_ms": 3.2
+    "duration_ms": 10.5
   },
   {
     "name": "test_schedule_rcbd_balance",
     "status": "PASS",
-    "message": "RCBD schedule is perfectly balanced: 4 blocks of 24, 24/arm, 16/task (CONFIRMED)",
-    "duration_ms": 0.7
+    "message": "3-arm RCBD schedule is perfectly balanced: 4 blocks of 18, 24/arm, 12/task (CONFIRMED)",
+    "duration_ms": 3.8
   },
   {
     "name": "test_original_files_unmodified",
     "status": "PASS",
     "message": "All tracked application source files match authentic post-refactor SHA-256 hashes (CONFIRMED)",
-    "duration_ms": 2.3
+    "duration_ms": 40.1
   },
   {
     "name": "test_accessibility_tree_comparison_artifacts",
     "status": "PASS",
     "message": "Accessibility tree comparison artifacts valid: critical divergence on Ch3 and concordant loss on Ch1 verified (CONFIRMED)",
-    "duration_ms": 0.5
+    "duration_ms": 0.8
   }
 ]

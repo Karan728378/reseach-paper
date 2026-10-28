@@ -1,0 +1,123 @@
+# Master Execution Log & Commands Record
+**Date:** 2026-10-18  
+**Directory:** `C:\testing\research_execution_20261018`  
+**Security Status:** 100% Offline · Zero API Calls · Zero Source File Modifications  
+
+---
+
+## 1. Commands Executed and Exit Codes
+
+### Command 1: Execution Directory Check
+- **Command:** `powershell -Command "Test-Path 'C:\testing\research_execution_20261018'"`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Output:** `False` (Confirmed clean initial state)
+
+### Command 2: Execution Directory Initialization
+- **Command:** `powershell -Command "New-Item -ItemType Directory -Path 'C:\testing\research_execution_20261018' -Force"`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Output:** Directory `C:\testing\research_execution_20261018` created successfully.
+
+### Command 3: Python Environment Verification
+- **Command:** `C:\testing\.venv311\Scripts\python.exe -c "import sys; print(sys.version)"`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Output:** `3.11.9 (tags/v3.11.9:de54cf5, Apr 2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]`
+
+### Command 4: Generator Execution (Parts 1-4)
+- **Command:** `C:\testing\.venv311\Scripts\python.exe scratch/generate_research_execution.py`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Generated Deliverables:**
+  - `protocol.md`
+  - `task_specifications.json`
+  - `treatment_matrix.csv`
+  - `proposed_randomized_schedule.csv`
+  - `analysis_plan.md`
+  - `verifier_specification.md`
+  - `data_dictionary.md`
+  - `run_manifest_schema.json`
+  - `reproducibility_checklist.md`
+  - `literature_verification_checklist.md`
+  - `remaining_blockers.md`
+  - `power_analysis.py`
+  - `offline_test_suite.py`
+  - `manuscript_draft.md`
+
+### Command 5: Statistical Power Analysis Execution
+- **Command:** `C:\testing\.venv311\Scripts\python.exe C:\testing\research_execution_20261018\power_analysis.py`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Output Summary:**
+  - `ABS vs VIS` (Delta=0.70): 100.0% power at N=24/arm
+  - `VIS vs ARIA` (Delta=0.35): 75.1% power at N=24/arm (47.8% Bonferroni-adjusted)
+  - `VIS vs DATA-CFG` (Delta=0.20): 35.6% power at N=24/arm
+  - `ARIA vs DATA-CFG` (Delta=0.15): 23.3% power at N=24/arm
+  - Exported to: `C:\testing\research_execution_20261018\power_analysis.json`
+
+### Command 6: Offline Test Suite Execution
+- **Command:** `C:\testing\.venv311\Scripts\python.exe C:\testing\research_execution_20261018\offline_test_suite.py`
+- **CWD:** `C:\testing`
+- **Exit Code:** `0`
+- **Output Summary:**
+  - Total Tests: 15
+  - Passed: 15 / 15 (100%)
+  - Failed: 0
+  - Blocked: 0
+  - Key Findings Confirmed:
+    * `test_serializer_disabled_elements`: `script` and `meta` in `DISABLED_ELEMENTS` (PASS)
+    * `test_views_default_include_attributes`: `aria-label` present, `data-*` absent by default (PASS)
+    * `test_patched_include_attributes`: custom attributes whitelisted under patched config (PASS)
+    * `test_t3_verifier_flaw_fixed`: wh-002 only succeeds; wh-001 fails (PASS)
+    * `test_t4_verifier_no_unconditional_partial`: failed checkout gets 0.0, not 0.25 (PASS)
+    * `test_t5_verifier_prestate_assertion`: unseeded cart rejected with error (PASS)
+    * `test_t6_retrieval_regex_strict`: refusal strings properly rejected (PASS)
+    * `test_schedule_rcbd_balance`: 96 runs, 4 blocks, 24/arm, 16/task, 4/cell (PASS)
+    * `test_original_files_unmodified`: All authentic baseline hashes match (PASS)
+
+---
+
+## 2. File Integrity & SHA-256 Hash Manifest
+
+### 2.1 Original Project Source Files (Immutability Check)
+All original project files were confirmed UNTOUCHED:
+
+| File Path | Size (Bytes) | SHA-256 Hash | Status |
+|-----------|--------------|--------------|--------|
+| `index.html` | 9128 | `4dbada49e746b976d9247382f8b052051416819e2bd763e41da7f7ec0295944c` | **UNTOUCHED** |
+| `runner/agent-runner.py` | 50267 | `8a4af77a540b9cff2feba65022dfee98c43ad9210f4d8f06a809e3f9a5094dfc` | **UNTOUCHED** |
+| `runner/verifier.py` | 33927 | `890b968345e82b59cb0545263d8e438a6ef6de9f521b90da5b98e5680850b378` | **UNTOUCHED** |
+| `runner/logger.py` | 6902 | `7306110817ce6339e4647c36b5592b8d12afa539126c14d6ec3093eb1abaf5ea` | **UNTOUCHED** |
+| `runner/requirements.txt` | 531 | `bfeb2fe24750056f6d52f82661d65b8ad96442c7797c18db912f0efe52a5b89f` | **UNTOUCHED** |
+| `tasks/task-definitions.json` | 6255 | `e61408a8a82192824c1c4b4b6a35ac47e0b36dd9b06025d865e3e435b2231e5f` | **UNTOUCHED** |
+| `shared/products.js` | 4857 | `b182ac6bdb6704f2c56f3718de41262aa2e9689ac2e965cae256ae1ae9278c11` | **UNTOUCHED** |
+| `shared/app-core.js` | 27961 | `0a7fd4f83df2cb805787500f5e2c1d56398dd31cf6ac21276f27127c48eabd8d` | **UNTOUCHED** |
+| `shared/styles.css` | 20005 | `034094e7e41eddce2d488aa0e13e3da79332fb8c73cef8675e0962bf6bec4799` | **UNTOUCHED** |
+| `variants/v0-baseline/index.html` | 8322 | `aa042e92caaab5ceac20a04552e18e182ab4f5812e54b6d28a6899fce3df43ae` | **UNTOUCHED** |
+| `variants/v1-jsonld/index.html` | 9078 | `9bad542fff4b6db719ae643ff60a48ff8ac4966c603158132e366c48852f70d7` | **UNTOUCHED** |
+| `variants/v2-aria/index.html` | 9714 | `e5e303ab0c6de3108258fcf4603192b539784af747e8c35f1073182dc097a612` | **UNTOUCHED** |
+| `variants/v3-data-attrs/index.html` | 10062 | `4db1305a1bc4623499f82a863148602f39e5db8dd9922f8f5eee71229b39df4d` | **UNTOUCHED** |
+| `variants/v4-evidence-meta/index.html` | 8657 | `6183427afe7d2fcafa1e68582dad515123482440d42af5b572d008fe0d802120` | **UNTOUCHED** |
+| `results/main_experiment/full-summary.csv` | 19249 | `42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621` | **UNTOUCHED** |
+
+### 2.2 Generated Research Execution Deliverables
+
+| File Name | Size (Bytes) | SHA-256 Hash | Validation |
+|-----------|--------------|--------------|------------|
+| `protocol.md` | 8603 | `d22568c62b0b81ae3279c0152df0d8fc60543f33715a58ff3aac798304be3e42` | **VERIFIED** |
+| `task_specifications.json` | 10309 | `8793f598c22342996ae9c599a4568524d07387fc5bda37edaa0a661c70f85daa` | **VERIFIED** |
+| `treatment_matrix.csv` | 4890 | `3032c13878dccbd225247fa3c40b85c874288bf57f8add212eec2b758d144d37` | **VERIFIED** |
+| `proposed_randomized_schedule.csv` | 3524 | `107c790e8de411849120e580dd987fe641a9112585667a0f7dc26bd913f778ce` | **VERIFIED** |
+| `analysis_plan.md` | 5361 | `709c226839d22284fa5fcacf5cdf0975c319c7205f2d928d946749d5f43b82e9` | **VERIFIED** |
+| `verifier_specification.md` | 9379 | `cb25f739da823ae3b0e933ba2eb589fc9604bbe4666c244c551a0f1f080c58f8` | **VERIFIED** |
+| `offline_test_suite.py` | 21219 | `0d2a916d912f2eef6952ab2d34d31612a01369ec9f776a4776ca796f4a0cd4a5` | **VERIFIED** |
+| `offline_test_results.json` | 3526 | `cca5115614662c3aca8d50e59dc98936786b742f887353c818ad95f180536b04` | **VERIFIED** |
+| `power_analysis.py` | 5460 | `208f5105b2559c36998bdb6538e814eae39f56dee92a7cd4bfd2e3b9de8ae632` | **VERIFIED** |
+| `power_analysis.json` | 4322 | `5c8650a1d8083c241e1d06c8fb1b185f21bf33dc5e2d71ad71f32b84de45f72f` | **VERIFIED** |
+| `data_dictionary.md` | 4395 | `ac89832eb4f71e70924dd24f61b2a0a2ef3439fc080bbe8f74bc7f2036532ee6` | **VERIFIED** |
+| `run_manifest_schema.json` | 2643 | `9e3c4643c5759611e1b0ffb835962d3e84ea27d8cc2e699a931e7ae7b2b987cb` | **VERIFIED** |
+| `reproducibility_checklist.md` | 2905 | `e75babad2aa01c517ae66b3a1349b9182b525e5638dac10ac99abd8016d3fb79` | **VERIFIED** |
+| `literature_verification_checklist.md` | 4323 | `83ce882b910d75f4680e31252c1a14fb79b9a8b642fa6c712a6dd4f6fe8f4b08` | **VERIFIED** |
+| `remaining_blockers.md` | 6154 | `a16efb9d0b16e3cad69853b31dd46ab0c8400f4862f69117631ed03ab9c78729` | **VERIFIED** |
+| `manuscript_draft.md` | 19731 | `f71bda2123fdf660cb95e3e3962b5421fa4c61be64a3c50120d20ef16c60634f` | **VERIFIED** |

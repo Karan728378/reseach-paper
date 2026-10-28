@@ -1,0 +1,28 @@
+{
+  "checkpoint_timestamp": "2026-10-24T22:51:00.000000",
+  "schedule_file": "proposed_3arm_schedule.csv",
+  "summary_file": "results/v3_3arm_summary.csv",
+  "runs_dir": "results/3arm_runs",
+  "model": "gemini-3.1-flash-lite",
+  "total_scheduled_runs": 72,
+  "completed_indices": [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41
+  ],
+  "completed_count": 41,
+  "remaining_count": 31,
+  "next_run_index": 42,
+  "current_block": 3,
+  "block_1_progress": "18/18 completed (100%)",
+  "block_2_progress": "18/18 completed (100%)",
+  "block_3_progress": "5/18 completed (remaining: 42-54)",
+  "block_4_progress": "0/18 completed (remaining: 55-72)",
+  "cumulative_requests_today": 604,
+  "max_requests_ceiling": 600,
+  "cost_spent_usd": 0.0,
+  "status": "halted_due_to_ceiling",
+  "blocker": "Configured daily request ceiling (600 requests) reached (604 requests recorded in daily ledger). Fail-closed safety gate prevents further unbudgeted API calls today."
+}

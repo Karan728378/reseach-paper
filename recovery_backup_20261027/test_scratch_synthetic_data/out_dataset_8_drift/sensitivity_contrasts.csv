@@ -1,0 +1,5 @@
+contrast_id,treatment_arm,reference_arm,treatment_successes,treatment_n,reference_successes,reference_n,risk_difference,newcombe_95_ci_lower,newcombe_95_ci_upper,agresti_caffo_95_ci_lower,agresti_caffo_95_ci_upper,fisher_p_unadjusted,cmh_chi2,cmh_common_or,cmh_p_unadjusted,is_significant_nominal
+ARIA_vs_ABS,ARIA,ABS,20,20,1,20,0.95,0.7037,0.9911,0.7153,1.0,0.0,28.7089,inf,0.0,True
+ARIA_vs_VIS,ARIA,VIS,20,20,18,20,0.1,-0.0766,0.3011,-0.0769,0.2587,0.4872,0.5,inf,0.4795,False
+DATA_CFG_vs_ABS,DATA-CFG,ABS,20,20,1,20,0.95,0.7037,0.9911,0.7153,1.0,0.0,28.7089,inf,0.0,True
+DATA_CFG_vs_VIS,DATA-CFG,VIS,20,20,18,20,0.1,-0.0766,0.3011,-0.0769,0.2587,0.4872,0.5,inf,0.4795,False

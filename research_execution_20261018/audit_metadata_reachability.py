@@ -33,7 +33,7 @@ EXTENDED_ATTRIBUTES = list(DEFAULT_INCLUDE_ATTRIBUTES) + [
 ]
 
 PORT = 8095
-WORKSPACE_ROOT = Path(r"C:\testing")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = WORKSPACE_ROOT / "research_execution_20261018" / "fixtures"
 
 DUMMY_JSON = json.dumps({

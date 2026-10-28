@@ -1,0 +1,301 @@
+{
+  "inventory": [
+    {
+      "label": "Manuscript Source",
+      "path": "C:\\testing\\research_execution_20261018\\research_paper_final.tex",
+      "exists": true,
+      "size_bytes": 51145,
+      "sha256": "9cfd478f255490d1388d84c72c07acf1eafa333ac09036f09572734e3a8ca91c"
+    },
+    {
+      "label": "Bibliography",
+      "path": "C:\\testing\\research_execution_20261018\\references.bib",
+      "exists": true,
+      "size_bytes": 8112,
+      "sha256": "1d81070d9a249751354f8313937ec284c3239e430cb7d510415724b503b239cc"
+    },
+    {
+      "label": "TikZ Architecture Diagram",
+      "path": "C:\\testing\\research_execution_20261018\\architecture_pipeline_figure.tex",
+      "exists": true,
+      "size_bytes": 5422,
+      "sha256": "096a646a2c6f5001764cfc25f4fc3485b367def2c8ad1dd51445b7e3e16d198f"
+    },
+    {
+      "label": "Existing PDF Artifact",
+      "path": "C:\\testing\\research_execution_20261018\\compiled_manuscript.pdf",
+      "exists": true,
+      "size_bytes": 752110,
+      "sha256": "4ecc0ae58392aae8e701d4a441caf89bdb79d77d4ddbf6fb46f1a10691248802"
+    },
+    {
+      "label": "Claim Evidence Matrix",
+      "path": "C:\\testing\\research_execution_20261018\\EVIDENCE_TO_CLAIM_MATRIX.csv",
+      "exists": true,
+      "size_bytes": 11953,
+      "sha256": "d57ec82cd274d4bceab266c8fe75ce58e527ce1b16786dc149f350ddc56d11f7"
+    },
+    {
+      "label": "Submission ZIP Archive",
+      "path": "C:\\testing\\research_execution_20261018\\manuscript_submission_bundle_corrected.zip",
+      "exists": true,
+      "size_bytes": 769677,
+      "sha256": "05cd4bf45471c21a74b10d47ae23eb17084ccdd2833bb9002d7ba4dfb9340b6b"
+    },
+    {
+      "label": "Raw Pilot (261 rows)",
+      "path": "C:\\testing\\results\\pilot-summary.csv",
+      "exists": true,
+      "size_bytes": 33855,
+      "sha256": "d258e5527c9905e6cf1334f92c6492ab93b9b1329819a139760a2e78ae5b3a86"
+    },
+    {
+      "label": "Cleaned Pilot (250 rows)",
+      "path": "C:\\testing\\results\\pilot-summary-clean.csv",
+      "exists": true,
+      "size_bytes": 38416,
+      "sha256": "82ae25ded8480c7b7804dd3dfbf53d03a6d46c2ecc96c8939e2044cc9c729b9c"
+    },
+    {
+      "label": "Main Experiment (147 rows)",
+      "path": "C:\\testing\\results\\main_experiment\\full-summary.csv",
+      "exists": true,
+      "size_bytes": 19249,
+      "sha256": "42e9856ae932d56e5d8c766b2fd37bdced4088e6e7e4d0a4d85ecc7244365621"
+    },
+    {
+      "label": "Cloud Pilot 3-Arm Summary",
+      "path": "C:\\testing\\research_execution_20261018\\results\\v3_3arm_summary.csv",
+      "exists": true,
+      "size_bytes": 12266,
+      "sha256": "3fe1ea364668a56f2566f1c3311cd7fbe284fef85f8ed566054e790de194e4a4"
+    },
+    {
+      "label": "Cloud Pilot Run Summary (44 rows)",
+      "path": "C:\\testing\\research_execution_20261018\\results\\v3_run_summary.csv",
+      "exists": true,
+      "size_bytes": 1240,
+      "sha256": "6fb1290bb499710e52586311f524a1d1f3aa77a9ff4453f7d28fe617f6bf66cd"
+    },
+    {
+      "label": "Local Qwen Summary (5 rows)",
+      "path": "C:\\testing\\research_execution_20261018\\results\\local_llama_summary.csv",
+      "exists": true,
+      "size_bytes": 1063,
+      "sha256": "8965fb12f748ca6aab77d2c61faef7056d3dcbce5de55f0cae09bca00d80f4ab"
+    },
+    {
+      "label": "Synthetic Benchmark Dataset 1",
+      "path": "C:\\testing\\research_execution_20261018\\test_scratch_synthetic_data\\dataset_1_valid_complete.csv",
+      "exists": true,
+      "size_bytes": 8139,
+      "sha256": "a94bb88eeab24ae44807682dd589d0234156c47bfd60bbcf8807f6a192fd9a45"
+    },
+    {
+      "label": "Proposed 3-Arm Schedule (72 rows)",
+      "path": "C:\\testing\\research_execution_20261018\\proposed_3arm_schedule.csv",
+      "exists": true,
+      "size_bytes": 2676,
+      "sha256": "17a97aa8b8c2782108603b3daf65f4c104691ee9b46189c086cc06fdbb9b77e1"
+    },
+    {
+      "label": "Proposed 4-Arm Schedule (96 rows)",
+      "path": "C:\\testing\\research_execution_20261018\\proposed_randomized_schedule.csv",
+      "exists": true,
+      "size_bytes": 3524,
+      "sha256": "107c790e8de411849120e580dd987fe641a9112585667a0f7dc26bd913f778ce"
+    },
+    {
+      "label": "Daily Quota Ledger",
+      "path": "C:\\testing\\research_execution_20261018\\results\\daily_quota_ledger.json",
+      "exists": true,
+      "size_bytes": 801,
+      "sha256": "7fa33f949501128f935b2c4c35da6ec8d8a296846e2a3a1e6496a54e12bb62b4"
+    }
+  ],
+  "zip_audit": {
+    "corrupted_member": null,
+    "members": [
+      {
+        "filename": "research_paper_final.tex",
+        "file_size": 51145,
+        "compress_size": 17934,
+        "crc": 451130472
+      },
+      {
+        "filename": "references.bib",
+        "file_size": 8112,
+        "compress_size": 2761,
+        "crc": 4291794682
+      },
+      {
+        "filename": "architecture_pipeline_figure.tex",
+        "file_size": 5422,
+        "compress_size": 2067,
+        "crc": 309483638
+      },
+      {
+        "filename": "compiled_manuscript.pdf",
+        "file_size": 752110,
+        "compress_size": 739869,
+        "crc": 1838664059
+      },
+      {
+        "filename": "EVIDENCE_TO_CLAIM_MATRIX.csv",
+        "file_size": 11953,
+        "compress_size": 4625,
+        "crc": 1030340345
+      },
+      {
+        "filename": "README_OVERLEAF.md",
+        "file_size": 3409,
+        "compress_size": 1665,
+        "crc": 832375427
+      }
+    ]
+  },
+  "reconciliation": {
+    "pilot": {
+      "raw_rows": 261,
+      "raw_successes": 251,
+      "raw_success_rate": 0.9617,
+      "cleaned_rows": 250,
+      "cleaned_successes": 249,
+      "cleaned_success_rate": 0.996,
+      "excluded_count": 11,
+      "excluded_failures": 9,
+      "excluded_successes": 2,
+      "selection_bias_impact": "Rate increased from 251/261 (96.17%) to 249/250 (99.60%) due to removing 9 failures from Rep 9."
+    },
+    "main_147": {
+      "total_rows": 147,
+      "phase1_completed_runs": 105,
+      "phase1_successes": 105,
+      "phase1_success_rate": 1.0,
+      "phase2_collapse_runs": 42,
+      "phase2_all_failed": true,
+      "phase2_all_7_steps": true,
+      "phase2_avg_duration": 9.12,
+      "verdict": "Runs 1-105 succeeded (100% ceiling); Runs 106-147 suffered 42-run infrastructure CDP disconnect failure."
+    },
+    "cloud_pilot_41": {
+      "total_execution_attempts": 44,
+      "completed_runs": 41,
+      "aborted_runs": 3,
+      "arm_counts": {
+        "DATA-CFG": {
+          "total": 15,
+          "success": 15
+        },
+        "ABS": {
+          "total": 13,
+          "success": 13
+        },
+        "ARIA": {
+          "total": 13,
+          "success": 13
+        }
+      },
+      "all_completed_succeeded": true,
+      "run_26_attempts": 4,
+      "run_26_503_retries": 3,
+      "verdict": "41 completed runs achieved 100% success across all arms (13 ABS, 13 ARIA, 15 DATA-CFG; ceiling effect). 44 total execution attempts logged (Run 26 had 3 transient 503 retries)."
+    },
+    "local_qwen": {
+      "total_runs": 5,
+      "durations": [
+        3.343,
+        1013.094,
+        288.61,
+        185.5,
+        188.563
+      ],
+      "min_duration": 3.343,
+      "max_duration": 1013.094,
+      "mean_duration": 335.82,
+      "verdict": "5 exploratory diagnostic runs. Range 3.343s to 1013.094s (cold-start outlier: 1013.09s; steady-state: ~185-288s). 0 confirmatory successes."
+    },
+    "schedules": {
+      "schedule_72_exists": true,
+      "schedule_72_rows": 72,
+      "schedule_96_exists": true,
+      "schedule_96_rows": 96,
+      "preregistration_status": "No external third-party registration (OSF, AsPredicted). Internally frozen in Git only.",
+      "execution_status": "Planned and verified offline, but completely unexecuted due to quota ceiling lock."
+    }
+  },
+  "provenance": [
+    {
+      "Dataset Name": "pilot_raw_261.csv",
+      "Category": "Historical Cloud Pilot (Raw)",
+      "Rows": 261,
+      "Successes": 251,
+      "Failures/Aborts": 10,
+      "Status": "Exploratory calibration pilot. Contains all 9 Rep 9 failures."
+    },
+    {
+      "Dataset Name": "pilot_cleaned_250.csv",
+      "Category": "Historical Cloud Pilot (Derived)",
+      "Rows": 250,
+      "Successes": 249,
+      "Failures/Aborts": 1,
+      "Status": "Post-hoc derived from 261-row pilot. Excluded 11 runs (9 failures from Rep 9), inflating success from 96.17% to 99.60%."
+    },
+    {
+      "Dataset Name": "main_raw_147.csv",
+      "Category": "Historical Cloud Experiment",
+      "Rows": 147,
+      "Successes": 105,
+      "Failures/Aborts": 42,
+      "Status": "Runs 1-105: 100% ceiling. Runs 106-147: consecutive 42-run infrastructure CDP disconnect failure."
+    },
+    {
+      "Dataset Name": "v3_3arm_summary.csv",
+      "Category": "Historical Cloud Pilot (Completed)",
+      "Rows": 41,
+      "Successes": 41,
+      "Failures/Aborts": 0,
+      "Status": "13 ABS, 13 ARIA, 15 DATA-CFG. 100% success creates acute ceiling effect (zero sample variance)."
+    },
+    {
+      "Dataset Name": "v3_run_summary.csv",
+      "Category": "Historical Cloud Execution Log",
+      "Rows": 44,
+      "Successes": 41,
+      "Failures/Aborts": 3,
+      "Status": "44 execution attempts. Run 26 had 3 transient HTTP 503 UNAVAILABLE retries before succeeding on attempt 4."
+    },
+    {
+      "Dataset Name": "local_llama_summary.csv",
+      "Category": "Local Qwen Hardware Telemetry",
+      "Rows": 5,
+      "Successes": 0,
+      "Failures/Aborts": 5,
+      "Status": "Exploratory latency profiling on laptop GPU (102.9s to 1013.09s). Zero confirmatory task completions."
+    },
+    {
+      "Dataset Name": "dataset_1_valid_complete.csv",
+      "Category": "Synthetic Software Benchmark",
+      "Rows": 96,
+      "Successes": "N/A (Mock)",
+      "Failures/Aborts": "N/A (Mock)",
+      "Status": "Synthetic mock dataset used exclusively to verify CMH and Newcombe statistical arithmetic without numerical errors."
+    },
+    {
+      "Dataset Name": "proposed_3arm_schedule.csv",
+      "Category": "Confirmatory Protocol Schedule",
+      "Rows": 72,
+      "Successes": 0,
+      "Failures/Aborts": 0,
+      "Status": "Authoritative 3-arm RCBD protocol (4 blocks of 18; 24/arm; 12/task). Internally frozen in Git; 0 live runs executed."
+    },
+    {
+      "Dataset Name": "proposed_randomized_schedule.csv",
+      "Category": "Legacy Confirmatory Schedule",
+      "Rows": 96,
+      "Successes": 0,
+      "Failures/Aborts": 0,
+      "Status": "Legacy 4-arm design with duplicate VIS baseline. Internally frozen in Git; 0 live runs executed."
+    }
+  ]
+}

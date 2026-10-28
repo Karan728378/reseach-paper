@@ -1,0 +1,4 @@
+run_index,block_id,within_block_order,arm,task_id,variant_mapping,target_entity,success,score,total_steps,total_time_seconds,status,error_message,timestamp_end
+1,1,1,ARIA,T1,v2-aria,wh-001,True,1.0,4,25.5,completed,,2026-10-18T12:00:00
+2,1,2,ABS,T2,v0-baseline,mkp-001,False,0.0,4,25.5,completed,,2026-10-18T12:00:00
+2,1,3,VIS,T3,v0-baseline,wh-002,True,1.0,4,25.5,completed,,2026-10-18T12:00:00

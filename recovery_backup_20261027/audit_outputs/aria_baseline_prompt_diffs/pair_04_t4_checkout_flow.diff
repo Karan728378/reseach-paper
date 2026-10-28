@@ -1,0 +1,129 @@
+--- BASELINE_pair_04_t4_checkout_flow
++++ ARIA_pair_04_t4_checkout_flow
+@@ -278,7 +278,7 @@
+ Agent initialized
+ <step>
+ Result
+-Navigated to http://127.0.0.1:PORT/variants/v0-baseline/index.html#home
++Navigated to http://127.0.0.1:PORT/variants/v2-aria/index.html#home
+ </agent_history>
+ 
+ <agent_state>
+@@ -291,9 +291,9 @@
+ </agent_state>
+ <browser_state>
+ <page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>
+-Current tab: F48F
++Current tab: 6681
+ Available tabs:
+-Tab F48F: http://127.0.0.1:PORT/variants/v0-baseline/index.html#home - 127.0.0.1:8098/variants/v0-bas
++Tab 6681: http://127.0.0.1:PORT/variants/v2-aria/index.html#home - 127.0.0.1:8098/variants/v2-ari
+ 
+ <page_info>0.0 pages above, 0.5 pages below — scroll down to reveal more content</page_info>
+ 
+@@ -301,26 +301,26 @@
+ [Start of page]
+ [28]<a id=logo-link />
+ 	TechMart
+-[5]<form id=search-form />
+-	|SHADOW(open)|[6]<input type=text id=search-input placeholder=Search products... autocomplete=off />
+-	[17]<button type=submit id=search-submit-btn />
++[5]<form id=search-form role=search />
++	|SHADOW(open)|[6]<input type=text id=search-input placeholder=Search products... autocomplete=off aria-label=Search products />
++	[15]<button type=submit id=search-submit-btn aria-label=Search />
+ 		Search
+ [29]<a id=cart-nav-link />
+ 	Cart (
+ Discover Premium Tech
+ Find the perfect gear for work, gaming, and everyday life.
+-[20]<a id=hero-cta-btn />
++[18]<a id=hero-cta-btn />
+ 	Shop All Products
+ Shop by Category
+ [30]<button id=cat-audio />
+ 	Audio
+ [31]<button id=cat-keyboards />
+ 	Keyboards
+-[21]<button id=cat-mice />
++[19]<button id=cat-mice />
+ 	Mice
+-[22]<button id=cat-monitors />
++[20]<button id=cat-monitors />
+ 	Monitors
+-[23]<button id=cat-accessories />
++[21]<button id=cat-accessories />
+ 	Accessories
+ Featured Products
+ Top-rated products from our catalog
+@@ -332,7 +332,7 @@
+ 	In Stock
+ [158]<a />
+ 	View Details
+-[32]<button />
++[32]<button aria-label=Add item to cart />
+ 	Add to Cart
+ ⌨️
+ Mechanical Keyboard Pro
+@@ -343,7 +343,7 @@
+ 	In Stock
+ [180]<a />
+ 	View Details
+-[33]<button />
++[33]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🖥️
+ CrystalView 27
+@@ -354,7 +354,7 @@
+ 	In Stock
+ [202]<a />
+ 	View Details
+-[34]<button />
++[34]<button aria-label=Add item to cart />
+ 	Add to Cart
+ BudPro Wireless X
+ Wireless Headphones
+@@ -364,7 +364,7 @@
+ 	In Stock
+ [224]<a />
+ 	View Details
+-[35]<button />
++[35]<button aria-label=Add item to cart />
+ 	Add to Cart
+ SoundFlow Air 3
+ Wireless Headphones
+@@ -374,7 +374,7 @@
+ 	In Stock
+ [247]<a />
+ 	View Details
+-[36]<button />
++[36]<button aria-label=Add item to cart />
+ 	Add to Cart
+ USB-C Hub Pro
+ Accessories
+@@ -384,7 +384,7 @@
+ 	In Stock
+ [270]<a />
+ 	View Details
+-[37]<button />
++[37]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🖱️
+ ErgoGlide Mouse
+@@ -395,7 +395,7 @@
+ 	In Stock
+ [293]<a />
+ 	View Details
+-[38]<button />
++[38]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🗂️
+ Desk Organizer Elite
+@@ -405,7 +405,7 @@
+ Out of Stock
+ [316]<a />
+ 	View Details
+-[39]<button disabled=true />
++[39]<button aria-label=Add item to cart disabled=true />
+ 	Out of Stock
+ </browser_state>
+ <step_info>Step1 maximum:1

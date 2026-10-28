@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edge Cases Fixture</title>
+  <meta name="evidence-date" content="2026-09-01T00:00:00Z">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "EdgeCase Unit",
+    "sku": "ec-999"
+  }
+  </script>
+</head>
+<body>
+  <!-- 1. Non-interactive container with ARIA and data-* -->
+  <section id="showcase-section" aria-label="Featured Showcase" data-container-id="sec-01">
+    <h2>Showcase Container</h2>
+  </section>
+
+  <!-- 2. Non-interactive element with ARIA and data-* (width > 50px to reflect non-icon text elements) -->
+  <div id="price-container">
+    <span id="price-span" class="product-price" style="display: inline-block; min-width: 80px;" aria-label="Price: $99.00" data-field="price" data-amount="99.00">$99.00</span>
+  </div>
+
+  <!-- 2b. Small unstyled element triggering icon heuristic (bounds between 10-50px with aria-label) -->
+  <div id="icon-container">
+    <span id="icon-span" aria-label="Audio Product Icon">🎧</span>
+  </div>
+
+  <!-- 3. Interactive element with ARIA -->
+  <div id="interactive-aria">
+    <button id="btn-aria" class="btn" aria-label="Add EdgeCase Unit to cart">Add to Cart</button>
+  </div>
+
+  <!-- 4. Interactive element with data-* -->
+  <div id="interactive-data">
+    <button id="btn-data" class="btn" data-action="add-cart" data-product-id="ec-999">Add to Cart</button>
+  </div>
+
+  <!-- 5. Empty attribute values -->
+  <div id="empty-attrs">
+    <button id="btn-empty" class="btn" aria-label="" data-action="">Empty Action</button>
+  </div>
+
+  <!-- 6. Nested elements inside button -->
+  <div id="nested-button">
+    <button id="btn-nested" class="btn" aria-label="Nested Button Wrapper">
+      <span class="btn-icon">🛒</span>
+      <span class="btn-text">Buy Now</span>
+    </button>
+  </div>
+
+  <!-- 7. Temporal metadata in time tag -->
+  <div id="temporal-info">
+    <time class="temporal-meta" datetime="2026-09-01">September 1, 2026</time>
+  </div>
+</body>
+</html>

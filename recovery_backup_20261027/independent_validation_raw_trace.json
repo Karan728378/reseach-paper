@@ -1,0 +1,444 @@
+{
+  "validation_metadata": {
+    "timestamp": "2026-10-22T17:53:53Z",
+    "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "browser_use_version": "0.13.10",
+    "disabled_elements": [
+      "script",
+      "link",
+      "title",
+      "meta",
+      "head",
+      "style"
+    ],
+    "default_include_attributes": [
+      "title",
+      "type",
+      "checked",
+      "id",
+      "name",
+      "role",
+      "value",
+      "placeholder",
+      "data-date-format",
+      "alt",
+      "aria-label",
+      "aria-expanded",
+      "data-state",
+      "aria-checked",
+      "aria-valuemin",
+      "aria-valuemax",
+      "aria-valuenow",
+      "aria-placeholder",
+      "pattern",
+      "min",
+      "max",
+      "minlength",
+      "maxlength",
+      "step",
+      "accept",
+      "multiple",
+      "inputmode",
+      "autocomplete",
+      "aria-autocomplete",
+      "list",
+      "data-mask",
+      "data-inputmask",
+      "data-datepicker",
+      "format",
+      "expected_format",
+      "contenteditable",
+      "pseudo",
+      "checked",
+      "selected",
+      "expanded",
+      "pressed",
+      "disabled",
+      "invalid",
+      "valuemin",
+      "valuemax",
+      "valuenow",
+      "keyshortcuts",
+      "haspopup",
+      "multiselectable",
+      "required",
+      "valuetext",
+      "level",
+      "busy",
+      "live",
+      "ax_name"
+    ],
+    "extended_attributes": [
+      "title",
+      "type",
+      "checked",
+      "id",
+      "name",
+      "role",
+      "value",
+      "placeholder",
+      "data-date-format",
+      "alt",
+      "aria-label",
+      "aria-expanded",
+      "data-state",
+      "aria-checked",
+      "aria-valuemin",
+      "aria-valuemax",
+      "aria-valuenow",
+      "aria-placeholder",
+      "pattern",
+      "min",
+      "max",
+      "minlength",
+      "maxlength",
+      "step",
+      "accept",
+      "multiple",
+      "inputmode",
+      "autocomplete",
+      "aria-autocomplete",
+      "list",
+      "data-mask",
+      "data-inputmask",
+      "data-datepicker",
+      "format",
+      "expected_format",
+      "contenteditable",
+      "pseudo",
+      "checked",
+      "selected",
+      "expanded",
+      "pressed",
+      "disabled",
+      "invalid",
+      "valuemin",
+      "valuemax",
+      "valuenow",
+      "keyshortcuts",
+      "haspopup",
+      "multiselectable",
+      "required",
+      "valuetext",
+      "level",
+      "busy",
+      "live",
+      "ax_name",
+      "data-sentinel-action",
+      "data-sentinel-field",
+      "data-action",
+      "data-product-id"
+    ],
+    "fixture_url": "http://127.0.0.1:8095/research_execution_20261018/fixtures/sentinel_fixture.html"
+  },
+  "raw_stage_lengths": {
+    "stage_1_source_html_bytes": 1380,
+    "stage_2_live_dom_bytes": 1363,
+    "stage_3_axtree_nodes": 26,
+    "stage_3_axtree_bytes": 16843,
+    "stage_4a_default_serializer_bytes": 212,
+    "stage_4b_extended_serializer_bytes": 257,
+    "stage_5_observation_buffer_bytes": 25098,
+    "stage_6_model_client_payload_bytes": 26231
+  },
+  "sentinel_evaluation": {
+    "visible_text": {
+      "token": "SENTINEL_TEXT_ALPHA_991",
+      "name": "Visible Typography in <p>",
+      "type": "positive_control",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... ion-visible\">     <p id=\"visible-para\">Product Description: SENTINEL_TEXT_ALPHA_991</p>   </div>    <!-- 2. Interactive Button with WAI-ARIA -- ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... ion-visible\">     <p id=\"visible-para\">Product Description: SENTINEL_TEXT_ALPHA_991</p>   </div>    <!-- 2. Interactive Button with WAI-ARIA -- ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": true,
+          "evidence_snippet": "... pe\": \"computedString\",       \"value\": \"Product Description: SENTINEL_TEXT_ALPHA_991\",       \"sources\": [         {           \"type\": \"contents\" ..."
+        },
+        "stage_4a_serializer_default": {
+          "present": true,
+          "evidence_snippet": "... Sentinel Verification Testbench Product Description: SENTINEL_TEXT_ALPHA_991 [14]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 / ..."
+        },
+        "stage_4b_serializer_extended": {
+          "present": true,
+          "evidence_snippet": "... Sentinel Verification Testbench Product Description: SENTINEL_TEXT_ALPHA_991 [14]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 / ..."
+        },
+        "stage_5_observation_buffer": {
+          "present": true,
+          "evidence_snippet": "... page] Sentinel Verification Testbench Product Description: SENTINEL_TEXT_ALPHA_991 [37]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 / ..."
+        },
+        "stage_6_model_client_payload": {
+          "present": true,
+          "evidence_snippet": "... age]\\nSentinel Verification Testbench\\nProduct Description: SENTINEL_TEXT_ALPHA_991\\n[37]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 ..."
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "aria_button": {
+      "token": "SENTINEL_ARIA_BETA_992",
+      "name": "WAI-ARIA aria-label on interactive <button>",
+      "type": "treatment_channel",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... -button\">     <button id=\"btn-aria\" class=\"btn\" aria-label=\"SENTINEL_ARIA_BETA_992\">Add to Cart</button>   </div>    <!-- 3. Non-interactive E ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... -button\">     <button id=\"btn-aria\" class=\"btn\" aria-label=\"SENTINEL_ARIA_BETA_992\">Add to Cart</button>   </div>    <!-- 3. Non-interactive E ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": true,
+          "evidence_snippet": "... \"name\": {       \"type\": \"computedString\",       \"value\": \"SENTINEL_ARIA_BETA_992\",       \"sources\": [         {           \"type\": \"relatedEl ..."
+        },
+        "stage_4a_serializer_default": {
+          "present": true,
+          "evidence_snippet": "... SENTINEL_TEXT_ALPHA_991 [14]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 /> \tAdd to Cart In Stock [18]<button id=btn-data /> \tOrder ..."
+        },
+        "stage_4b_serializer_extended": {
+          "present": true,
+          "evidence_snippet": "... SENTINEL_TEXT_ALPHA_991 [14]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 /> \tAdd to Cart In Stock [18]<button id=btn-data data-senti ..."
+        },
+        "stage_5_observation_buffer": {
+          "present": true,
+          "evidence_snippet": "... SENTINEL_TEXT_ALPHA_991 [37]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 /> \tAdd to Cart In Stock [53]<button id=btn-data /> \tOrder ..."
+        },
+        "stage_6_model_client_payload": {
+          "present": true,
+          "evidence_snippet": "... SENTINEL_TEXT_ALPHA_991\\n[37]<button id=btn-aria aria-label=SENTINEL_ARIA_BETA_992 />\\n\\tAdd to Cart\\nIn Stock\\n[53]<button id=btn-data />\\n\\t ..."
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "aria_span": {
+      "token": "SENTINEL_SPAN_ARIA_993",
+      "name": "WAI-ARIA aria-label on non-interactive <span>",
+      "type": "critical_divergence",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... a-span\">     <span id=\"span-aria\" class=\"badge\" aria-label=\"SENTINEL_SPAN_ARIA_993\">In Stock</span>   </div>    <!-- 4. Interactive Button wit ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... a-span\">     <span id=\"span-aria\" class=\"badge\" aria-label=\"SENTINEL_SPAN_ARIA_993\">In Stock</span>   </div>    <!-- 4. Interactive Button wit ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": true,
+          "evidence_snippet": "... \"name\": {       \"type\": \"computedString\",       \"value\": \"SENTINEL_SPAN_ARIA_993\",       \"sources\": [         {           \"type\": \"relatedEl ..."
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "data_button": {
+      "token": "SENTINEL_DATA_GAMMA_994",
+      "name": "Custom data-* attribute on interactive <button>",
+      "type": "reversed_divergence",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... <button id=\"btn-data\" class=\"btn\" data-sentinel-action=\"SENTINEL_DATA_GAMMA_994\">Order Now</button>   </div>    <!-- 5. Non-interactive Con ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... <button id=\"btn-data\" class=\"btn\" data-sentinel-action=\"SENTINEL_DATA_GAMMA_994\">Order Now</button>   </div>    <!-- 5. Non-interactive Con ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": true,
+          "evidence_snippet": "... Cart In Stock [18]<button id=btn-data data-sentinel-action=SENTINEL_DATA_GAMMA_994 /> \tOrder Now Container Body ..."
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "data_container": {
+      "token": "SENTINEL_DATA_DELTA_995",
+      "name": "Custom data-* attribute on non-interactive <div>",
+      "type": "non_interactive_data",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... -->   <div id=\"section-data-container\" data-sentinel-field=\"SENTINEL_DATA_DELTA_995\">     <p>Container Body</p>   </div> </body> </html> ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... -->   <div id=\"section-data-container\" data-sentinel-field=\"SENTINEL_DATA_DELTA_995\">     <p>Container Body</p>   </div>   </body></html> ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "jsonld_name": {
+      "token": "SENTINEL_JSONLD_EPSILON_996",
+      "name": "Schema.org JSON-LD name in <script>",
+      "type": "hardcoded_pruning",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... \"https://schema.org\",     \"@type\": \"Product\",     \"name\": \"SENTINEL_JSONLD_EPSILON_996\",     \"sku\": \"SENTINEL_SKU_ZETA_997\"   }   </script> </head ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... \"https://schema.org\",     \"@type\": \"Product\",     \"name\": \"SENTINEL_JSONLD_EPSILON_996\",     \"sku\": \"SENTINEL_SKU_ZETA_997\"   }   </script> </head ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "jsonld_sku": {
+      "token": "SENTINEL_SKU_ZETA_997",
+      "name": "Schema.org JSON-LD sku in <script>",
+      "type": "hardcoded_pruning",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... ct\",     \"name\": \"SENTINEL_JSONLD_EPSILON_996\",     \"sku\": \"SENTINEL_SKU_ZETA_997\"   }   </script> </head> <body>   <h1>Sentinel Verification ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... ct\",     \"name\": \"SENTINEL_JSONLD_EPSILON_996\",     \"sku\": \"SENTINEL_SKU_ZETA_997\"   }   </script> </head> <body>   <h1>Sentinel Verification ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    },
+    "meta_tag": {
+      "token": "SENTINEL_META_ETA_998",
+      "name": "Standard HTML <meta> content",
+      "type": "hardcoded_pruning",
+      "stages": {
+        "stage_1_source_html": {
+          "present": true,
+          "evidence_snippet": "... Trace Fixture</title>   <meta name=\"sentinel-meta\" content=\"SENTINEL_META_ETA_998\">   <script type=\"application/ld+json\">   {     \"@context\": ..."
+        },
+        "stage_2_live_dom": {
+          "present": true,
+          "evidence_snippet": "... Trace Fixture</title>   <meta name=\"sentinel-meta\" content=\"SENTINEL_META_ETA_998\">   <script type=\"application/ld+json\">   {     \"@context\": ..."
+        },
+        "stage_3_blink_axtree": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4a_serializer_default": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_4b_serializer_extended": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_5_observation_buffer": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        },
+        "stage_6_model_client_payload": {
+          "present": false,
+          "evidence_snippet": "[NOT PRESENT IN STAGE OUTPUT]"
+        }
+      },
+      "survival_matches_expectation": true
+    }
+  },
+  "isolation_evaluation": {
+    "products_catalog_shared": true,
+    "app_core_shared": true,
+    "button_aria_label_deconfounded": true,
+    "baseline_clean_of_aria_nav": true,
+    "aria_variant_has_aria_nav": true,
+    "data_variant_has_data_actions": true,
+    "vis_arm_strictly_text_only": true
+  },
+  "mismatches": []
+}

@@ -1,0 +1,709 @@
+OFFLINE TEST RUN LOG - 2026-10-26T19:42:46.136945+00:00
+Interpreter: C:\testing\.venv311\Scripts\python.exe
+Total Passed: 196, Failed: 0, Skipped: 0
+
+=== test_accessibility_tree_comparison.py [Exit 0] (0.15s) ===
+test_channel_1_jsonld_concordant_loss (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_channel_1_jsonld_concordant_loss)
+Verifies JSON-LD is absent in both Chromium AXTree and browser-use prompt. ... ok
+test_channel_2_button_accessible_names (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_channel_2_button_accessible_names)
+Verifies button accessible names are concordantly retained in AXTree and prompt. ... ok
+test_channel_3_non_interactive_aria_critical_divergence (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_channel_3_non_interactive_aria_critical_divergence)
+Verifies price/rating ARIA is retained in AXTree but stripped in browser-use. ... ok
+test_channel_4_custom_data_attrs_reversed_divergence (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_channel_4_custom_data_attrs_reversed_divergence)
+Verifies data-* is absent in AXTree but reachable in browser-use under extended whitelist. ... ok
+test_channel_5_visible_text_concordant_retention (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_channel_5_visible_text_concordant_retention)
+Verifies visible text is 100% retained across all representations. ... ok
+test_edge_cases_divergence_assertions (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_edge_cases_divergence_assertions)
+Verifies edge cases fixture findings. ... ok
+test_markdown_report_integrity (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_markdown_report_integrity)
+Verifies that the generated markdown report is complete and well-formatted. ... ok
+test_node_level_correspondence (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_node_level_correspondence)
+Verifies node correspondence metrics between CDP AXTree and browser-use selector map. ... ok
+test_tooling_metadata_playwright_unavailability (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_tooling_metadata_playwright_unavailability)
+Verifies Playwright unavailability is accurately documented without deception. ... ok
+test_variant_ax_node_counts (test_accessibility_tree_comparison.TestAccessibilityTreeComparison.test_variant_ax_node_counts)
+Verifies node counts for all variants and fixtures. ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK
+
+
+=== test_agent_prompt_pipeline.py [Exit 0] (2.54s) ===
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+OK
+
+
+=== test_analyze_v3_results.py [Exit 0] (0.33s) ===
+[+] Successfully generated analysis outputs in: C:\testing\research_execution_20261018\test_scratch_synthetic_data\out_dataset_8_drift
+    - JSON:     summary_metrics.json
+    - CSV:      primary_contrasts.csv, sensitivity_contrasts.csv, task_by_arm_summary.csv, t6_probe_summary.csv
+    - Markdown: analysis_report.md
+[+] Successfully generated analysis outputs in: C:\testing\research_execution_20261018\test_scratch_synthetic_data\out_dataset_1
+    - JSON:     summary_metrics.json
+    - CSV:      primary_contrasts.csv, sensitivity_contrasts.csv, task_by_arm_summary.csv, t6_probe_summary.csv
+    - Markdown: analysis_report.md
+test_baseline_drift_and_sensitivity_reporting (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_baseline_drift_and_sensitivity_reporting)
+Verifies that baseline divergence (ABS != VIS) triggers drift warnings and generates separate-arm sensitivity contrasts. ... ok
+test_cli_execution_end_to_end (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_cli_execution_end_to_end)
+Verifies CLI subprocess invocation and exit code 0. ... ok
+test_cmh_multicenter_reference_case (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_cmh_multicenter_reference_case)
+Validates CMH calculation against published multicenter clinical trial data (Agresti 2002, p. 231). ... ok
+test_dataset_1_valid_complete (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_1_valid_complete)
+Tests ingestion and analysis of a completely balanced 96-run dataset. ... ok
+test_dataset_2_known_treatment_differences (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_2_known_treatment_differences)
+Verifies that large prespecified differences produce expected positive RDs and low CMH p-values. ... ok
+test_dataset_3_missing_runs (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_3_missing_runs)
+Verifies that missing runs are explicitly flagged and never converted to successes or failures. ... ok
+test_dataset_4_duplicate_run_id (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_4_duplicate_run_id)
+Verifies that duplicate run indices trigger an immediate, clear ValueError. ... ok
+test_dataset_5_quota_and_infra_errors (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_5_quota_and_infra_errors)
+Verifies that infrastructure aborts (HTTP 429 / setup failure) are segregated from genuine task failures. ... ok
+test_dataset_6_t6_exploratory_probe (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_6_t6_exploratory_probe)
+Verifies that T6 correctly scores grounded refusal (1) vs hallucination (0) in strict isolation. ... ok
+test_dataset_7_boundary_zero_and_hundred_cells (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_dataset_7_boundary_zero_and_hundred_cells)
+Verifies that 0% and 100% success rates do not trigger math errors, inf, or NaN in CIs or CMH. ... ok
+test_independent_numerical_primitives (test_analyze_v3_results.TestAnalyzeV3Pipeline.test_independent_numerical_primitives)
+Validates statistical primitives against known analytical values. ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.163s
+
+OK
+
+
+=== test_aria_baseline_prompt_divergence.py [Exit 0] (0.15s) ===
+test_all_seven_pairs_diverge_in_raw_and_normalized_hashes (test_aria_baseline_prompt_divergence.TestAriaBaselinePromptDivergence.test_all_seven_pairs_diverge_in_raw_and_normalized_hashes)
+Verify that all 7 tested pairs (Tasks T1-T6 and Edge Cases Fixture) ... ok
+test_edge_cases_fixture_divergence (test_aria_baseline_prompt_divergence.TestAriaBaselinePromptDivergence.test_edge_cases_fixture_divergence)
+Verify that the edge cases fixture produces observable prompt divergence ... ok
+test_interactive_aria_retention_in_prompt_diffs (test_aria_baseline_prompt_divergence.TestAriaBaselinePromptDivergence.test_interactive_aria_retention_in_prompt_diffs)
+Verify that interactive elements (buttons, inputs, forms) retain ARIA attributes ... ok
+test_non_interactive_aria_pruning_in_prompts (test_aria_baseline_prompt_divergence.TestAriaBaselinePromptDivergence.test_non_interactive_aria_pruning_in_prompts)
+Verify that non-interactive ARIA semantics (e.g. price/rating spans, card divs) ... ok
+test_treatment_character_length_expansion (test_aria_baseline_prompt_divergence.TestAriaBaselinePromptDivergence.test_treatment_character_length_expansion)
+Verify that the ARIA treatment systematically expands prompt character length ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+
+
+=== test_baseline_pooling_consistency.py [Exit 0] (0.15s) ===
+test_md_table3_is_unpooled (test_baseline_pooling_consistency.TestBaselinePoolingConsistency.test_md_table3_is_unpooled)
+Verify RESEARCH_PAPER_DRAFT_V2.md Table 3 presents separate baseline arms (N=20). ... ok
+test_no_synthetic_data_labeled_as_live_confirmatory (test_baseline_pooling_consistency.TestBaselinePoolingConsistency.test_no_synthetic_data_labeled_as_live_confirmatory)
+Verify that synthetic benchmark disclaimers are prominent on all tables. ... ok
+test_risk_difference_arithmetic_consistency (test_baseline_pooling_consistency.TestBaselinePoolingConsistency.test_risk_difference_arithmetic_consistency)
+Verify that all risk differences in Table 3 match exact raw proportions: ... ok
+test_table4_decision_justifies_unpooled_presentation (test_baseline_pooling_consistency.TestBaselinePoolingConsistency.test_table4_decision_justifies_unpooled_presentation)
+Verify Table 4 explicitly resolves the methodology by rejecting pooling ... ok
+test_tex_table3_is_unpooled (test_baseline_pooling_consistency.TestBaselinePoolingConsistency.test_tex_table3_is_unpooled)
+Verify research_paper_final.tex Table 3 presents separate baseline arms (N=20). ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+
+
+=== test_browser_lifecycle_and_recovery.py [Exit 0] (7.33s) ===
+       -> Effective agent step budget: 30 steps (step 30 is finalization/done).
+test_browser_startup_failure_handling (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_browser_startup_failure_handling)
+Verify that browser startup failure raises cleanly and is caught. ... ok
+test_cleanup_invoked_on_exception (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_cleanup_invoked_on_exception)
+Verify that browser kill/stop is always invoked in finally block even after exceptions. ... ok
+test_client_disconnect_during_terminal_extraction (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_client_disconnect_during_terminal_extraction)
+Verify extract_terminal_state attempts reconnect when ws is dead and returns structured error instead of crashing. ... ok
+test_complete_delivery_rule_datacfg (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_complete_delivery_rule_datacfg)
+DATA-CFG complete delivery requires BOTH data-action AND data-product-id. ... ok
+test_duplicate_run_index_and_attempt_preservation (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_duplicate_run_index_and_attempt_preservation)
+Retrying an aborted run creates run_{idx}_attempt_2.json without overwriting run_{idx}.json. ... ok
+test_preservation_of_failed_and_aborted_records (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_preservation_of_failed_and_aborted_records)
+Failed and aborted records are persisted in summary CSV but excluded from get_completed_run_indices. ... ok
+test_provider_429_503_classification (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_provider_429_503_classification)
+Verify 503 and 429 errors are classified as infrastructure_aborted. ... ok
+test_terminal_state_capture_failure_does_not_mask_agent_completion (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_terminal_state_capture_failure_does_not_mask_agent_completion)
+When DOM evaluation fails, agent_completed must remain in termination_reason while status is infrastructure_aborted. ... ok
+test_terminal_state_fallback_recovery_when_websocket_closed (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_terminal_state_fallback_recovery_when_websocket_closed)
+When live CDP reconnect fails, fallback_state smoothly recovers terminal telemetry without error. ... ok
+test_verifier_strict_correctness (test_browser_lifecycle_and_recovery.TestBrowserLifecycleAndRecovery.test_verifier_strict_correctness)
+Validate ground-truth evaluations across all tasks. ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 6.071s
+
+OK
+
+
+=== test_budget_controls.py [Exit 0] (0.17s) ===
+test_01_unknown_model_fails_closed (test_budget_controls.TestBudgetController.test_01_unknown_model_fails_closed)
+Unknown or unverified models must immediately fail closed. ... ok
+test_02_known_models_return_accurate_pricing (test_budget_controls.TestBudgetController.test_02_known_models_return_accurate_pricing)
+Standard benchmark models should have strictly positive pricing. ... ok
+test_03_preflight_budget_calculation (test_budget_controls.TestBudgetController.test_03_preflight_budget_calculation)
+Preflight budget calculation must bound worst-case and realistically expected costs. ... ok
+test_04_preflight_fails_when_ceiling_is_too_low (test_budget_controls.TestBudgetController.test_04_preflight_fails_when_ceiling_is_too_low)
+If ceiling is set to $1.00 but worst-case is $2.16, preflight flags warning. ... ok
+test_05_local_guard_accumulates_and_stops_at_ceiling (test_budget_controls.TestBudgetController.test_05_local_guard_accumulates_and_stops_at_ceiling)
+Guard stops execution when cumulative cost reaches or exceeds ceiling. ... ok
+test_06_guard_fails_closed_on_insufficient_headroom (test_budget_controls.TestBudgetController.test_06_guard_fails_closed_on_insufficient_headroom)
+When require_worst_case_headroom is enabled, stops before starting a run if worst-case cannot fit. ... ok
+test_07_missing_tokens_fallback_to_conservative_bounds (test_budget_controls.TestBudgetController.test_07_missing_tokens_fallback_to_conservative_bounds)
+When provider returns None for tokens, guard must not charge $0.00; must use conservative bound. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.000s
+
+OK
+
+
+=== test_budget_guard_repairs.py [Exit 0] (0.24s) ===
+test_01_exact_600_request_boundary (test_budget_guard_repairs.TestBudgetGuardRepairs.test_01_exact_600_request_boundary)
+The guard must allow request 600, but request 601 must raise BudgetExceededError. ... ok
+test_02_worst_case_headroom_enforcement (test_budget_guard_repairs.TestBudgetGuardRepairs.test_02_worst_case_headroom_enforcement)
+When worst-case headroom is required, guard halts before starting a trial if steps cannot fit. ... ok
+test_03_in_flight_model_request_interception (test_budget_guard_repairs.TestBudgetGuardRepairs.test_03_in_flight_model_request_interception)
+BudgetGuardedChatModel intercepts each ainvoke call and raises BudgetExceededError in-flight. ... ok
+test_04_retry_request_metering (test_budget_guard_repairs.TestBudgetGuardRepairs.test_04_retry_request_metering)
+If an external loop retries after failure, every retry attempt is counted and subject to ceiling. ... ok
+test_05_concurrent_dispatch_boundary_safety (test_budget_guard_repairs.TestBudgetGuardRepairs.test_05_concurrent_dispatch_boundary_safety)
+Concurrent threads attempting to dispatch simultaneously at ceiling boundary cannot exceed ceiling. ... ok
+test_06_historical_604_preservation_and_fail_closed (test_budget_guard_repairs.TestBudgetGuardRepairs.test_06_historical_604_preservation_and_fail_closed)
+When initialized with historical 604 requests and 600 ceiling, guard fails closed immediately. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.008s
+
+OK
+
+
+=== test_data_reconciliation_and_provenance.py [Exit 0] (0.54s) ===
+test_01_three_infra_aborts_followed_by_valid_completion (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_01_three_infra_aborts_followed_by_valid_completion)
+Run 26 scenario: 3 transient 503 aborts + 1 completion yields RECOVERED_AFTER_INFRA_ABORT. ... ok
+test_02_two_completed_attempts_quarantines_unit (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_02_two_completed_attempts_quarantines_unit)
+Runs 34/38 scenario: Multiple completed attempts without pre-registered rule must be quarantined. ... ok
+test_03_missing_attempt_number_inferred_from_filename (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_03_missing_attempt_number_inferred_from_filename)
+When attempt_number is omitted from JSON body, filename suffix _attempt_X is correctly parsed. ... ok
+test_04_malformed_json_raises_explicit_error (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_04_malformed_json_raises_explicit_error)
+Malformed JSON must raise ValueError with filename rather than failing silently. ... ok
+test_05_missing_timestamps_flagged (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_05_missing_timestamps_flagged)
+Attempt files with empty or missing timestamps must report timestamp_error. ... ok
+test_06_metadata_collision_detected_and_quarantined (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_06_metadata_collision_detected_and_quarantined)
+If attempt metadata disagrees with schedule arm/task, it is flagged as METADATA_COLLISION. ... ok
+test_07_deterministic_output_regardless_of_file_order (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_07_deterministic_output_regardless_of_file_order)
+Reconciliation result is identical regardless of disk file creation sequence. ... ok
+test_08_exact_raw_versus_clean_csv_reconciliation (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_08_exact_raw_versus_clean_csv_reconciliation)
+Verifies exactly 46 raw rows and 44 clean rows, with Runs 34 and 38 explaining the delta. ... ok
+test_09_retries_do_not_inflate_behavioral_denominator (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_09_retries_do_not_inflate_behavioral_denominator)
+A unit with 4 attempts (Run 26) contributes exactly 1 unit to the denominator. ... ok
+test_10_infra_aborts_never_count_as_behavioral_failures (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_10_infra_aborts_never_count_as_behavioral_failures)
+Pure infrastructure aborts receive status != 'completed' and do not enter behavioral failures. ... ok
+test_11_unverified_completed_attempt_is_ineligible (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_11_unverified_completed_attempt_is_ineligible)
+A completed trial missing verifier_result is marked UNVERIFIED_COMPLETION and INELIGIBLE. ... ok
+test_12_missing_treatment_delivery_evidence_is_ineligible (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_12_missing_treatment_delivery_evidence_is_ineligible)
+A completed trial missing treatment_delivery observation evidence is marked INELIGIBLE. ... ok
+test_13_duplicate_completion_handling_and_quarantine (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_13_duplicate_completion_handling_and_quarantine)
+Verifies that Runs 34 and 38 are quarantined in real dataset audit. ... ok
+test_14_original_input_hashes_unaltered (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_14_original_input_hashes_unaltered)
+Verifies that running reconciliation does not modify input CSVs or JSON files. ... ok
+test_15_missing_input_files_raise_filenotfound (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_15_missing_input_files_raise_filenotfound)
+Missing schedule or runs directory raises explicit FileNotFoundError. ... ok
+test_16_downstream_analysis_excludes_quarantined_units (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_16_downstream_analysis_excludes_quarantined_units)
+When reconciled CSV is passed to analyze_v3_results.py, quarantined units are excluded. ... ok
+test_17_arm_denominators_agree_with_eligible_table (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_17_arm_denominators_agree_with_eligible_table)
+Eligible units per arm must be exactly 13 for ABS, 13 for ARIA, 13 for DATA-CFG. ... ok
+test_18_csv_output_contains_no_duplicate_scheduled_units (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_18_csv_output_contains_no_duplicate_scheduled_units)
+The reconciled CSV has strictly unique run_index values matching the schedule. ... ok
+test_19_traceable_source_file_provenance (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_19_traceable_source_file_provenance)
+Every executed unit points to an existing on-disk source JSON file. ... ok
+test_20_reconciliation_is_strictly_deterministic (test_data_reconciliation_and_provenance.TestDataReconciliationAndProvenance.test_20_reconciliation_is_strictly_deterministic)
+Two independent runs on identical inputs produce identical output SHA-256 hashes. ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.358s
+
+OK
+
+
+=== test_disambiguation_probes.py [Exit 0] (0.94s) ===
+test_control_fixture_visible_text_retention (test_disambiguation_probes.TestDisambiguationProbes.test_control_fixture_visible_text_retention)
+Positive control fixture explicitly displays target SKU in human-visible typography. ... ok
+test_probe_a_abs_pipeline_strips_identity (test_disambiguation_probes.TestDisambiguationProbes.test_probe_a_abs_pipeline_strips_identity)
+In ABS condition (default whitelist), data-product-id is stripped, making buttons indistinguishable. ... ok
+test_probe_a_data_cfg_pipeline_preserves_identity (test_disambiguation_probes.TestDisambiguationProbes.test_probe_a_data_cfg_pipeline_preserves_identity)
+In DATA-CFG condition (extended whitelist), data-product-id is preserved on interactive buttons. ... ok
+test_probe_a_fixture_structure (test_disambiguation_probes.TestDisambiguationProbes.test_probe_a_fixture_structure)
+Probe A fixture must contain two buttons with identical visible text but distinct data-product-id. ... ok
+test_probe_a_position_randomization_invariance (test_disambiguation_probes.TestDisambiguationProbes.test_probe_a_position_randomization_invariance)
+Position swapping re-orders buttons, proving task cannot be solved by position alone. ... ok
+test_probe_b_fixture_structure (test_disambiguation_probes.TestDisambiguationProbes.test_probe_b_fixture_structure)
+Probe B fixture encodes identity in container span aria-label with identical visible text. ... ok
+test_probe_b_serializer_strips_non_interactive_span_aria_label (test_disambiguation_probes.TestDisambiguationProbes.test_probe_b_serializer_strips_non_interactive_span_aria_label)
+browser-use serializer strips non-interactive container tags at serializer.py:1046. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.024s
+
+OK
+
+
+=== test_forensic_audit_regressions.py [Exit 0] (0.16s) ===
+test_exact_geometry_threshold_boundaries (test_forensic_audit_regressions.TestDOMGeometryBoundaryRegressions.test_exact_geometry_threshold_boundaries)
+Strict boundary assertions around 10.0px and 50.0px. ... ok
+test_in_stock_badge_heuristic_trigger (test_forensic_audit_regressions.TestDOMGeometryBoundaryRegressions.test_in_stock_badge_heuristic_trigger)
+In Stock badge (48.625 x 15px) satisfies 10-50px icon heuristic. ... ok
+test_out_of_stock_badge_heuristic_exclusion (test_forensic_audit_regressions.TestDOMGeometryBoundaryRegressions.test_out_of_stock_badge_heuristic_exclusion)
+Out of Stock badge (74.766 x 15px) exceeds 50px width ceiling. ... ok
+test_local_llama_summary_provenance (test_forensic_audit_regressions.TestDataProvenanceRegressions.test_local_llama_summary_provenance)
+local_llama_summary.csv has 5 rows of qwen3:4b with exact recorded latencies. ... ok
+test_quota_ledger_ceiling_enforcement (test_forensic_audit_regressions.TestDataProvenanceRegressions.test_quota_ledger_ceiling_enforcement)
+daily_quota_ledger.json enforces halt ceiling. ... ok
+test_v3_3arm_summary_provenance (test_forensic_audit_regressions.TestDataProvenanceRegressions.test_v3_3arm_summary_provenance)
+v3_3arm_summary.csv has 44 rows: 41 completed, 3 aborted retries on Run 26. ... ok
+test_abstract_numerical_claims_alignment (test_forensic_audit_regressions.TestManuscriptIntegrityRegressions.test_abstract_numerical_claims_alignment)
+Abstract numbers must match body tables. ... ok
+test_all_cited_keys_exist_in_bib (test_forensic_audit_regressions.TestManuscriptIntegrityRegressions.test_all_cited_keys_exist_in_bib)
+Every \cite{key} in research_paper_final.tex must exist in references.bib. ... ok
+test_crucial_citations_present (test_forensic_audit_regressions.TestManuscriptIntegrityRegressions.test_crucial_citations_present)
+Key citations (agentoccam2025, osworld2024, wilson1927, schuirmann1987comparison) must be present. ... ok
+test_newcombe_hybrid_score_example (test_forensic_audit_regressions.TestStatisticalRegressions.test_newcombe_hybrid_score_example)
+56/70 vs 38/80 produces RD = 0.325 with Newcombe 95% CI [0.172, 0.456]. ... ok
+test_tost_sample_size_formula_bounds (test_forensic_audit_regressions.TestStatisticalRegressions.test_tost_sample_size_formula_bounds)
+TOST sample size at p=0.70 gives ~360, p=0.50 gives ~429, DEFF=1.30 gives ~468. ... ok
+test_wilson_proportions_census_and_pilot (test_forensic_audit_regressions.TestStatisticalRegressions.test_wilson_proportions_census_and_pilot)
+Wilson intervals for 27/34 and 41/41. ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.003s
+
+OK
+
+
+=== test_groq_backend.py [Exit 0] (8.97s) ===
+test_01_backend_and_model_selection (test_groq_backend.TestGroqBackendMigration.test_01_backend_and_model_selection)
+ChatGroq initializes with correct model, provider, and name attributes. ... ok
+test_02_missing_api_key_handling (test_groq_backend.TestGroqBackendMigration.test_02_missing_api_key_handling)
+Missing API key raises descriptive ValueError and never prints secrets. ... ok
+test_03_secret_leakage_sanitization (test_groq_backend.TestGroqBackendMigration.test_03_secret_leakage_sanitization)
+sanitize_secret_leakage strips gsk_... keys and other tokens. ... ok
+test_04_structured_output_validation_mock (test_groq_backend.TestGroqBackendMigration.test_04_structured_output_validation_mock)
+ChatGroq.ainvoke returns valid Pydantic instance and extracts token usage. ... ok
+test_05_error_translation_and_redaction (test_groq_backend.TestGroqBackendMigration.test_05_error_translation_and_redaction)
+Groq errors (Auth, RateLimit) are translated cleanly with redacted credentials. ... ok
+test_06_budget_guard_request_interception_pre_dispatch (test_groq_backend.TestGroqBackendMigration.test_06_budget_guard_request_interception_pre_dispatch)
+BudgetGuardedChatModel stops execution BEFORE dispatch when requests ceiling is hit. ... ok
+test_07_budget_guard_token_ceiling_interception (test_groq_backend.TestGroqBackendMigration.test_07_budget_guard_token_ceiling_interception)
+BudgetGuardedChatModel stops execution BEFORE dispatch when token ceiling is reached. ... ok
+test_08_gemini_historical_ledger_intact_and_isolated (test_groq_backend.TestGroqBackendMigration.test_08_gemini_historical_ledger_intact_and_isolated)
+Historical Gemini ledger (results/daily_quota_ledger.json) remains strictly preserved. ... ok
+test_09_groq_ledger_isolated_persistence (test_groq_backend.TestGroqBackendMigration.test_09_groq_ledger_isolated_persistence)
+Groq budget updates save to a separate Groq ledger with provider metadata. ... ok
+test_10_agent_framework_compatibility (test_groq_backend.TestGroqBackendMigration.test_10_agent_framework_compatibility)
+browser-use Agent can be instantiated with ChatGroq. ... INFO     [service] Using anonymized telemetry, see https://docs.browser-use.com/development/monitoring/telemetry.
+ok
+test_11_verifiers_and_treatments_unaltered (test_groq_backend.TestGroqBackendMigration.test_11_verifiers_and_treatments_unaltered)
+Protocol v3/v4 verifiers (T1-T6) and attribute sets remain intact. ... ok
+test_12_oversized_payload_blocked_pre_dispatch (test_groq_backend.TestGroqBackendMigration.test_12_oversized_payload_blocked_pre_dispatch)
+ChatGroq blocks requests predictably exceeding TPM ceiling (HTTP 413) before provider dispatch. ... ok
+test_13_flash_mode_system_prompt_size (test_groq_backend.TestGroqBackendMigration.test_13_flash_mode_system_prompt_size)
+Verifies flash_mode=True produces a bounded system prompt under 800 tokens. ... ok
+test_14_fatal_error_propagation_not_completed (test_groq_backend.TestGroqBackendMigration.test_14_fatal_error_propagation_not_completed)
+Simulates action error (HTTP 413 rate limit) and verifies it is recognized as infrastructure_aborted. ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 6.301s
+
+OK
+
+
+=== test_implementation_fixes.py [Exit 0] (0.83s) ===
+test_fix01_02_resume_excludes_infrastructure_aborts (test_implementation_fixes.TestImplementationFixes.test_fix01_02_resume_excludes_infrastructure_aborts)
+Verify that get_completed_run_indices excludes infrastructure_aborted runs so resume retries them. ... ok
+test_fix01_default_schedule_and_summary_binding (test_implementation_fixes.TestImplementationFixes.test_fix01_default_schedule_and_summary_binding)
+Verify runner defaults are explicitly bound to proposed_3arm_schedule.csv and v3_3arm_summary.csv. ... ok
+test_fix02_attempt_preservation_never_overwrites (test_implementation_fixes.TestImplementationFixes.test_fix02_attempt_preservation_never_overwrites)
+Verify that retrying a run creates run_{idx}_attempt_{N}.json and preserves earlier files byte-for-byte. ... ok
+test_fix03_ingest_multi_attempt_infrastructure_aborts (test_implementation_fixes.TestImplementationFixes.test_fix03_ingest_multi_attempt_infrastructure_aborts)
+Verify analyze_v3_results ingestion handles multi-attempt rows, preserves raw telemetry, and excludes infra aborts. ... ok
+test_fix03_rejection_of_duplicate_completed_runs (test_implementation_fixes.TestImplementationFixes.test_fix03_rejection_of_duplicate_completed_runs)
+Verify that multiple completed runs for the same run_index trigger a clear ValueError. ... ok
+test_fix04_persistent_quota_accounting_across_restarts (test_implementation_fixes.TestImplementationFixes.test_fix04_persistent_quota_accounting_across_restarts)
+Verify that load_daily_requests_offset reads prior summary rows and initializes LocalBudgetGuard. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.037s
+
+OK
+
+
+=== test_live_instrumentation_offline.py [Exit 0] (13.22s) ===
+test_failed_runs_retained_in_summary (test_live_instrumentation_offline.TestLiveInstrumentationOffline.test_failed_runs_retained_in_summary)
+Verify that infrastructure errors or failed runs are recorded and not silently dropped. ... ok
+test_mock_chat_model_observation_interception (test_live_instrumentation_offline.TestLiveInstrumentationOffline.test_mock_chat_model_observation_interception)
+Verify prompt observation interception at MessageManager boundary. ... INFO     [BrowserSession] Setting viewport to 1920x1080 with device scale factor 1.0 whereas original device scale factor was 1.0
+INFO     [service] Using anonymized telemetry, see https://docs.browser-use.com/development/monitoring/telemetry.
+INFO     [Agent] [34m\U0001f3af Task: Find wireless headphones[0m
+INFO     [Agent] \U0001f4e6 Newer version available: 0.13.11 (current: 0.13.10). Upgrade with: uv add browser-use==0.13.11
+INFO     [Agent] Starting a browser-use agent with version 0.13.10, with provider=google and model=gemini-flash-lite-latest
+INFO     [Agent]   \u25b6\ufe0f   [34mnavigate[0m: [35murl[0m: http://127.0.0.1:8094/variants/v0-baseline/index.html#home, [35mnew_tab[0m: False
+INFO     [tools] \U0001f517 Navigated to http://127.0.0.1:8094/variants/v0-baseline/index.html#home
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 1:
+WARNING  [Agent] \u274c Result failed 1/6 times: items
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 2:
+WARNING  [Agent] \u274c Result failed 2/6 times: items
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 3:
+WARNING  [Agent] \u274c Result failed 3/6 times: items
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 4:
+WARNING  [Agent] \u274c Result failed 4/6 times: items
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 5:
+INFO     [Agent] \U0001f4cb Exploration nudge injected after 5 steps without a plan
+WARNING  [Agent] \u274c Result failed 5/6 times: items
+INFO     [Agent] 
+
+INFO     [Agent] \U0001f4cd Step 6:
+INFO     [Agent] \U0001f4cb Exploration nudge injected after 6 steps without a plan
+INFO     [Agent] \U0001f501 Loop detection nudge injected (repetition=0, stagnation=5)
+ERROR    [Agent] \u274c Result failed 6/6 times: items
+ERROR    [Agent] \u274c Stopping due to 5 consecutive failures
+INFO     [Agent] 
+INFO     [Agent] Did the Agent not work as expected? Let us fix this!
+INFO     [Agent]    Open a short issue on GitHub: https://github.com/browser-use/browser-use/issues
+INFO     [BrowserSession] \U0001f4e2 on_BrowserStopEvent - Calling reset() (force=True, keep_alive=None)
+INFO     [BrowserSession] [SessionManager] Cleared all owned data (targets, sessions, mappings)
+INFO     [BrowserSession] \u2705 Browser session reset complete
+INFO     [BrowserSession] \u2705 Browser session reset complete
+INFO     [BrowserSession] \U0001f4e2 on_BrowserStopEvent - Calling reset() (force=False, keep_alive=None)
+INFO     [BrowserSession] \u2705 Browser session reset complete
+INFO     [BrowserSession] \u2705 Browser session reset complete
+ok
+test_per_run_json_schema_logging (test_live_instrumentation_offline.TestLiveInstrumentationOffline.test_per_run_json_schema_logging)
+Verify per-run detailed JSON logging preserves required provenance fields. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 9.558s
+
+OK
+
+
+=== test_manuscript_consistency.py [Exit 0] (0.18s) ===
+test_01_manuscript_denominators (test_manuscript_consistency.TestManuscriptConsistency.test_01_manuscript_denominators)
+Verifies primary (39), sensitivity (41), and total files (46) are accounted for. ... ok
+test_02_manuscript_power_concordance (test_manuscript_consistency.TestManuscriptConsistency.test_02_manuscript_power_concordance)
+Verifies B=10,000 power numbers (~48.51% and ~11.45%) appear in the manuscript. ... ok
+test_03_design_parameters (test_manuscript_consistency.TestManuscriptConsistency.test_03_design_parameters)
+Verifies design arm count and sample size requirements. ... ok
+test_04_citations_exist_in_bib (test_manuscript_consistency.TestManuscriptConsistency.test_04_citations_exist_in_bib)
+Verifies that all cite keys used in the manuscript exist in references.bib. ... ok
+test_05_banned_phrases_audit (test_manuscript_consistency.TestManuscriptConsistency.test_05_banned_phrases_audit)
+Audits manuscript for presence of deprecated or unverified phrases. ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+OK
+
+
+=== test_mutation_audit.py [Exit 0] (0.89s) ===
+======================================================================
+PROTOCOL V3/V4 EXPERIMENTAL RUNNER
+Mode: LIVE
+Backend: GEMINI
+Schedule: C:\testing\research_execution_20261018\proposed_3arm_schedule.csv
+Model: gemini-3.1-flash-lite
+Max Steps Per Run: 4
+Max Requests Ceiling: 16
+Summary Output: C:\testing\research_execution_20261018\results\v3_3arm_summary.csv
+Per-Run Detail Directory: Disabled
+Cost Constraint: $0.00 USD (Free-tier locked: True)
+Vision Confound Enforcement: use_vision=False (STRICT)
+======================================================================
+test_mutation_cmh_detects_data_reversal (test_mutation_audit.TestMutationAudit.test_mutation_cmh_detects_data_reversal)
+Verify that cmh_test detects when treatments are swapped. ... ok
+test_mutation_safety_gate_catches_unconfirmed_live (test_mutation_audit.TestMutationAudit.test_mutation_safety_gate_catches_unconfirmed_live)
+Verify that execute_experiment throws RuntimeError if confirm_live is False. ... ok
+test_mutation_t1_rejects_expensive_headphones (test_mutation_audit.TestMutationAudit.test_mutation_t1_rejects_expensive_headphones)
+Mutation: T1 verifier accepts wh-002 ($89.99) or wh-003 ($129.99). ... ok
+test_mutation_t2_rejects_wrong_product (test_mutation_audit.TestMutationAudit.test_mutation_t2_rejects_wrong_product)
+Mutation: T2 verifier accepts mse-001 instead of mkp-001. ... ok
+test_mutation_t3_rejects_multi_item_cart (test_mutation_audit.TestMutationAudit.test_mutation_t3_rejects_multi_item_cart)
+Mutation: T3 verifier accepts cart with wh-002 plus extraneous items. ... ok
+test_mutation_t3_verifier_detects_wrong_sku (test_mutation_audit.TestMutationAudit.test_mutation_t3_verifier_detects_wrong_sku)
+Mutation: T3 verifier is altered to accept wh-001 instead of wh-002. ... ok
+test_mutation_t4_rejects_wrong_product_checkout (test_mutation_audit.TestMutationAudit.test_mutation_t4_rejects_wrong_product_checkout)
+Mutation: T4 verifier passes confirmed order of wrong product (wh-001 instead of mse-001). ... ok
+test_mutation_t4_verifier_detects_unconfirmed_order (test_mutation_audit.TestMutationAudit.test_mutation_t4_verifier_detects_unconfirmed_order)
+Mutation: T4 verifier awards 0.25 on checkout visit even if unconfirmed. ... ok
+test_mutation_t5_verifier_detects_unseeded_prestate (test_mutation_audit.TestMutationAudit.test_mutation_t5_verifier_detects_unseeded_prestate)
+Mutation: T5 verifier passes on empty cart even when pre_cart_count was 0. ... ok
+test_mutation_t6_detects_flawed_inversion (test_mutation_audit.TestMutationAudit.test_mutation_t6_detects_flawed_inversion)
+Mutation: T6 awards success on '36 months' and fails on refusal. ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.003s
+
+OK
+
+
+=== test_observation_pipeline_stages.py [Exit 0] (0.99s) ===
+test_channel_1_jsonld_pipeline (test_observation_pipeline_stages.TestObservationPipelineStages.test_channel_1_jsonld_pipeline)
+Trace JSON-LD through source HTML, AXTree, and serializer. ... ok
+test_channel_2_button_aria_pipeline (test_observation_pipeline_stages.TestObservationPipelineStages.test_channel_2_button_aria_pipeline)
+Trace Button ARIA through source HTML, live DOM rendering, AXTree, and serializer. ... ok
+test_channel_3_non_interactive_aria_pipeline (test_observation_pipeline_stages.TestObservationPipelineStages.test_channel_3_non_interactive_aria_pipeline)
+Prove Critical Divergence: retained in Blink AXTree but stripped in serializer prompt. ... ok
+test_channel_4_custom_data_attributes_pipeline (test_observation_pipeline_stages.TestObservationPipelineStages.test_channel_4_custom_data_attributes_pipeline)
+Prove Reversed Divergence: absent in Blink AXTree, but present in serializer under extended whitelist. ... ok
+test_channel_5_visible_typography_concordance (test_observation_pipeline_stages.TestObservationPipelineStages.test_channel_5_visible_typography_concordance)
+Prove concordant 100% retention of visible text across all representations. ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+OK
+
+
+=== test_power_audit.py [Exit 0] (0.16s) ===
+test_analytical_power_monotonicity (test_power_audit.TestPowerAudit.test_analytical_power_monotonicity)
+Power must strictly increase with sample size and effect size. ... ok
+test_analytical_power_zero_delta (test_power_audit.TestPowerAudit.test_analytical_power_zero_delta)
+Delta = 0 must return alpha (Type I error rate). ... ok
+test_audit_json_file_validity (test_power_audit.TestPowerAudit.test_audit_json_file_validity)
+Verify output JSON contains all required reconciled metrics. ... ok
+test_design_effect_calculation (test_power_audit.TestPowerAudit.test_design_effect_calculation)
+Verify DEFF formula and effective sample size. ... ok
+test_normal_functions_inverses (test_power_audit.TestPowerAudit.test_normal_functions_inverses)
+Verify norm_ppf and norm_cdf are accurate inverses. ... ok
+test_sample_size_superiority_bounds (test_power_audit.TestPowerAudit.test_sample_size_superiority_bounds)
+Verify required sample size calculations for superiority. ... ok
+test_sample_size_tost_bounds (test_power_audit.TestPowerAudit.test_sample_size_tost_bounds)
+Verify required sample size calculations for TOST equivalence. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+OK
+
+
+=== test_runner_guard_integration.py [Exit 0] (2.28s) ===
+       -> Effective agent step budget: 2 steps (step 2 is finalization/done).
+       -> Effective agent step budget: 5 steps (step 5 is finalization/done).
+test_01_runner_wraps_llm_with_budget_guard (test_runner_guard_integration.TestRunnerGuardIntegration.test_01_runner_wraps_llm_with_budget_guard)
+run_single_live_trial must wrap custom_llm in BudgetGuardedChatModel when guard is provided. ... ok
+test_02_in_flight_budget_exhaustion_aborts_cleanly (test_runner_guard_integration.TestRunnerGuardIntegration.test_02_in_flight_budget_exhaustion_aborts_cleanly)
+When guard reaches ceiling during live trial steps, runner halts with quota_aborted. ... ok
+test_03_execute_experiment_worst_case_headroom (test_runner_guard_integration.TestRunnerGuardIntegration.test_03_execute_experiment_worst_case_headroom)
+execute_experiment must halt before trial dispatch if worst-case steps exceed ceiling. ... ok
+test_04_no_double_counting_with_requests_already_recorded (test_runner_guard_integration.TestRunnerGuardIntegration.test_04_no_double_counting_with_requests_already_recorded)
+record_trial_completion does not double count steps when requests_already_recorded=True. ... ok
+test_05_historical_ledger_blocks_live_dispatch (test_runner_guard_integration.TestRunnerGuardIntegration.test_05_historical_ledger_blocks_live_dispatch)
+When ledger contains 604 requests with ceiling 600, trial dispatch fails closed immediately. ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.268s
+
+OK
+
+
+=== test_schedule_validity.py [Exit 0] (0.17s) ===
+test_01_smoke_schedule_structure (test_schedule_validity.TestScheduleValidity.test_01_smoke_schedule_structure)
+Smoke schedule must have exactly 4 rows (1 per arm), valid tasks, and no duplicates. ... ok
+test_02_full_pilot_schedule_structure_and_counts (test_schedule_validity.TestScheduleValidity.test_02_full_pilot_schedule_structure_and_counts)
+Full pilot schedule must have 96 rows (4 arms x 6 tasks x 4 blocks). ... ok
+test_03_arm_and_task_integrity (test_schedule_validity.TestScheduleValidity.test_03_arm_and_task_integrity)
+All rows must have valid arms, tasks, and variant mappings. ... ok
+test_04_rcbd_block_balance (test_schedule_validity.TestScheduleValidity.test_04_rcbd_block_balance)
+Every block must contain exactly 24 runs with 1 run for each (arm, task) combination. ... ok
+test_05_target_entity_consistency (test_schedule_validity.TestScheduleValidity.test_05_target_entity_consistency)
+Target entities must strictly match canonical task definitions. ... ok
+test_06_option_a_3arm_schedule_structure_and_balance (test_schedule_validity.TestScheduleValidity.test_06_option_a_3arm_schedule_structure_and_balance)
+Option A clean 3-arm schedule must have 72 rows (3 arms x 6 tasks x 4 blocks). ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+
+
+=== test_sentinel_pipeline.py [Exit 0] (0.18s) ===
+test_aria_button_reaches_model_payload (test_sentinel_pipeline.TestSentinelPipelineTrace.test_aria_button_reaches_model_payload)
+WAI-ARIA aria-label on interactive button reaches the model client payload. ... ok
+test_aria_span_critical_divergence (test_sentinel_pipeline.TestSentinelPipelineTrace.test_aria_span_critical_divergence)
+Non-interactive span aria-label exists in Blink AXTree but is stripped by serializer. ... ok
+test_custom_data_attributes_reachability_rules (test_sentinel_pipeline.TestSentinelPipelineTrace.test_custom_data_attributes_reachability_rules)
+Custom data attributes are absent in Blink AXTree and default serializer, require extended whitelist. ... ok
+test_jsonld_and_meta_unconditional_loss (test_sentinel_pipeline.TestSentinelPipelineTrace.test_jsonld_and_meta_unconditional_loss)
+JSON-LD script tags and meta tags are pruned at serializer and never reach prompt. ... ok
+test_visible_text_full_preservation (test_sentinel_pipeline.TestSentinelPipelineTrace.test_visible_text_full_preservation)
+Visible typography must survive 100% of pipeline stages (Stages 1-6). ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+
+
+=== test_step_limits_and_budget_audit.py [Exit 0] (4.66s) ===
+======================================================================
+PROTOCOL V3/V4 EXPERIMENTAL RUNNER
+Mode: MOCK
+Backend: GEMINI
+Schedule: C:\Users\kr728\AppData\Local\Temp\test_audit_77cfx77i\multi_schedule.csv
+Model: gemini-3.1-flash-lite
+Max Steps Per Run: 4
+Max Requests Ceiling: 16
+Summary Output: C:\Users\kr728\AppData\Local\Temp\test_audit_77cfx77i\test_summary.csv
+Per-Run Detail Directory: C:\Users\kr728\AppData\Local\Temp\test_audit_77cfx77i\test_runs
+Cost Constraint: $0.00 USD (Free-tier locked: True)
+Vision Confound Enforcement: use_vision=False (STRICT)
+======================================================================
+Loaded 3 runs from schedule.
+Found 0 already completed runs in summary CSV.
+
+[Run 01/3] Block 1 | Arm ABS | Task T1 | Variant v0-baseline
+       -> Result: success=True (score=1.0) | logged to summary
+Reached max_runs limit (1). Stopping.
+
+======================================================================
+Runner finished. Executed 1 runs. Total completed: 1/3
+Cumulative Estimated Cost: $0.0044 USD
+Cumulative Requests Used: 4/16
+======================================================================
+======================================================================
+PROTOCOL V3/V4 EXPERIMENTAL RUNNER
+Mode: MOCK
+Backend: GEMINI
+Schedule: C:\Users\kr728\AppData\Local\Temp\test_audit_qh761j06\single_schedule.csv
+Model: gemini-3.1-flash-lite
+Max Steps Per Run: 7
+Max Requests Ceiling: 16
+Summary Output: C:\Users\kr728\AppData\Local\Temp\test_audit_qh761j06\test_summary.csv
+Per-Run Detail Directory: C:\Users\kr728\AppData\Local\Temp\test_audit_qh761j06\test_runs
+Cost Constraint: $0.00 USD (Free-tier locked: True)
+Vision Confound Enforcement: use_vision=False (STRICT)
+======================================================================
+Loaded 1 runs from schedule.
+Found 0 already completed runs in summary CSV.
+
+[Run 01/1] Block 1 | Arm ABS | Task T1 | Variant v0-baseline
+       -> Result: success=True (score=1.0) | logged to summary
+Reached max_runs limit (1). Stopping.
+
+======================================================================
+Runner finished. Executed 1 runs. Total completed: 1/1
+Cumulative Estimated Cost: $0.0078 USD
+Cumulative Requests Used: 7/16
+======================================================================
+test_01_cli_parsing_and_mode_selection (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_01_cli_parsing_and_mode_selection)
+CLI must cleanly distinguish mock vs live mode without contradictory flags. ... ok
+test_02_max_runs_one_limit (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_02_max_runs_one_limit)
+--max-runs 1 must execute strictly one scheduled trial and halt. ... ok
+test_03_explicit_step_limits_preserved (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_03_explicit_step_limits_preserved)
+User-supplied --max-steps must be respected and passed to the execution engine. ... ok
+test_04_multi_step_task_warning_and_budget (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_04_multi_step_task_warning_and_budget)
+When max_steps < 2, runner must emit an explicit step budget warning explaining done-tool restrictions. ... ok
+test_05_mock_task_identifies_cheapest_product_without_click_fails (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_05_mock_task_identifies_cheapest_product_without_click_fails)
+Identifying the cheapest product in agent final text without clicking Add-to-Cart must evaluate as failed. ... ok
+test_06_mock_task_clicks_cheapest_product_passes_verifier (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_06_mock_task_clicks_cheapest_product_passes_verifier)
+Adding the cheapest product (SoundFlow Air 3 / wh-001) to cart must evaluate as successful. ... ok
+test_07_task_failure_distinguishable_from_cleanup_failure (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_07_task_failure_distinguishable_from_cleanup_failure)
+A task failure with a cleanup error must record both distinct signals without confusion. ... ok
+test_08_cleanup_exception_does_not_erase_persisted_result (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_08_cleanup_exception_does_not_erase_persisted_result)
+extract_terminal_state must gracefully use fallback_state if CDP is already disconnected. ... ok
+test_09_budget_guard_blocks_when_insufficient_worst_case_headroom (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_09_budget_guard_blocks_when_insufficient_worst_case_headroom)
+Budget guard must fail closed before trial dispatch if remaining requests < max_steps. ... ok
+test_10_request_accounting_does_not_count_steps_as_requests (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_10_request_accounting_does_not_count_steps_as_requests)
+load_daily_requests_offset must prefer explicit model_requests over raw total_steps. ... ok
+test_11_ledger_and_csv_reconciliation_no_double_count (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_11_ledger_and_csv_reconciliation_no_double_count)
+Multiple summary CSVs containing the same run must be deduplicated by run_index and timestamp. ... ok
+test_12_provider_filtering_in_offset_loader (test_step_limits_and_budget_audit.TestStepLimitsAndBudgetAudit.test_12_provider_filtering_in_offset_loader)
+Groq accounting must not be inflated by historical Gemini runs. ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 3.597s
+
+OK
+
+
+=== test_t6_verifier_isolated.py [Exit 0] (0.16s) ===
+test_ambiguous_answers (test_t6_verifier_isolated.TestT6VerifierIsolated.test_ambiguous_answers) ... ok
+test_casing_and_whitespace_variants (test_t6_verifier_isolated.TestT6VerifierIsolated.test_casing_and_whitespace_variants) ... ok
+test_contradictory_refusal_with_duration (test_t6_verifier_isolated.TestT6VerifierIsolated.test_contradictory_refusal_with_duration) ... ok
+test_differential_flawed_vs_corrected (test_t6_verifier_isolated.TestT6VerifierIsolated.test_differential_flawed_vs_corrected)
+Direct demonstration of the inversion: ... ok
+test_explicit_unsupported_durations (test_t6_verifier_isolated.TestT6VerifierIsolated.test_explicit_unsupported_durations) ... ok
+test_unrelated_answers (test_t6_verifier_isolated.TestT6VerifierIsolated.test_unrelated_answers) ... ok
+test_valid_refusals_standard (test_t6_verifier_isolated.TestT6VerifierIsolated.test_valid_refusals_standard) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+OK
+
+
+=== test_treatment_leakage_and_integrity.py [Exit 0] (0.17s) ===
+test_catalog_identical_across_variants (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_catalog_identical_across_variants)
+Verify all variants load identical shared/products.js without overrides. ... ok
+test_deconfounded_button_label_in_app_core (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_deconfounded_button_label_in_app_core)
+Verify button aria-label in v2-aria does NOT leak the target product name. ... ok
+test_jsonld_manipulation_failure_acknowledged (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_jsonld_manipulation_failure_acknowledged)
+Verify JSON-LD arm is excluded from primary confirmatory arms due to serializer pruning. ... ok
+test_v0_baseline_cleanliness (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_v0_baseline_cleanliness)
+Verify v0-baseline source HTML has no ARIA enhancements or data-* actions. ... ok
+test_v3_data_attrs_separation (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_v3_data_attrs_separation)
+Verify v3-data-attrs does not leak ARIA attributes. ... ok
+test_vis_arm_vision_confound_elimination (test_treatment_leakage_and_integrity.TestTreatmentLeakageAndIntegrity.test_vis_arm_vision_confound_elimination)
+Verify VIS arm does NOT enable vision in text-only Protocol v4. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.008s
+
+OK
+
+
+=== test_verifier_ground_truth_battery.py [Exit 0] (0.84s) ===
+test_t1_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t1_known_fails)
+T1 must fail on higher-priced headphones, wrong categories, or empty cart. ... ok
+test_t1_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t1_known_passes)
+T1 must pass when cart contains exactly wh-001 ($49.99, lowest price). ... ok
+test_t2_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t2_known_fails)
+T2 must fail on wrong keyboard (mkp-002) or empty cart. ... ok
+test_t2_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t2_known_passes)
+T2 must pass when cart contains mkp-001 (ProClick Tactile Pro). ... ok
+test_t3_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t3_known_fails)
+T3 must strictly reject the highest-rated product (wh-001) and other audio products. ... ok
+test_t3_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t3_known_passes)
+T3 must pass ONLY for wh-002 (second-highest rating 4.5 vs highest wh-001 4.8). ... ok
+test_t4_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t4_known_fails)
+T4 must fail if checkout was unconfirmed or confirmed with wrong item. ... ok
+test_t4_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t4_known_passes)
+T4 must pass when order is confirmed and last_order_items contains mse-001. ... ok
+test_t5_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t5_known_fails)
+T5 must fail if pre_cart_count was 0 (unseeded) or final cart still has items. ... ok
+test_t5_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t5_known_passes)
+T5 must pass when pre_cart_count == 1 and final cart == []. ... ok
+test_t6_known_fails (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t6_known_fails)
+T6 must fail when agent hallucinates a specific duration or produces contradictory text. ... ok
+test_t6_known_passes (test_verifier_ground_truth_battery.TestVerifierGroundTruthBattery.test_t6_known_passes)
+T6 must pass when agent correctly refuses to provide an unstated warranty duration. ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.001s
+
+OK
+

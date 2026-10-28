@@ -1,0 +1,27 @@
+{
+  "test_type": "NEUTRAL_SMOKE_VERIFICATION",
+  "provider": "google",
+  "model_id": "gemini-3-flash-preview",
+  "api_endpoint": "generativelanguage.googleapis.com",
+  "timestamp_start": "2026-10-22T19:15:18.478407+00:00",
+  "timestamp_end": "2026-10-22T19:15:28.783795+00:00",
+  "http_status": 200,
+  "success": true,
+  "prompt_sent": "Respond with exactly the single word: PONG",
+  "sanitized_response": "PONG",
+  "usage_metadata": {
+    "prompt_token_count": 10,
+    "candidates_token_count": 2,
+    "total_token_count": 68
+  },
+  "candidates": [
+    {
+      "finish_reason": "FinishReason.STOP"
+    }
+  ],
+  "cost_usd": 0.0,
+  "tier_type": "Google AI Studio Free of Charge Tier",
+  "paid_fallback_used": false,
+  "mock_model_used": false,
+  "behavioral_experiment_count": 0
+}

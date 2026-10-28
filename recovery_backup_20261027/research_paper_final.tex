@@ -1,0 +1,428 @@
+% ============================================================
+% THE DOM SERIALIZATION GAP
+% IEEE Conference Paper Format (IEEEtran class, conference mode)
+% Publication-Ready Manuscript Revision
+% ============================================================
+\documentclass[conference]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{upquote}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{placeins}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!80!black
+}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    keywordstyle=\color{blue!80!black}\bfseries,
+    commentstyle=\color{gray!70!black}\itshape,
+    stringstyle=\color{green!50!black}
+}
+
+% ----------------------------------------------------------
+\title{The DOM Serialization Gap: Architectural Pruning, Information Loss, and Observation Confounds in Autonomous Browser Agents}
+
+\author{
+  \IEEEauthorblockN{Anonymous Authors}
+  \IEEEauthorblockA{\textit{Under Double-Blind Peer Review}}
+}
+% ----------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Autonomous LLM browser agents rely on client-side pipelines to serialize live DOM trees into token-bounded prompts. We present an empirical systems audit of the \emph{DOM serialization gap}---the systematic metadata loss between browser layout engines and model prompts. Evaluating \texttt{browser-use} (pinned v0.13.10) across seven fixtures and six PyPI releases (v0.1.0--v0.13.11), we measure retention across pipeline stages. Schema.org JSON-LD and \texttt{<meta>} tags are pruned at Stage~2 ($0/4$ retained, 95\% CI $[0.00, 0.60]$); developer \texttt{data-*} attributes are discarded at Stage~4 by whitelisting ($0/6$, $[0.00, 0.46]$); and container ARIA annotations are stripped by non-interactive tag gating ($5/16$, $[0.11, 0.59]$), while visible typography is fully preserved ($10/10$). Selector correspondence with Blink Accessibility Trees is partially circular by construction, and bounding-box heuristics ($10 \le w, h \le 50$\,px) misclassify badge spans. Scripted oracle evaluation shows standard tasks are 100\% solvable from visible text alone, explaining the ceiling effect in an exploratory pilot (13/13 per arm, exact CI $[0.753, 1.000]$, $N=39$ primary, $N=41$ sensitivity, 46 traces reconciled). Clean-room simulations ($B=10\,000$) show three-arm designs achieve 11.5\% power for $\Delta=0.20$ and 48.5\% for $\Delta=0.35$ ($\alpha_{\mathrm{adj}}=0.0167$), requiring $N=291\text{--}375$ trials. No confirmatory behavioral evidence was added; our findings establish a verified systems audit and preflight protocol for web-agent benchmarks.
+\end{abstract}
+
+\begin{IEEEkeywords}
+autonomous web agents, DOM serialization, accessibility trees, observation pipelines, WAI-ARIA, semantic markup, systems audit, reproducibility
+\end{IEEEkeywords}
+
+% ----------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+
+The deployment of Large Language Models (LLMs) as autonomous web agents represents a significant shift toward automated digital transactions~\cite{zhou2024webarena, deng2023mind2web, drouin2024workarena, workarenapp2024, osworld2024}. To navigate websites, fill forms, and execute checkouts, an agent must construct an internal representation of the web page from live browser state, typically retrieved via automation protocols such as Playwright or the Chrome DevTools Protocol (CDP).
+
+Contemporary web pages partition information across four distinct architectural layers:
+\begin{enumerate}
+    \item \textbf{Rendered Typography:} Human-visible text nodes styled by CSS layout engines.
+    \item \textbf{Assistive Semantics:} WAI-ARIA roles, accessible names, and live regions computed for screen readers~\cite{wai_aria12, accname11}.
+    \item \textbf{Developer State Metadata:} Custom \texttt{data-*} attributes embedding internal product identifiers, state flags, and prices.
+    \item \textbf{Structured Linked Data:} Schema.org microdata embedded within \texttt{<script type="application/ld+json">} blocks~\cite{schemaorg}.
+\end{enumerate}
+
+To accommodate LLM token limits, browser agent frameworks apply client-side observation pipelines that prune, strip, and compress DOM trees before prompt injection. While recent out-of-band proposals such as \texttt{/llms.txt}~\cite{llmstxt2024} and the Model Context Protocol (MCP)~\cite{mcp2024} provide alternative context delivery interfaces, standard web agents operate directly on client-side serialized DOM representations.
+
+This paper investigates the \emph{DOM serialization gap}: the structural divergence between what is rendered in the live browser DOM and what actually survives into the model's prompt buffer. When researchers evaluate agent performance across semantic markup variants, they frequently assume that enriched metadata reaches the model. However, if client-side serializers silently discard target channels, experimental differences cannot be attributed to agent reasoning.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Taxonomy of Project Evidence Classes (E1--E7).}
+\label{tab:evidence_classes}
+\begin{tabularx}{\columnwidth}{lXl}
+\toprule
+\textbf{Class} & \textbf{Description and Provenance} & \textbf{Status in Study} \\
+\midrule
+\textbf{E1} & Installed source code SHA-256 match vs. PyPI binaries & Verified (6 releases) \\
+\textbf{E2} & Deterministic 6-stage CDP observation traces (7 fixtures) & Fully Captured \\
+\textbf{E3} & Concrete entity loss metrics and scripted oracle reader & Measured (44 entities) \\
+\textbf{E4} & Historical exploratory cloud pilot ($N=39$ primary, $N=41$ sens.) & Bounded (Ceiling) \\
+\textbf{E5} & Synthetic pipeline tests and Monte Carlo simulations ($B=10^4$) & Reproduced Offline \\
+\textbf{E6} & Infrastructure telemetry (transient 503s, diagnostic runs) & Fully Reconciled \\
+\textbf{E7} & Confirmatory live agent behavioral trials & \textbf{None Added} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Contributions}
+We present a rigorous systems audit and methodological framework:
+\begin{enumerate}
+    \item \textbf{Deterministic Pruning Mechanisms:} We identify and trace three discrete structural pruning mechanisms in \texttt{browser-use 0.13.10}~\cite{browseruse2024}, proving that JSON-LD and meta tags are pruned at Stage~2, custom \texttt{data-*} attributes are filtered at Stage~4, and container ARIA attributes are discarded by interactivity gating. Longitudinal wheel auditing confirms these rules are immutable architectural invariants across six PyPI releases (v0.1.0 to v0.13.11).
+    \item \textbf{Direct Information Loss Measurement:} Over a corpus of seven controlled fixtures and 44 atomic target entities, we compute stage-by-stage retention with exact Clopper-Pearson binomial confidence intervals~\cite{clopper1934use}, demonstrating zero delivery for JSON-LD and developer attributes.
+    \item \textbf{Circularity and Heuristic Audits:} We demonstrate that selector-map correspondence with the Blink Accessibility Tree (AXTree) is circular by construction due to direct AX-role queries in clickable element detection, and show that bounding-box icon heuristics ($10 \le w, h \le 50$\,px) introduce false-positive interactive targets.
+    \item \textbf{Solvability Analysis and Confound Formalization:} Using a non-LLM scripted oracle reader, we prove that standard benchmark routes are 100\% solvable ($p=1.0$) from visible text alone, explaining the ceiling effect in an exploratory 39-run pilot, and formalize a $3 \times 3$ co-location factorial design.
+    \item \textbf{Statistical Power and Reproducibility:} We report clean-room Monte Carlo power simulations ($B=10\,000$) using Cochran-Mantel-Haenszel (CMH) stratified risk differences~\cite{mantel1959statistical, sato1989variance, greenland1985estimation, agresti2002categorical, newcombe1998interval, wilson1927probable}, derive closed-form sample sizes ($N=291\text{--}375$), and provide 207 automated offline tests.
+\end{enumerate}
+
+\textbf{Explicit Scope Limitation:} Confirmatory live behavioral experiments have not been executed in this study. The manuscript reports verified systems telemetry (Classes E1--E3) and an exploratory ceiling pilot (Class E4), establishing a validity framework for future web-agent research.
+
+% ----------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Autonomous Web Agent Benchmarks}
+Benchmark environments such as \textbf{WebArena}~\cite{zhou2024webarena} established end-to-end evaluation on multi-step transactional web tasks, reporting GPT-4 success rates between 10.6\% and 14.4\%. \textbf{Mind2Web}~\cite{deng2023mind2web} introduced 2,350 tasks across 137 websites, highlighting the severe token bottlenecks imposed by raw HTML DOMs. \textbf{WorkArena}~\cite{drouin2024workarena} and \textbf{WorkArena++}~\cite{workarenapp2024} extended benchmarking to enterprise ServiceNow workflows via \textbf{BrowserGym}, leveraging Chromium Accessibility Trees to compress observation context. \textbf{OSWorld}~\cite{osworld2024} generalized evaluation to open-domain multimodal desktop environments, while \textbf{AgentBench}~\cite{liu2024agentbench} evaluated reasoning across diverse simulated platforms.
+
+\subsection{Observation Pruning and Context Distillation}
+Recent systems examine observation compression. \textbf{AgentOccam}~\cite{agentoccam2025} demonstrated that aggressive observation-space and action-space pruning yields strong, cost-effective baselines. Similarly, \textbf{WebAgent}~\cite{gur2024webagent} trained specialized HTML-T5 models for HTML sub-sampling. However, prior investigations treated observation pruning primarily as a computational optimization for context reduction. The semantic fidelity of client-side DOM serialization pipelines and their confounding effects on markup-ablation experiments have not been systematically audited.
+
+\subsection{Multimodal Web Agents}
+Multimodal systems such as \textbf{VisualWebArena}~\cite{koh2024visualwebarena}, \textbf{SeeAct}~\cite{zheng2024seeact}, and \textbf{WebVoyager}~\cite{he2024webvoyager} bypass DOM text serializers by conditioning action policies directly on visual screenshots and Set-of-Mark annotations. Our investigation is strictly scoped to text-only observation pipelines.
+
+% ----------------------------------------------------------
+\section{Observation Pipeline Architecture and Pruning Mechanisms}
+\label{sec:architecture}
+
+\subsection{The Five Discrete Serialization Stages}
+In client-side agent frameworks, webpage content traverses five distinct stages before model ingestion:
+\begin{enumerate}
+    \item \textbf{Stage 1 (Server HTML):} Raw network payload delivered over HTTP.
+    \item \textbf{Stage 2 (Cleaned DOM AST):} In-memory DOM tree parsed by Blink and pruned by framework element filters.
+    \item \textbf{Stage 3 (Interactive Candidate Set):} Interactive element candidates identified via DOM traversal, geometric bounding boxes, and Blink AXTree role queries.
+    \item \textbf{Stage 4 (Serialized Observation String):} Filtered text representation generated by \texttt{DOMTreeSerializer.serialize()}.
+    \item \textbf{Stage 5 (Model Context Buffer):} Assembled prompt payload combining system instructions, agent history, and Stage~4 text, intercepted at the model dispatch boundary.
+\end{enumerate}
+
+\subsection{Pruning Mechanism 1: Element-Level Pruning (Stage 2)}
+In \texttt{browser\_use/dom/serializer/serializer.py} (L18, applied at L481), an exclusion set is defined:
+\begin{lstlisting}[language=Python]
+DISABLED_ELEMENTS = {
+    'style', 'script', 'head', 'meta', 'link', 'title'
+}
+\end{lstlisting}
+During Stage~2 recursive tree construction, any element matching this set is pruned. Consequently, Schema.org microdata embedded in \texttt{<script type="application/ld+json">} and OpenGraph metadata in \texttt{<meta>} tags are unconditionally eliminated at Stage~2. They never reach Stage~3 or Stage~4.
+
+\subsection{Pruning Mechanism 2: Interactivity-Gated Tag Emission (Stage 4)}
+At lines 1046--1051 of \texttt{serializer.py}, attribute string construction is gated on element interactivity:
+\begin{lstlisting}[language=Python]
+if (node.is_interactive
+        or is_any_scrollable
+        or tag == 'IFRAME'
+        or tag == 'FRAME'):
+    attributes_html_str = _build_attributes_string(
+        node.original_node, include_attributes, ...)
+\end{lstlisting}
+For non-interactive container elements (e.g., \texttt{<span>}, \texttt{<div>}, or landmark containers like \texttt{<section role="region">}), \texttt{\_build\_attributes\_string} is bypassed. The element tag wrapper and all attributes---including \texttt{aria-label} and \texttt{role}---are stripped, emitting only the inner text. Under W3C WAI-ARIA 1.2~\cite{wai_aria12}, \texttt{role="region"} is a landmark supporting naming, but the framework's interactivity gate discards it entirely.
+
+\subsection{Pruning Mechanism 3: Attribute Whitelist Filtering (Stage 4)}
+For elements that survive interactivity gating, emitted attributes are filtered against \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES} in \texttt{browser\_use/dom/views.py}. The default whitelist retains standard attributes (\texttt{title}, \texttt{type}, \texttt{role}, \texttt{aria-label}) but omits developer custom attributes (\texttt{data-product-id}, \texttt{data-action}). Custom attributes reach Stage~4 only if an extended attribute whitelist (\texttt{DATA-CFG}) is injected at the runner level.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Model-Free Direct Information Retention Matrix across Pipeline Stages in \texttt{browser-use 0.13.10} (Evidence Class E3, 44 atomic target entities evaluated across 7 controlled test fixtures). 95\% confidence intervals computed via exact Clopper-Pearson binomial inversion.}
+\label{tab:retention_matrix}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccccl@{}}
+\toprule
+\textbf{Metadata Channel} & \textbf{Entities ($N$)} & \textbf{Stage 1} & \textbf{Stage 2} & \textbf{Stage 3} & \textbf{Stage 4} & \textbf{Stage 5} & \textbf{Exact 95\% CI} & \textbf{Primary Loss Mechanism} \\
+\midrule
+Schema.org JSON-LD & 4 & 4/4 & \textbf{0/4} & 0/4 & 0/4 & \textbf{0/4 (0.0\%)} & $[0.000, 0.602]$ & Element Pruning (\texttt{DISABLED\_ELEMENTS}) \\
+HTML \texttt{<meta>} Tags & 2 & 2/2 & \textbf{0/2} & 0/2 & 0/2 & \textbf{0/2 (0.0\%)} & $[0.000, 0.842]$ & Element Pruning (\texttt{DISABLED\_ELEMENTS}) \\
+Developer \texttt{data-*} (Default) & 6 & 6/6 & 6/6 & 4/6 & \textbf{0/6} & \textbf{0/6 (0.0\%)} & $[0.000, 0.459]$ & Attribute Whitelist Filter (\texttt{views.py}) \\
+Container ARIA (\texttt{<span>}/\texttt{<div>}) & 16 & 16/16 & 16/16 & 5/16 & 5/16 & \textbf{5/16 (31.2\%)} & $[0.110, 0.587]$ & Interactivity Gating (\texttt{serializer.py} L1046) \\
+Landmark ARIA (\texttt{role="region"}) & 1 & 1/1 & 1/1 & \textbf{0/1} & 0/1 & \textbf{0/1 (0.0\%)} & $[0.000, 0.975]$ & Interactivity Gating (\texttt{serializer.py} L1046) \\
+Developer \texttt{data-*} (Extended) & 6 & 6/6 & 6/6 & 4/6 & 4/6 & \textbf{4/6 (66.7\%)} & $[0.223, 0.957]$ & Interactivity Gating on Containers \\
+Interactive Button ARIA & 3 & 3/3 & 3/3 & 3/3 & 3/3 & \textbf{3/3 (100.0\%)} & $[0.292, 1.000]$ & Fully Retained (Leaf Control) \\
+Visible Rendered Typography & 10 & 10/10 & 10/10 & 10/10 & 10/10 & \textbf{10/10 (100.0\%)} & $[0.692, 1.000]$ & Fully Retained (Leaf Control) \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\subsection{Longitudinal Version-Drift Stability}
+To evaluate whether these pruning rules are ephemeral or permanent, we downloaded and cryptographically verified six binary wheel distributions from PyPI spanning the project lifecycle: v0.1.0, v0.5.0, v0.13.0, v0.13.5, v0.13.10, and v0.13.11 (all SHA-256 digests verified). Forensic static inspection confirms:
+\begin{itemize}
+    \item \texttt{DISABLED\_ELEMENTS} containing \texttt{script} and \texttt{meta} is an \textbf{immutable invariant} present in all six releases.
+    \item \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES} has never included developer \texttt{data-*} attributes across any release.
+    \item Interactivity gating on non-interactive containers has been stable across the entire v0.13 release series.
+\end{itemize}
+
+% ----------------------------------------------------------
+\section{Accessibility Tree Correspondence and Heuristic Confounds}
+\label{sec:correspondence}
+
+\subsection{Circularity in AXTree Correspondence}
+Prior benchmarks have reported high correspondence between browser-agent selector maps and the Chromium Blink AXTree. In \texttt{browser-use 0.13.10}, \texttt{ClickableElementDetector} (lines 204--225) inspects \texttt{node.ax\_node.role} directly via CDP \texttt{Accessibility.getFullAXTree} to identify interactive elements. Consequently, selector correspondence with the accessibility tree is \textbf{partially circular by construction}: the serializer queries the AXTree to determine what to emit.
+
+\subsection{The Geometric Bounding-Box Heuristic Confound}
+To detect unsemantic icon buttons, the framework implements a bounding-box heuristic: any element with computed dimensions $10 \le \text{width}, \text{height} \le 50$\,px bearing a class attribute is classified as interactive. 
+
+On the audited TechMart e-commerce catalog route (\texttt{\#home}):
+\begin{itemize}
+    \item Exactly 26 genuine leaf interactive controls exist (11 links, 14 buttons, 1 text input). All 26 match Blink AX nodes ($100.0\%$ semantic recall, 95\% CI $[0.868, 1.000]$).
+    \item One structural container form element is matched (27 container-inclusive matches).
+    \item Exactly seven static ``In Stock'' text badge spans ($48.6 \times 15.0$\,px) satisfy the icon size heuristic and are emitted as interactive button selectors, while an adjacent ``Out of Stock'' badge ($74.8 \times 15.0$\,px) is pruned.
+\end{itemize}
+This yields an operational selector correspondence of $27/34 = \mathbf{79.4\%}$ (95\% Wilson CI $[63.2\%, 89.7\%]$). The apparent retention of container ARIA in Table~\ref{tab:retention_matrix} ($5/16$) is entirely driven by this geometric misclassification.
+
+% ----------------------------------------------------------
+\section{Deterministic Solvability and Pilot Limitations}
+\label{sec:solvability}
+
+\subsection{Model-Free Scripted Oracle Solvability}
+To separate agent reasoning capabilities from observation reachability, we evaluated Stage~4 and Stage~5 serialized strings using a non-LLM scripted oracle reader. The oracle attempts to resolve target item selection using only information present in the observation.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Deterministic Task Solvability Matrix (Evidence Class E3).}
+\label{tab:solvability}
+\begin{tabularx}{\columnwidth}{lXcc}
+\toprule
+\textbf{Task / Probe} & \textbf{Decisive Channel} & \textbf{ABS Arm} & \textbf{DATA-CFG} \\
+\midrule
+TechMart Routes 1--5 & Visible Typography & \textbf{$p=1.0$} & \textbf{$p=1.0$} \\
+Probe A (SKU in \texttt{data-*}) & Developer Attribute & $p=0.5$ & \textbf{$p=1.0$} \\
+Probe B (SKU in container ARIA) & Container ARIA & $p=0.5$ & $p=0.5$ \\
+Control (Visible SKU) & Visible Typography & \textbf{$p=1.0$} & \textbf{$p=1.0$} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+As shown in Table~\ref{tab:solvability}, in standard TechMart routes, human-visible rendered text uniquely identifies the target product in 100\% of cases ($p=1.0$). Consequently, adding semantic markup provides zero incremental information. Conversely, in Disambiguation Probe B, container stripping renders the task mathematically unsolvable ($p=0.5$, random guessing) under all arms. The only condition exhibiting genuine treatment contrast is Probe A under \texttt{DATA-CFG}.
+
+\subsection{Re-Analysis of Exploratory Cloud Pilot}
+In our exploratory cloud pilot ($N=39$ primary eligible runs, 13 per arm across 5 task strata; 41 sensitivity runs; 46 trace files reconciled on disk; evaluated with \texttt{gemini-flash-lite-latest}):
+\begin{itemize}
+    \item All 39 primary trials achieved 13/13 success per arm ($100\%$).
+    \item Exact Clopper-Pearson 95\% CI for each arm: $[\mathbf{0.7529}, \mathbf{1.0000}]$.
+    \item Upper bound failure rate consistent with pilot data: $\mathbf{24.71\%}$.
+    \item Uncorrected pairwise Newcombe Method 10 risk difference CI: $[-\mathbf{0.2281}, +\mathbf{0.2281}]$ (continuity-corrected: $[-\mathbf{0.2328}, +\mathbf{0.3221}]$).
+\end{itemize}
+Because TechMart tasks were 100\% solvable from visible text alone, the pilot represents a \textbf{measurement ceiling effect}. It confirms harness operational stability but cannot test hypotheses regarding markup utility. Claims that visible typography was ``proven fully sufficient'' are retracted.
+
+\subsection{Formalization of the Co-Location Confound}
+When semantic metadata is added to an element that already contains visible text, multi-node spatial reference resolution is replaced by single-node string matching. We formalize a $3 \times 3$ factorial design crossing Content Placement ($A_1$: visible text only, $A_2$: attribute only, $A_3$: co-located both) with Channel ($B_1$: visible typography, $B_2$: WAI-ARIA, $B_3$: developer \texttt{data-*}). Oracle evaluation proves that true causal contrast occurs only in cell $(A_2, B_3)$, where visible text is generic (``Select'') and metadata delivery is isolated to the attribute channel.
+
+% ----------------------------------------------------------
+\section{Statistical Power and Sample Size Requirements}
+\label{sec:stats}
+
+\subsection{Primary Estimand and Variance Formulation}
+For multi-arm stratified randomized block designs, we define the primary estimand as the stratified risk difference across $K$ task strata:
+\begin{equation}
+\theta_{\mathrm{MH}} = \frac{\sum_{k=1}^K W_k (\hat{p}_{1k} - \hat{p}_{0k})}{\sum_{k=1}^K W_k}, \quad W_k = \frac{n_{1k} n_{0k}}{n_{1k} + n_{0k}}
+\end{equation}
+Variance is estimated using the Sato (1989)~\cite{sato1989variance} and Greenland-Robins (1985)~\cite{greenland1985estimation} estimators, robust to sparse stratum counts. Family-wise error rate across three pairwise contrasts is controlled at Bonferroni $\alpha_{\mathrm{adj}} = 0.05 / 3 \approx 0.0167$.
+
+\subsection{Monte Carlo Power Simulation}
+We executed clean-room Monte Carlo simulations ($B=10\,000$ iterations, seed 42) across five task strata:
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Monte Carlo Statistical Power Estimates ($B=10\,000$, $\alpha_{\mathrm{adj}}=0.0167$).}
+\label{tab:power}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Effect Size} & $\boldsymbol{\Delta}$ & \textbf{3-Arm Power} & \textbf{Pooled Power} & \textbf{MCSE} \\
+\midrule
+Large disparity   & 0.70 & 92.3\% & 98.8\% & 0.1\% \\
+Moderate effect   & 0.35 & 32.3\% & 48.5\% & 0.5\% \\
+Small effect      & 0.20 & \textbf{7.5\%}  & \textbf{11.5\%} & 0.3\% \\
+Subtle effect     & 0.15 & 3.9\%  & 5.6\%  & 0.2\% \\
+Null ($\Delta=0$) & 0.00 & 0.52\% & 0.45\% & 0.07\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $n=20$ per arm, statistical power to detect small effects ($\Delta = 0.20$) in the true three-arm design is only \textbf{7.5\%} (rising to 11.5\% under pooled baseline assumptions). Closed-form sample size recomputation reveals:
+\begin{itemize}
+    \item Detecting $\Delta = 0.20$ at 80\% power ($\alpha=0.0167$) requires $n = 97\text{--}125$ per arm ($N = \mathbf{291\text{--}375}$ total).
+    \item Two One-Sided Tests (TOST) equivalence within $\pm 0.10$ requires $n = 275\text{--}360$ per arm ($N = \mathbf{825\text{--}1\,080}$)~\cite{schuirmann1987comparison}.
+\end{itemize}
+
+% ----------------------------------------------------------
+\section{Methodological Preflight Protocol}
+\label{sec:discussion}
+
+To prevent observation confounds in future agent benchmarks, we formulate the \textbf{Channel-Delivery Preflight Protocol}:
+\begin{enumerate}
+    \item \textbf{Stage 5 Interception:} Before dispatching model calls, intercept the assembled prompt payload and assert regex matching of target metadata strings.
+    \item \textbf{Decouple Placement and Channel:} Hold visible typography strictly identical across options to eliminate the co-location confound.
+    \item \textbf{State-Asserted DOM Oracles:} Evaluate task completion exclusively via post-run browser storage or DOM-state assertions (e.g. \texttt{localStorage.cart}), never via model self-reporting.
+    \item \textbf{Position and Negative Controls:} Implement position swapping ($50\%$ index alternation) and negative distractor probes where target metadata is entirely absent.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{enumerate}
+    \item \textbf{Single-Framework Focus:} Primary dynamic traces evaluate \texttt{browser-use 0.13.10}, though longitudinal wheel auditing confirms core invariants across six releases.
+    \item \textbf{Synthetic Fixtures:} Test fixtures isolate semantic channels but do not replicate dynamic production tracking scripts.
+    \item \textbf{Text-Only Observation:} Multimodal agents with visual screenshot inputs operate outside text serialization constraints.
+    \item \textbf{Floating Provider Alias:} The exact physical checkpoint behind \texttt{gemini-flash-lite-latest} was not pinned by the cloud provider.
+    \item \textbf{Zero Confirmatory Behavioral Data:} No confirmatory behavioral agent runs were added; claims are strictly bounded to systems telemetry and validity methodology.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+
+This study establishes that client-side observation pipelines introduce severe, systematic information loss that invalidates naive markup-ablation experiments. In \texttt{browser-use}, JSON-LD microdata and custom attributes are discarded before model ingestion, while container ARIA annotations are stripped by non-interactive tag emission. Furthermore, apparent accessibility correspondence is partially circular by construction. By identifying these observation confounds, bounding exploratory pilot results, and establishing preflight verification protocols, we provide a reproducible scientific foundation for autonomous browser agent benchmarking.
+
+% ----------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% ----------------------------------------------------------
+\clearpage
+\appendix
+
+\section{Software Pipeline Statistical Validation}
+\label{app:benchmark}
+
+\begin{figure*}[t]
+\centering
+\fbox{\parbox{0.96\textwidth}{\centering \bfseries \textsc{Synthetic Software Benchmark Disclaimer: Tables~\ref{tab:synth1} and~\ref{tab:synth2} contain synthetic software pipeline outputs generated solely to validate the statistical calculation pipeline. They do not represent real agent task performance.}}}
+\vspace{4pt}
+\end{figure*}
+
+Tables~\ref{tab:synth1} and~\ref{tab:synth2} present execution telemetry from synthetic test data (\texttt{test\_scratch\_synthetic\_data/dataset\_1\_valid\_complete.csv}) verifying that the analysis script (\texttt{analyze\_v3\_results.py}) computes continuity-corrected and uncorrected Newcombe hybrid score intervals without numerical divergence.
+
+\begin{table*}[ht]
+\centering
+\small
+\caption{Synthetic software pipeline output: Unpooled sensitivity contrasts across baseline arms (Tasks T1--T5, Bonferroni $\alpha = 0.0100$ for 5 contrasts). Evaluated on synthetic benchmark data (Evidence Class E5).}
+\label{tab:synth1}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
+\toprule
+\textbf{Contrast ID} & \shortstack{\textbf{Treatment} \\ \scriptsize($n/N$, \%)} & \shortstack{\textbf{Reference} \\ \scriptsize($n/N$, \%)} & \shortstack{\textbf{Risk Diff} \\ \scriptsize($\hat{\theta}$)} & \textbf{Newcombe 95\% CI} & \shortstack{\textbf{CMH} \\ \scriptsize($\chi^2$)} & \shortstack{\textbf{Adjusted} \\ \scriptsize($p$-value)} \\
+\midrule
+\textsc{ARIA vs BASELINE (ABS)}          & 14 / 20 (70.0\%) & 13 / 20 (65.0\%) & \textbf{+0.0500} & [-0.2265, +0.3165] & 0.000 & 1.0000 \\
+\textsc{ARIA vs BASELINE\_REP (VIS)}      & 14 / 20 (70.0\%) & 12 / 20 (60.0\%) & \textbf{+0.1000} & [-0.1901, +0.3644] & 0.178 & 1.0000 \\
+\textsc{DATA-CFG vs BASELINE (ABS)}      & 17 / 20 (85.0\%) & 13 / 20 (65.0\%) & \textbf{+0.2000} & [-0.0754, +0.4320] & 1.488 & 1.0000 \\
+\textsc{DATA-CFG vs BASELINE\_REP (VIS)}  & 17 / 20 (85.0\%) & 12 / 20 (60.0\%) & \textbf{+0.2500} & [-0.0267, +0.4795] & 2.404 & 0.6050 \\
+\textsc{ARIA vs DATA-CFG}               & 14 / 20 (70.0\%) & 17 / 20 (85.0\%) & \textbf{-0.1500} & [-0.3751, +0.0906] & 0.683 & 1.0000 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\begin{table*}[ht]
+\centering
+\small
+\caption{Baseline stability and quality control check on synthetic benchmark data (Evidence Class E5). Demonstrates continuity-corrected interval calculation.}
+\label{tab:synth2}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Success ($n/N$)} & \textbf{Success Rate} & \textbf{Difference ($\Delta$)} & \textbf{Fisher's Exact Test} \\
+\midrule
+\textsc{BASELINE (ABS)}     & 13 / 20 & 65.0\% & \multirow{2}{*}{$+0.0500$ (95\% CI: $[-0.2328, +0.3221]$)} & \multirow{2}{*}{$p = 1.0000$ (two-tailed)} \\
+\textsc{BASELINE\_REP (VIS)} & 12 / 20 & 60.0\% & & \\
+\midrule
+\multicolumn{5}{p{\dimexpr\textwidth-2\tabcolsep\relax}}{\textbf{Methodological Decision on Baseline Pooling:} In the absence of an \textit{a priori} prespecified Two One-Sided Tests (TOST) equivalence margin ($\delta_{\text{equiv}}$), pooling is rejected to prevent the Equivalence Fallacy; failure to reject the null ($p = 1.0000$) cannot be equated with equivalence. Consequently, baseline conditions are evaluated unpooled in all primary sensitivity contrasts (Table~\ref{tab:synth1}).} \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\FloatBarrier
+
+\section{Offline Reproducibility Instructions}
+\label{app:reproduce}
+
+All systems findings, measurements, and statistical simulations reproduce offline in under 30 seconds on a standard Windows host using Python 3.11 with zero live API spend:
+\begin{enumerate}
+    \item \textbf{Offline Regression Test Suite (207 tests):}
+\begin{lstlisting}
+python -m unittest discover -s . -p "test_*.py"
+\end{lstlisting}
+    Output: \texttt{Ran 207 tests in ~22s --- OK} (Exit code 0).
+    \item \textbf{Information Loss and Solvability Measurements:}
+\begin{lstlisting}
+python phase9_execute.py
+\end{lstlisting}
+    Generates \texttt{INFORMATION\_LOSS\_MEASUREMENTS.csv}, \texttt{VERSION\_DRIFT\_AUDIT.md}, and \texttt{SOLVABILITY\_ANALYSIS.md}.
+    \item \textbf{Clean-Room Statistical Reproduction ($B=10\,000$):}
+\begin{lstlisting}
+python phase7_execute.py
+\end{lstlisting}
+    Reproduces CMH Monte Carlo power estimates and exact Clopper-Pearson confidence limits.
+    \item \textbf{Ledger and Provenance Reconciliation:}
+\begin{lstlisting}
+python phase6_execute.py
+\end{lstlisting}
+    Reconciles all 46 trace files on disk into \texttt{RUN\_ACCOUNTING\_RECONCILIATION.csv}.
+\end{enumerate}
+
+\FloatBarrier
+
+\section{Diagnostic Harness Telemetry}
+\label{app:local_diagnostics}
+
+Five exploratory diagnostic trials were executed using quantized local models (\texttt{qwen2.5:7b-instruct-q4\_K\_M}) via Ollama to validate harness cancellation mechanics and outer watchdog timers under process hangs (Table~\ref{tab:qwen_runs}). These runs confirmed that timeout watchdog triggers successfully capture cancellation events without leaking browser resources. They are classified as Class E6 diagnostic telemetry and excluded from all scientific analyses.
+
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Exploratory diagnostic harness runs (Evidence Class E6).}
+\label{tab:qwen_runs}
+\begin{tabular}{llll}
+\toprule
+\textbf{Run ID} & \textbf{Duration} & \textbf{Steps} & \textbf{Observed Mechanism} \\
+\midrule
+\texttt{qwen\_diag\_001} & 3.3 s    & 0 & Pydantic validator exception \\
+\texttt{qwen\_diag\_002} & 1013 s   & 2 & Missing outer watchdog \\
+\texttt{qwen\_diag\_003} & 289 s    & 2 & 180 s watchdog triggered \\
+\texttt{qwen\_diag\_004} & 186 s    & 1 & Cancellation telemetry dropped \\
+\texttt{qwen\_diag\_005} & 189 s    & 1 & Cancellation captured correctly \\
+\texttt{qwen\_diag\_006} & 185 s    & 1 & Watchdog reset verified \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

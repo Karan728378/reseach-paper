@@ -1,0 +1,176 @@
+@inproceedings{zhou2024webarena,
+  author    = {Shuyan Zhou and Frank F. Xu and Hao Zhu and Xuhui Zhou and Robert Lo and Abishek Sridhar and Xianyi Cheng and Tianyue Ou and Yonatan Bisk and Daniel Fried and Uri Alon and Graham Neubig},
+  title     = {{WebArena}: A Realistic Web Environment for Building Autonomous Language Agents},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2307.13854}
+}
+
+@inproceedings{deng2023mind2web,
+  author    = {Xiang Deng and Yu Gu and Boyuan Zheng and Shijie Chen and Samuel Stevens and Boshi Wang and Huan Sun and Yu Su},
+  title     = {{Mind2Web}: Towards a Generalist Agent for the Web},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2306.06070}
+}
+
+@inproceedings{koh2024visualwebarena,
+  author    = {Jing Yu Koh and Robert Lo and Lawrence Jang and Vikram Duvvur and Ming Chong Lim and Po-Yu Huang and Graham Neubig and Shuyan Zhou and Ruslan Salakhutdinov and Daniel Fried},
+  title     = {{VisualWebArena}: Evaluating Multimodal Web Agents on Realistic Visual Web Tasks},
+  booktitle = {Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2401.13649}
+}
+
+@inproceedings{drouin2024workarena,
+  author    = {Alexandre Drouin and Maxime Gasse and Massimo Caccia and Issam H. Laradji and Manuel Del Verme and Tom Marty and L{\'e}o Boisvert and Megh Thakkar and Quentin Cappart and David Vazquez and Nicolas Chapados and Alexandre Lacoste},
+  title     = {{WorkArena}: How Capable Are Web Agents at Solving Common Knowledge Work Tasks?},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2403.07718}
+}
+
+@article{workarenapp2024,
+  author    = {L{\'e}o Boisvert and Massimo Caccia and Megh Thakkar and Alexandre Drouin and Nicolas Chapados and Alexandre Lacoste},
+  title     = {{WorkArena++}: Towards Enterprise-Grade Autonomous Web Agents},
+  journal   = {arXiv preprint arXiv:2407.05291},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2407.05291}
+}
+
+@inproceedings{osworld2024,
+  author    = {Tianbao Xie and Danyang Zhang and Jixuan Chen and Xiaochuan Li and Siheng Zhao and Ruisheng Cao and Toh Jing Hua and Zhoujun Cheng and Dongchan Shin and Fangyu Lei and Yitao Liu and Han Shen and Fukushima Kunihiko and Tsung-Yi Ho and Tao Yu},
+  title     = {{OSWorld}: Benchmarking Multimodal Agents for Open-Domain OS Tasks},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2404.07972}
+}
+
+@inproceedings{agentoccam2025,
+  author    = {Yue Yang and Gabriel Synnaeve and Arthur Szlam and Saining Xie},
+  title     = {{AgentOccam}: A Simple Yet Strong Baseline for {LLM}-Based Web Agents},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2410.08272}
+}
+
+@inproceedings{zheng2024seeact,
+  author    = {Boyuan Zheng and Boyu Gou and Jihyung Kil and Huan Sun and Yu Su},
+  title     = {{SeeAct}: {GPT-4V}(ision) is a Generalist Web Agent, if Grounded},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2401.01614}
+}
+
+@inproceedings{gur2024webagent,
+  author    = {Izzeddin G{\"u}r and Hiroki Furuta and Austin Huang and Mustafa Safdari and Yutaka Matsuo and Douglas Eck and Aleksandra Faust},
+  title     = {A Real-World {WebAgent} with Planning, Long Context Understanding, and Program Synthesis},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2307.12856}
+}
+
+@inproceedings{he2024webvoyager,
+  author    = {Hongliang He and Wenlin Yao and Kaixin Ma and Wenhao Yu and Yong Dai and Hongming Zhang and Zhenzhong Lan and Dong Yu},
+  title     = {{WebVoyager}: Building an End-to-End Web Agent with Large Multimodal Models},
+  booktitle = {Annual Meeting of the Association for Computational Linguistics (ACL)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2401.13919}
+}
+
+@inproceedings{liu2024agentbench,
+  author    = {Xiao Liu and Hao Yu and Hanchen Zhang and Yifan Xu and Xuanyu Lei and Hanyu Lai and Yu Gu and Hangliang Ding and Kaiwen Men and Kejuan Yang and Shudan Zhang and Xiang Deng and Aohan Zeng and Zhengxiao Du and Chenhui Zhang and Sheng Shen and Tianjun Zhang and Yu Su and Huan Sun and Minlie Huang and Yuxiao Dong and Jie Tang},
+  title     = {{AgentBench}: Evaluating {LLMs} as Agents},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2308.03688}
+}
+
+@book{agresti2002categorical,
+  author    = {Alan Agresti},
+  title     = {Categorical Data Analysis},
+  edition   = {2nd},
+  publisher = {John Wiley \& Sons},
+  address   = {Hoboken, NJ},
+  year      = {2002}
+}
+
+@article{newcombe1998interval,
+  author    = {Robert G. Newcombe},
+  title     = {Interval estimation for the difference between independent proportions: comparison of eleven methods},
+  journal   = {Statistics in Medicine},
+  volume    = {17},
+  number    = {8},
+  pages     = {873--890},
+  year      = {1998},
+  publisher = {Wiley Online Library}
+}
+
+@article{wilson1927probable,
+  author    = {Edwin B. Wilson},
+  title     = {Probable inference, the law of population, and the binomial distribution},
+  journal   = {Journal of the American Statistical Association},
+  volume    = {22},
+  number    = {158},
+  pages     = {209--212},
+  year      = {1927}
+}
+
+@article{mantel1959statistical,
+  author    = {Nathan Mantel and William Haenszel},
+  title     = {Statistical aspects of the analysis of data from retrospective studies of disease},
+  journal   = {Journal of the National Cancer Institute},
+  volume    = {22},
+  number    = {4},
+  pages     = {719--748},
+  year      = {1959}
+}
+
+@techreport{wai_aria12,
+  author      = {{World Wide Web Consortium}},
+  title       = {Accessible Rich Internet Applications ({WAI-ARIA}) 1.2},
+  institution = {W3C},
+  type        = {W3C Recommendation},
+  year        = {2023},
+  url         = {https://www.w3.org/TR/wai-aria-1.2/}
+}
+
+@techreport{accname11,
+  author      = {{World Wide Web Consortium}},
+  title       = {Accessible Name and Description Computation 1.1},
+  institution = {W3C},
+  type        = {W3C Recommendation},
+  year        = {2018},
+  url         = {https://www.w3.org/TR/accname-1.1/}
+}
+
+@techreport{wai_aria11,
+  author      = {{World Wide Web Consortium}},
+  title       = {Accessible Rich Internet Applications ({WAI-ARIA}) 1.1},
+  institution = {W3C},
+  type        = {W3C Recommendation},
+  year        = {2017},
+  url         = {https://www.w3.org/TR/wai-aria-1.1/}
+}
+
+@misc{schemaorg,
+  author       = {{Schema.org Community Group}},
+  title        = {Schema.org: Structured Data for the Web},
+  howpublished = {\url{https://schema.org/}},
+  year         = {2024}
+}
+
+@misc{mcp2024,
+  author       = {{Anthropic}},
+  title        = {The Model Context Protocol: An Open Standard for Connecting {AI} Models to Data Sources},
+  howpublished = {\url{https://modelcontextprotocol.io/}},
+  year         = {2024}
+}
+
+@misc{llmstxt2024,
+  author       = {Jeremy Howard},
+  title        = {The \texttt{/llms.txt} File Format for Standardizing Machine-Readable Context for Language Models},
+  howpublished = {\url{https://llmstxt.org/}},
+  year         = {2024}
+}

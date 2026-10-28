@@ -1,0 +1,62 @@
+{
+  "run_index": 1,
+  "block_id": 1,
+  "within_block_order": 1,
+  "arm": "ARIA",
+  "task_id": "T4",
+  "variant_mapping": "v2-aria",
+  "target_entity": "mse-001",
+  "model": "gemini-3.1-flash-lite",
+  "timestamps": {
+    "start": "2026-10-23T01:38:48.738503",
+    "end": "2026-10-23T01:39:00.577885"
+  },
+  "total_time_seconds": 11.844,
+  "total_steps": 2,
+  "status": "infrastructure_aborted",
+  "termination_reason": "infrastructure_aborted",
+  "error_message": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+  "agent_final_text": null,
+  "pre_state": {
+    "pre_cart_count": null
+  },
+  "terminal_browser_state": {
+    "url": "",
+    "title": "",
+    "cart": [],
+    "order_confirmed": false,
+    "last_order_items": []
+  },
+  "verifier_result": {
+    "success": false,
+    "score": 0.0,
+    "details": {
+      "error": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    }
+  },
+  "treatment_delivery": {
+    "arm": "ARIA",
+    "treatment_attribute_observed": true,
+    "evidence": "ARIA label in serialized observation: True"
+  },
+  "token_and_cost_estimates": {
+    "estimated_input_tokens": 14000,
+    "estimated_output_tokens": 200,
+    "estimated_cost_usd": 0.00222
+  },
+  "action_history": [
+    {
+      "step": 1,
+      "thinking": "",
+      "actions": [
+        "is_done=False success=None judgement=None error=None attachments=None images=None long_term_memory='Navigated to http://127.0.0.1:8080/variants/v2-aria/index.html#home' extracted_content='\ud83d\udd17 Navigated to http://127.0.0.1:8080/variants/v2-aria/index.html#home' include_extracted_content_only_once=False metadata=None include_in_memory=False"
+      ]
+    },
+    {
+      "step": 2,
+      "actions": [
+        "is_done=False success=None judgement=None error=\"503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}\" attachments=None images=None long_term_memory=None extracted_content=None include_extracted_content_only_once=False metadata=None include_in_memory=False"
+      ]
+    }
+  ]
+}

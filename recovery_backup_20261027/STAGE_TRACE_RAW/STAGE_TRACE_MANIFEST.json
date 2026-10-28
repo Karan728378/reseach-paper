@@ -1,0 +1,46 @@
+{
+  "sentinel_trace.json": {
+    "rel_path": "fixtures/sentinel_fixture.html",
+    "out_path": "C:\\testing\\research_execution_20261018\\STAGE_TRACE_RAW\\sentinel_trace.json",
+    "sha256": "f46ccc3a1588a8197aa900efb5aa35ab1f4e45c633b132abb703a71d4205ec18",
+    "source_sha256": "184b4f4192d23647fc8829006464d1cd1d0a10b24b6598c8f16f26215d5cb596",
+    "live_dom_chars": 1363,
+    "ax_nodes_count": 26,
+    "selector_map_count": 2,
+    "stage_4_chars": 212,
+    "stage_5_messages_count": 2
+  },
+  "edge_cases_trace.json": {
+    "rel_path": "fixtures/edge_cases.html",
+    "out_path": "C:\\testing\\research_execution_20261018\\STAGE_TRACE_RAW\\edge_cases_trace.json",
+    "sha256": "46a76db9fc66cab8557fdac5cdca9a23568fa9b5b89e14090776c7e55136ef32",
+    "source_sha256": "d885b58676dd44990cdf153e8e5cf2eb0d503ec50b32beac294e80e2accf9ca9",
+    "live_dom_chars": 2024,
+    "ax_nodes_count": 39,
+    "selector_map_count": 5,
+    "stage_4_chars": 329,
+    "stage_5_messages_count": 2
+  },
+  "probe_b_trace.json": {
+    "rel_path": "fixtures/disambiguation_probe_b.html",
+    "out_path": "C:\\testing\\research_execution_20261018\\STAGE_TRACE_RAW\\probe_b_trace.json",
+    "sha256": "ec111f1c6fa0813131e40ad1d3c1872b5614073a381cf9e7e155f6884db992c8",
+    "source_sha256": "3461380d72fc1546e85c8c9eae57022ce9e3541d90a6428262a2572075873d51",
+    "live_dom_chars": 4028,
+    "ax_nodes_count": 54,
+    "selector_map_count": 2,
+    "stage_4_chars": 496,
+    "stage_5_messages_count": 2
+  },
+  "geometry_boundary_trace.json": {
+    "rel_path": "fixtures/geometry_boundary_cases.html",
+    "out_path": "C:\\testing\\research_execution_20261018\\STAGE_TRACE_RAW\\geometry_boundary_trace.json",
+    "sha256": "926be5177eec373ad738607f81e1d3988b0c429764e28c860f6f96a4525a70f8",
+    "source_sha256": "bffa8f1a07f95b7e2b96ad80eed0e5ad0d8ce422ba692920e52af385cf4008db",
+    "live_dom_chars": 2635,
+    "ax_nodes_count": 22,
+    "selector_map_count": 4,
+    "stage_4_chars": 339,
+    "stage_5_messages_count": 2
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-24",
+  "cumulative_requests": 604,
+  "cumulative_cost_usd": 0.67044,
+  "cumulative_prompt_tokens": 84000,
+  "cumulative_completion_tokens": 1200,
+  "runs_completed": 2,
+  "model_name": "gemini-3.1-flash-lite",
+  "cost_ceiling_usd": 0.0,
+  "max_requests_ceiling": 600,
+  "is_free_tier": true,
+  "halted_due_to_ceiling": true,
+  "last_updated": "2026-10-24T22:50:52.089039",
+  "accounting_scope_and_limitations": {
+    "counted": "In-process steps, persisted offsets from today's summary CSVs/ledger, conservative token estimates",
+    "not_counted": "Provider-side hidden retries, out-of-band requests from external scripts, provider billing meter",
+    "guarantee": "Fail-closed client-side bounded requests; does not replace provider cloud console quotas"
+  }
+}

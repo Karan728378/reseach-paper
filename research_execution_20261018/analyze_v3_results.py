@@ -230,10 +230,15 @@ def parse_boolean(val: Any) -> Optional[bool]:
         return False
     return None
 
-def validate_and_load_summary(csv_path: Path) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+def validate_and_load_summary(
+    csv_path: Path,
+    expected_total_runs: Optional[int] = None
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """
     Loads run-summary CSV and validates schema, types, duplicates, and completeness.
     Distinguishes genuine task failures from infrastructure errors and missing runs.
+    Safely preserves multi-attempt retry telemetry and handles infrastructure aborts
+    before duplicate completed-index checks.
     """
     if not csv_path.exists():
         raise FileNotFoundError(f"Input CSV not found at: {csv_path}")
@@ -253,7 +258,7 @@ def validate_and_load_summary(csv_path: Path) -> Tuple[List[Dict[str, Any]], Dic
         rows = list(reader)
 
     records: List[Dict[str, Any]] = []
-    seen_run_indices = set()
+    seen_completed_run_indices = set()
     malformed_errors = []
     infra_error_count = 0
     completed_count = 0
@@ -264,10 +269,6 @@ def validate_and_load_summary(csv_path: Path) -> Tuple[List[Dict[str, Any]], Dic
             malformed_errors.append(f"Line {line_idx}: Invalid or non-numeric run_index '{raw_idx}'")
             continue
         run_idx = int(raw_idx)
-        if run_idx in seen_run_indices:
-            malformed_errors.append(f"Line {line_idx}: Duplicate run_index {run_idx} detected")
-            continue
-        seen_run_indices.add(run_idx)
 
         arm = r.get("arm", "").strip()
         if arm not in ALLOWED_ARMS:
@@ -285,14 +286,33 @@ def validate_and_load_summary(csv_path: Path) -> Tuple[List[Dict[str, Any]], Dic
         status = r.get("status", "").strip().lower()
         err_msg = r.get("error_message", "").strip()
 
-        # Categorize execution status
-        is_infra_error = (status in {"quota_aborted", "http_error", "timeout_error", "setup_failed"} or 
-                          any(k in err_msg.lower() for k in ["quota", "http 429", "timed out", "precondition failed"]))
+        # Categorize execution status (FIX-03)
+        infra_error_statuses = {
+            "infrastructure_aborted", "quota_aborted", "http_error", 
+            "timeout_error", "setup_failed"
+        }
+        infra_error_keywords = [
+            "quota", "http 429", "429", "503", "unavailable", 
+            "resource_exhausted", "timed out", "precondition failed",
+            "spikes in demand", "rate limit", "ratelimit"
+        ]
+        is_infra_error = (
+            status in infra_error_statuses or 
+            any(k in err_msg.lower() for k in infra_error_keywords)
+        )
         
         if is_infra_error:
             infra_error_count += 1
-        elif status == "completed":
-            completed_count += 1
+            # Infrastructure abort attempts are preserved in raw telemetry but do not count as completed
+            # and do not collide with subsequent retry attempts.
+        else:
+            # Check for duplicate non-infrastructure (completed or terminal) runs
+            if run_idx in seen_completed_run_indices:
+                malformed_errors.append(f"Line {line_idx}: Duplicate run_index {run_idx} detected")
+                continue
+            seen_completed_run_indices.add(run_idx)
+            if status == "completed":
+                completed_count += 1
 
         try:
             score = float(r.get("score", 0.0))
@@ -344,17 +364,23 @@ def validate_and_load_summary(csv_path: Path) -> Tuple[List[Dict[str, Any]], Dic
             err_report += f"\n... and {len(malformed_errors) - 10} more malformed rows."
         raise ValueError(f"Data Validation Failed ({len(malformed_errors)} errors):\n{err_report}")
 
-    # Expected full schedule: 96 runs
-    missing_indices = sorted(list(set(range(1, 97)) - seen_run_indices))
+    # Expected full schedule: 72 runs for 3-arm schedule, 96 runs for 4-arm schedule
+    if expected_total_runs is None:
+        if "3arm" in csv_path.name.lower():
+            expected_total_runs = 72
+        else:
+            expected_total_runs = 96
+
+    missing_indices = sorted(list(set(range(1, expected_total_runs + 1)) - seen_completed_run_indices))
     
     validation_summary = {
         "total_rows_ingested": len(records),
-        "expected_total_runs": 96,
+        "expected_total_runs": expected_total_runs,
         "completed_runs": completed_count,
         "infra_error_runs": infra_error_count,
         "missing_runs_count": len(missing_indices),
         "missing_run_indices": missing_indices,
-        "is_complete_schedule": (len(records) == 96 and len(missing_indices) == 0 and infra_error_count == 0)
+        "is_complete_schedule": (completed_count == expected_total_runs and len(missing_indices) == 0 and infra_error_count == 0)
     }
 
     return records, validation_summary
@@ -964,6 +990,10 @@ def main():
         "--label-synthetic", action="store_true", default=False,
         help="Explicitly label outputs as synthetic software verification data"
     )
+    parser.add_argument(
+        "--expected-runs", type=int, default=None,
+        help="Expected total schedule runs (default: auto-detect 72 for 3arm, 96 for 4arm)"
+    )
 
     args = parser.parse_args()
 
@@ -979,7 +1009,7 @@ def main():
     print("=" * 75)
 
     try:
-        records, val_summary = validate_and_load_summary(input_csv)
+        records, val_summary = validate_and_load_summary(input_csv, expected_total_runs=args.expected_runs)
     except Exception as e:
         print(f"\n[!] FATAL INGESTION ERROR: {e}", file=sys.stderr)
         sys.exit(1)

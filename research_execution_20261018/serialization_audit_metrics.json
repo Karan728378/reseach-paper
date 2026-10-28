@@ -30,8 +30,8 @@
         "aria-label=Add SoundFlow Air 3 to cart"
       ],
       "source_html_present": true,
-      "parsed_dom_present": true,
-      "prompt_buffer_present": true,
+      "parsed_dom_present": false,
+      "prompt_buffer_present": false,
       "reachability_percentage": 100.0,
       "pruning_mechanism": "None (retained via DEFAULT_INCLUDE_ATTRIBUTES on interactive nodes)",
       "evaluated_in_protocol_v3": true,

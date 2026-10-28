@@ -218,6 +218,6 @@ RESULT: Differences found beyond extra meta tags!
       <div id="cart-container">
 
 --- 5. Shared Asset Comparison ---
-Shared file: app-core.js exists, size=27961 bytes
+Shared file: app-core.js exists, size=27904 bytes
 Shared file: products.js exists, size=4857 bytes
 Shared file: styles.css exists, size=20005 bytes

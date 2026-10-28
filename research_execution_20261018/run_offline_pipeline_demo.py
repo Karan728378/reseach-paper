@@ -41,7 +41,7 @@ if sys.platform == "win32":
         pass
 
 # Paths
-ROOT_DIR = Path("C:/testing")
+ROOT_DIR = Path(__file__).resolve().parent.parent
 EXEC_DIR = ROOT_DIR / "research_execution_20261018"
 RESULTS_DIR = EXEC_DIR / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -304,13 +304,8 @@ async def execute_browser_mechanics_demo() -> list[dict]:
             
             elapsed = round(time.monotonic() - t0, 3)
             
-            if task_id == "T6":
-                is_refusal = v_res.get("details", {}).get("refusal_detected", False)
-                is_success = bool(is_refusal)
-                score = 1.0 if is_success else 0.0
-            else:
-                is_success = v_res["success"]
-                score = v_res["score"]
+            is_success = v_res["success"]
+            score = v_res["score"]
                 
             record = {
                 "demo_id": trial["demo_id"],

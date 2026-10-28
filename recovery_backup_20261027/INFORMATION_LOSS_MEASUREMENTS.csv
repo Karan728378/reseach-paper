@@ -1,0 +1,45 @@
+Fixture,Entity_Type,Target_Value,Channel,Source_Present,Stage_2_DOM,Stage_3_SelectorMap,Stage_4_Serializer,Stage_5_Prompt,Loss_Stage,Loss_Mechanism,Decisive_For_Task
+sentinel_fixture.html,SKU,SENTINEL_SKU_ZETA_997,json_ld,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,True
+sentinel_fixture.html,Name,SENTINEL_JSONLD_EPSILON_996,json_ld,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,False
+sentinel_fixture.html,Meta,SENTINEL_META_ETA_998,meta_tag,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,False
+sentinel_fixture.html,Description,SENTINEL_TEXT_ALPHA_991,visible_typography,1,1,0,1,1,None,NONE,True
+sentinel_fixture.html,Action Intent,SENTINEL_ARIA_BETA_992,interactive_aria_label,1,1,1,1,1,None,NONE,True
+sentinel_fixture.html,Stock Status,SENTINEL_SPAN_ARIA_993,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+sentinel_fixture.html,Action Intent,SENTINEL_DATA_GAMMA_994,data_attribute_default,1,1,1,0,0,Stage 4,ATTRIBUTE_WHITELIST,True
+sentinel_fixture.html,Metadata Field,SENTINEL_DATA_DELTA_995,data_attribute_container,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+edge_cases.html,SKU,ec-999,json_ld,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,True
+edge_cases.html,Availability Date,2026-09-01T00:00:00Z,meta_tag,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,False
+edge_cases.html,Section Label,Featured Showcase,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+edge_cases.html,Price,Price: $99.00,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+edge_cases.html,Price,99.00,data_attribute_default,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+edge_cases.html,Price,$99.00,visible_typography,1,1,0,1,1,None,NONE,True
+edge_cases.html,Icon Label,Audio Product Icon,non_interactive_aria_label,1,1,1,1,1,None,GEOMETRIC_MISCLASSIFICATION,False
+edge_cases.html,Action Intent,Add EdgeCase Unit to cart,interactive_aria_label,1,1,1,1,1,None,NONE,True
+edge_cases.html,SKU,ec-999,data_attribute_default,1,1,1,0,0,Stage 4,ATTRIBUTE_WHITELIST,True
+edge_cases.html,Date Text,"September 1, 2026",visible_typography,1,1,0,1,1,None,NONE,True
+disambiguation_probe_b.html,SKU,target-sku-101,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+disambiguation_probe_b.html,SKU,distractor-sku-202,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+disambiguation_probe_b.html,Landmark Role,region,aria_roles_landmarks,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+disambiguation_probe_b.html,Visible Label,Standard Model Option,visible_typography,1,1,0,1,1,None,NONE,False
+disambiguation_probe_a.html,SKU,target-sku-101,data_attribute_default,1,1,1,0,0,Stage 4,ATTRIBUTE_WHITELIST,True
+disambiguation_probe_a.html,SKU,distractor-sku-202,data_attribute_default,1,1,1,0,0,Stage 4,ATTRIBUTE_WHITELIST,True
+disambiguation_probe_a.html,Visible Label,Select Item,visible_typography,1,1,0,1,1,None,NONE,False
+geometry_boundary_cases.html,Geometry Label,W9-H30,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+geometry_boundary_cases.html,Geometry Label,W10-H10,non_interactive_aria_label,1,1,1,1,1,None,GEOMETRIC_MISCLASSIFICATION,False
+geometry_boundary_cases.html,Geometry Label,W30-H30,non_interactive_aria_label,1,1,1,1,1,None,GEOMETRIC_MISCLASSIFICATION,False
+geometry_boundary_cases.html,Geometry Label,W50-H50,non_interactive_aria_label,1,1,1,1,1,None,GEOMETRIC_MISCLASSIFICATION,False
+geometry_boundary_cases.html,Geometry Label,W51-H30,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+geometry_boundary_cases.html,Geometry Label,W30-H9,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+geometry_boundary_cases.html,Geometry Label,W30-H51,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+geometry_boundary_cases.html,Stock Status,In Stock,non_interactive_aria_label,1,1,1,1,1,None,GEOMETRIC_MISCLASSIFICATION,True
+geometry_boundary_cases.html,Stock Status,Out of Stock,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,True
+multi_framework_observation_fixture.html,SKU,target-sku-101,json_ld,1,0,0,0,0,Stage 2,DISABLED_ELEMENTS,True
+multi_framework_observation_fixture.html,SKU,target-sku-101,data_attribute_default,1,1,1,0,0,Stage 4,ATTRIBUTE_WHITELIST,True
+multi_framework_observation_fixture.html,Action Intent,Select Target Product Option,interactive_aria_label,1,1,1,1,1,None,NONE,True
+multi_framework_observation_fixture.html,Section Label,Primary Product Information,non_interactive_aria_label,1,1,0,0,0,Stage 3,INTERACTIVITY_GATE,False
+multi_framework_observation_fixture.html,Price,$149.99,visible_typography,1,1,0,1,1,None,NONE,True
+multi_framework_observation_fixture.html,Hidden Action,Hidden Administrative Action,hidden_dom,1,1,0,0,0,Stage 3,CSS_VISIBILITY,False
+disambiguation_control.html,SKU,target-sku-101,visible_typography,1,1,0,1,1,None,NONE,True
+disambiguation_control.html,SKU,distractor-sku-202,visible_typography,1,1,0,1,1,None,NONE,True
+disambiguation_control.html,Action Intent,Select Alpha Model,visible_typography,1,1,1,1,1,None,NONE,True
+disambiguation_control.html,Action Intent,Select Beta Model,visible_typography,1,1,1,1,1,None,NONE,True

@@ -1,0 +1,135 @@
+{
+  "analysis_date": "2026-10-18",
+  "nominal_alpha": 0.05,
+  "bonferroni_adjusted_alpha": 0.008333333333333333,
+  "scenarios": [
+    {
+      "contrast": "ABS_vs_VIS_presence_absence",
+      "p1": 0.1,
+      "p2": 0.8,
+      "delta": 0.7,
+      "power_by_sample_size": {
+        "N_24": {
+          "n_per_arm": 24,
+          "analytical_power_nominal_alpha_0_05": 1.0,
+          "analytical_power_bonferroni_alpha_0_0083": 0.9992,
+          "simulation_rcbd_power": 1.0
+        },
+        "N_30": {
+          "n_per_arm": 30,
+          "analytical_power_nominal_alpha_0_05": 1.0,
+          "analytical_power_bonferroni_alpha_0_0083": 1.0,
+          "simulation_rcbd_power": 1.0
+        },
+        "N_48": {
+          "n_per_arm": 48,
+          "analytical_power_nominal_alpha_0_05": 1.0,
+          "analytical_power_bonferroni_alpha_0_0083": 1.0,
+          "simulation_rcbd_power": 1.0
+        },
+        "N_96": {
+          "n_per_arm": 96,
+          "analytical_power_nominal_alpha_0_05": 1.0,
+          "analytical_power_bonferroni_alpha_0_0083": 1.0,
+          "simulation_rcbd_power": 1.0
+        }
+      }
+    },
+    {
+      "contrast": "VIS_vs_ARIA_large_degradation",
+      "p1": 0.85,
+      "p2": 0.5,
+      "delta": 0.35,
+      "power_by_sample_size": {
+        "N_24": {
+          "n_per_arm": 24,
+          "analytical_power_nominal_alpha_0_05": 0.7509,
+          "analytical_power_bonferroni_alpha_0_0083": 0.4785,
+          "simulation_rcbd_power": 0.755
+        },
+        "N_30": {
+          "n_per_arm": 30,
+          "analytical_power_nominal_alpha_0_05": 0.8429,
+          "analytical_power_bonferroni_alpha_0_0083": 0.6085,
+          "simulation_rcbd_power": 0.754
+        },
+        "N_48": {
+          "n_per_arm": 48,
+          "analytical_power_nominal_alpha_0_05": 0.9666,
+          "analytical_power_bonferroni_alpha_0_0083": 0.8648,
+          "simulation_rcbd_power": 0.962
+        },
+        "N_96": {
+          "n_per_arm": 96,
+          "analytical_power_nominal_alpha_0_05": 0.9997,
+          "analytical_power_bonferroni_alpha_0_0083": 0.9969,
+          "simulation_rcbd_power": 1.0
+        }
+      }
+    },
+    {
+      "contrast": "VIS_vs_DATA_CFG_moderate_effect",
+      "p1": 0.85,
+      "p2": 0.65,
+      "delta": 0.2,
+      "power_by_sample_size": {
+        "N_24": {
+          "n_per_arm": 24,
+          "analytical_power_nominal_alpha_0_05": 0.3555,
+          "analytical_power_bonferroni_alpha_0_0083": 0.1429,
+          "simulation_rcbd_power": 0.357
+        },
+        "N_30": {
+          "n_per_arm": 30,
+          "analytical_power_nominal_alpha_0_05": 0.43,
+          "analytical_power_bonferroni_alpha_0_0083": 0.1912,
+          "simulation_rcbd_power": 0.335
+        },
+        "N_48": {
+          "n_per_arm": 48,
+          "analytical_power_nominal_alpha_0_05": 0.622,
+          "analytical_power_bonferroni_alpha_0_0083": 0.3496,
+          "simulation_rcbd_power": 0.63
+        },
+        "N_96": {
+          "n_per_arm": 96,
+          "analytical_power_nominal_alpha_0_05": 0.8987,
+          "analytical_power_bonferroni_alpha_0_0083": 0.718,
+          "simulation_rcbd_power": 0.919
+        }
+      }
+    },
+    {
+      "contrast": "ARIA_vs_DATA_CFG_small_effect",
+      "p1": 0.85,
+      "p2": 0.7,
+      "delta": 0.15,
+      "power_by_sample_size": {
+        "N_24": {
+          "n_per_arm": 24,
+          "analytical_power_nominal_alpha_0_05": 0.2333,
+          "analytical_power_bonferroni_alpha_0_0083": 0.0782,
+          "simulation_rcbd_power": 0.233
+        },
+        "N_30": {
+          "n_per_arm": 30,
+          "analytical_power_nominal_alpha_0_05": 0.2814,
+          "analytical_power_bonferroni_alpha_0_0083": 0.1024,
+          "simulation_rcbd_power": 0.186
+        },
+        "N_48": {
+          "n_per_arm": 48,
+          "analytical_power_nominal_alpha_0_05": 0.4192,
+          "analytical_power_bonferroni_alpha_0_0083": 0.1858,
+          "simulation_rcbd_power": 0.425
+        },
+        "N_96": {
+          "n_per_arm": 96,
+          "analytical_power_nominal_alpha_0_05": 0.7044,
+          "analytical_power_bonferroni_alpha_0_0083": 0.4394,
+          "simulation_rcbd_power": 0.703
+        }
+      }
+    }
+  ]
+}

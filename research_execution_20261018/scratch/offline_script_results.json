@@ -1,0 +1,56 @@
+[
+  {
+    "description": "Phase 1 Baseline & Hash Check",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe phase1_execute.py",
+    "exit_code": 0,
+    "duration_sec": 7.6869,
+    "status": "SUCCESS",
+    "stdout_tail": "1:56.764722, sha256: 3f9e5107ea54cb92...)\n  research_paper.tex (40,678 bytes, mtime: 2026-10-24T00:49:41.879894, sha256: 4e43bf5cc3c0485d...)\n  research_paper_audited.tex (36,968 bytes, mtime: 2026-10-24T01:19:18.235218, sha256: 09dc6db0b8b6a241...)\n  research_paper_final.tex (32,760 bytes, mtime: 2026-10-27T01:50:05.520207, sha256: 04dd7c351cd4d50d...)\nWrote RECOVERY_BASELINE.md.\nWrote RECOVERY_STATE.json and RECOVERY_LOG.md.\n[2026-10-27T19:13:16.110245] Phase 1 execution successfully finished.",
+    "stderr_tail": ""
+  },
+  {
+    "description": "Phase 6 Run Accounting & Provenance",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe phase6_execute.py",
+    "exit_code": 0,
+    "duration_sec": 0.5345,
+    "status": "SUCCESS",
+    "stdout_tail": "lasses E1-E7 separation in EVIDENCE_CLASS_LEDGER.csv. ... ok\ntest_reconciliation_row_counts (test_run_accounting_and_provenance.TestRunAccounting.test_reconciliation_row_counts)\nAsserts exact counts for 3arm runs: 46 files, 39 primary, 4 quarantined, 3 aborts, 31 unexecuted. ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.029s\n\nOK\n\nUpdated RECOVERY_STATE.json and RECOVERY_LOG.md.\n[2026-10-27T19:13:16.658732] Phase 6 execution successfully finished.",
+    "stderr_tail": ""
+  },
+  {
+    "description": "Phase 7 Statistical Audit & MC Reproduction",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe phase7_execute.py",
+    "exit_code": 0,
+    "duration_sec": 2.1387,
+    "status": "SUCCESS",
+    "stdout_tail": "0% +/- 0.32%\n  3-Arm  (n=20 vs n=20): Power =   7.51% +/- 0.26%\nDelta = +0.15:\n  Pooled (n=20 vs n=40): Power =   5.38% +/- 0.23%\n  3-Arm  (n=20 vs n=20): Power =   3.94% +/- 0.19%\nDelta = +0.00:\n  Pooled (n=20 vs n=40): Power =   0.45% +/- 0.07%\n  3-Arm  (n=20 vs n=20): Power =   0.52% +/- 0.07%\nWrote C:\\testing\\research_execution_20261018\\STATISTICAL_AUDIT_AND_REPRODUCTION.md.\nUpdated RECOVERY_STATE.json and RECOVERY_LOG.md.\n[2026-10-27T19:13:18.790141] Phase 7 execution successfully finished.",
+    "stderr_tail": ""
+  },
+  {
+    "description": "Phase 9 Information Loss & Wheel Audit",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe phase9_execute.py",
+    "exit_code": 0,
+    "duration_sec": 1.5093,
+    "status": "SUCCESS",
+    "stdout_tail": " INFORMATION_LOSS_MEASUREMENTS.csv : 519bac28a0f00728551d3620a0ea5d45ad18ce22e7f5a61e551bf8f539972c96\n  2. INFORMATION_LOSS_MEASUREMENTS.md  : ab0829b4a5dff362788f3c176411f8fafa23eced4a5f9debd8210c16e5de606f\n  3. VERSION_DRIFT_AUDIT.md            : dc6e28989de59d0dc78b09c348ee1db684e2b213716da609ced01baae960c7b2\n  4. SOLVABILITY_ANALYSIS.md           : fe8ae54f579fd5ef618698c6fd40dabd4a7adcce800d68ee3c48ddaf8195076b\n================================================================================",
+    "stderr_tail": ""
+  },
+  {
+    "description": "Citation Key Audit",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe audit_citation_keys.py",
+    "exit_code": 0,
+    "duration_sec": 0.136,
+    "status": "SUCCESS",
+    "stdout_tail": "Citation Key Audit Complete: Status = PASS\n  Total Citations: 33\n  Unique Cited Keys: 25\n  Total Bib Entries: 26\n  Undefined Citations: 0\n  Duplicate Keys: 0\n  Unused Bib Entries: 1 (['wai_aria11'])\n  Syntax Errors: 0\n  Environment Errors: 0\n  Report written to: C:\\testing\\research_execution_20261018\\audit_outputs\\citation_key_audit.json",
+    "stderr_tail": ""
+  },
+  {
+    "description": "Route Controls & Correspondence Audit",
+    "command": "C:\\testing\\.venv311\\Scripts\\python.exe audit_route_controls_and_correspondence.py",
+    "exit_code": 0,
+    "duration_sec": 0.1258,
+    "status": "SUCCESS",
+    "stdout_tail": "ed: AX=87, Sel=8, Matched=8 (100.0%), Sem=7/7 (100.0%)\n   Note: 7 genuine controls + 1 search form; zero false-positive badges\nroute_checkout: AX=113, Sel=13, Matched=13 (100.0%), Sem=12/12 (100.0%)\n   Note: 12 genuine controls + 1 search form; zero false-positive badges\nroute_search_audio: AX=153, Sel=19, Matched=16 (84.2%), Sem=10/10 (100.0%)\n   Note: 3 unmatched in-stock badges; 16 matched = 10 controls + 6 containers (form, views, cards)\n\nALL INVARIANTS INDEPENDENTLY RECONCILED AND VERIFIED!",
+    "stderr_tail": ""
+  }
+]

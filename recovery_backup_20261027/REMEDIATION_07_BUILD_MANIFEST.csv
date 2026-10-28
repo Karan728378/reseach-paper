@@ -1,0 +1,7 @@
+Filename,SizeBytes,SHA256,Description,BuildStatus
+research_paper_final.tex,41844,1059b410bbc71cf3bec9a8f383797b73b3c550c88654dc2a6623981af44cb2df,LaTeX Source Root (Two-Column IEEEtran),SYNTACTICALLY_VERIFIED (0 errors)
+references.bib,8112,1d81070d9a249751354f8313937ec284c3239e430cb7d510415724b503b239cc,BibTeX Bibliography Database (22 entries),VERIFIED (16/16 cited keys resolved)
+architecture_pipeline_figure.tex,5422,096a646a2c6f5001764cfc25f4fc3485b367def2c8ad1dd51445b7e3e16d198f,TikZ Architecture Diagram,VERIFIED (fits linewidth)
+compiled_manuscript.pdf,752110,4ecc0ae58392aae8e701d4a441caf89bdb79d77d4ddbf6fb46f1a10691248802,Historical Reference PDF Compilation,HISTORICAL_BUILD (Oct 25 draft)
+manuscript_submission_bundle_corrected.zip,772497,9dc94546bd0920f0dbbe51226a735a3fc9d543fc13e26e86a1314fd5188999d3,Cleanroom Submission Bundle Archive,TAMPER_PROOF (testzip passed)
+README_OVERLEAF.md,3409,0c0e2df863d8024fc71922c9bace2188134f992760a71d94629b18a0b629085d,Overleaf 1-Click Build Instructions,DOCUMENTED

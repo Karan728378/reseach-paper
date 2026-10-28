@@ -1,0 +1,215 @@
+{
+  "session_number": 1,
+  "last_updated_utc": "2026-10-26T20:30:59.845134+00:00",
+  "current_phase": "PHASE_17_COMPLETE_WORKFLOW_CLOSED",
+  "phases": {
+    "PHASE_0": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:26:40.213889+00:00"
+    },
+    "PHASE_1": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:26:40.213889+00:00",
+      "deliverables": [
+        "RECOVERY_BASELINE.md",
+        "RECOVERY_FILE_MANIFEST.csv"
+      ]
+    },
+    "PHASE_2": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:27:22.476626+00:00",
+      "deliverables": [
+        "EXISTING_REPORTS_INDEX.csv",
+        "EXISTING_CLAIMS_CONFLICTS.md"
+      ],
+      "indexed_reports_count": 289
+    },
+    "PHASE_3": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:28:59.133746+00:00",
+      "deliverables": [
+        "RECOVERY_ISSUE_REGISTER.csv",
+        "REVIEW_ISSUES_AND_RESOLUTIONS.md"
+      ],
+      "registered_issues_count": 33
+    },
+    "PHASE_4": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:34:48.313118+00:00",
+      "deliverables": [
+        "REMEDIATION_03_INFORMATION_LOSS_MATRIX.csv",
+        "STAGE_TRACE_RAW/STAGE_TRACE_MANIFEST.json",
+        "DATA_FLOW_DIAGRAM.md"
+      ],
+      "channels_evaluated": 21
+    },
+    "PHASE_5": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:42:46.136945+00:00",
+      "deliverables": [
+        "design.json",
+        "claims_registry.json",
+        "test_manuscript_consistency.py",
+        "TEST_RUN_LOG.txt",
+        "REMEDIATION_06_TEST_INVENTORY.csv",
+        "TEST_QUALITY_AUDIT.md"
+      ],
+      "total_tests_passed": 196,
+      "total_modules_audited": 25
+    },
+    "PHASE_6": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:45:00.657625+00:00",
+      "deliverables": [
+        "RUN_ACCOUNTING_RECONCILIATION.csv",
+        "RUN_ACCOUNTING_AUDIT.md",
+        "EVIDENCE_CLASS_LEDGER.csv",
+        "test_run_accounting_and_provenance.py"
+      ],
+      "reconciled_traces_count": 46,
+      "classified_records_count": 72
+    },
+    "PHASE_7": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T19:49:20.563402+00:00",
+      "deliverables": [
+        "STATISTICAL_AUDIT_AND_REPRODUCTION.md"
+      ],
+      "simulation_b_iterations": 10000
+    },
+    "PHASE_8": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T01:20:00.000000+00:00",
+      "deliverables": [
+        "CONTRIBUTION_DECISION_MEMO.md"
+      ],
+      "selected_models": [
+        "Model A (Systems Audit)",
+        "Model B (Methodological Validity Framework)"
+      ],
+      "rq_calibration": [
+        "RQ1 Narrowed to Stage-by-Stage Retention",
+        "RQ2 Calibrated for AXTree Circularity",
+        "RQ3 Repositioned as Methods/Power Note"
+      ]
+    },
+    "PHASE_9": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T01:30:00.000000+00:00",
+      "deliverables": [
+        "INFORMATION_LOSS_MEASUREMENTS.csv",
+        "INFORMATION_LOSS_MEASUREMENTS.md",
+        "VERSION_DRIFT_AUDIT.md",
+        "SOLVABILITY_ANALYSIS.md",
+        "test_phase9_strengthening.py"
+      ],
+      "entities_audited": 44,
+      "wheels_audited": 6
+    },
+    "PHASE_10": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T01:35:00.000000+00:00",
+      "deliverables": [
+        "CONFIRMATORY_PROTOCOL.md",
+        "protocol.json",
+        "test_confirmatory_protocol_dryrun.py"
+      ],
+      "protocol_md_sha256": "fec5a54ceab0df0620e6546123db91c06f1fff1283234bcdd528086a3693a190",
+      "protocol_json_sha256": "9ee10c1ec003e06e4175b7f05e3e309db00a7bbed9ec2a08a28f6e00d7f159a2",
+      "planned_trials": 96
+    },
+    "PHASE_11": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T01:36:30.000000+00:00",
+      "user_decision": "OFFLINE_COMPLETION",
+      "authorization": "USER_DIRECTED_OFFLINE_MODE",
+      "spend_authorized_usd": 0.0,
+      "behavioral_evidence_added": false
+    },
+    "PHASE_12": {
+      "status": "skipped",
+      "reason": "USER_DIRECTED_OFFLINE_MODE_NO_PAID_CALLS",
+      "completed_utc": "2026-10-27T01:36:30.000000+00:00"
+    },
+    "PHASE_13": {
+      "status": "verified",
+      "completed_utc": "2026-10-27T01:39:30.000000+00:00",
+      "deliverables": [
+        "CITATION_AUDIT.md",
+        "LITERATURE_SEARCH_LOG.md",
+        "references.bib"
+      ],
+      "verified_entries_count": 26
+    },
+    "PHASE_14": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T20:22:19.572618+00:00",
+      "deliverables": [
+        "research_paper_final.tex",
+        "CLAIM_EVIDENCE_MAPPING.md",
+        "MANUSCRIPT_REVISION_CHANGELOG.md"
+      ],
+      "tex_sha256": "04dd7c351cd4d50daa3a3934f78687b652507e811088e0e597f32884f5b13bfc",
+      "claim_mapping_sha256": "092ab7aff200ea600bb6d2fde460c84f68e60b308da2a043c09ee54b05107cf9",
+      "changelog_sha256": "401f31306d21cd594f5c6cbfe6a9ef964d64dba520f92c7f02116406f4da9a6c",
+      "abstract_word_count": 198,
+      "banned_phrases_count": 0,
+      "total_offline_tests_passing": 207
+    },
+    "PHASE_15": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T20:26:55.518239+00:00",
+      "deliverables": [
+        "FINAL_BUILD_LOG.txt",
+        "PDF_VISUAL_QA.md"
+      ],
+      "build_log_sha256": "16c388ff87ed9b0050b456c78b971e96ae332e9f1fe5c0c5f2e6e794509ee787",
+      "visual_qa_sha256": "1406359f6f1964b95e60838a93f009da3d295d9468103ea99dd95d87265ab6c1",
+      "latex_errors_count": 0,
+      "undefined_citations_count": 0,
+      "undefined_references_count": 0,
+      "overfull_hbox_over_3pt_count": 0
+    },
+    "PHASE_16": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T20:28:38.324791+00:00",
+      "deliverables": [
+        "FINAL_VERIFICATION_REPORT.md"
+      ],
+      "verification_report_sha256": "4515c5b32d3da4057c04751d009a6c6f44d03269ba21fad3a573270261cdb1db",
+      "total_tests_passing": 207,
+      "total_tests_failing": 0,
+      "total_issues_verified": 33,
+      "pending_issues_count": 0,
+      "adversarial_review_disposition": "ACCEPT_SYSTEMS_AND_METHODOLOGICAL"
+    },
+    "PHASE_17": {
+      "status": "verified",
+      "completed_utc": "2026-10-26T20:30:59.845134+00:00",
+      "deliverables": [
+        "README_REPRODUCE.md",
+        "FINAL_ARTIFACT_MANIFEST.csv",
+        "ARTIFACT_REPRODUCIBILITY_AUDIT.md",
+        "manuscript_submission_bundle.zip",
+        "FINAL_RECOVERY_REPORT.md"
+      ],
+      "readme_sha256": "b22f75d3723bf4fadaaf0208bb9be149622a8e83f1a2bd8d732c6fa0d5d5ce80",
+      "manifest_sha256": "86d5c7122b4388b5b486df29fecc0ffe0ef6d0e8a79f7751cc9f810d2670e2c0",
+      "audit_sha256": "f971663a01a93527c8c0d1ffd3e2f3e7dc2ef757833b2f637c7cda10e88abad0",
+      "zip_sha256": "ea1017da0596f70de69389f49d0c45c3571959fd6acbdab4f916e237b74ca317",
+      "recovery_report_sha256": "a71e241c0049adfaef01e25ff727cb2f267b686ef32eb88bc2303ba815a052cd",
+      "zip_file_count": 653,
+      "zip_integrity_tested": true,
+      "all_phases_complete": true
+    }
+  },
+  "issue_register_pointer": "RECOVERY_ISSUE_REGISTER.csv",
+  "authorization_ledger": {
+    "authorizations": [],
+    "total_calls_consumed": 0,
+    "total_spend_usd": 0.0
+  },
+  "authoritative_manuscript": "research_paper_final.tex",
+  "backup_directory": "C:\\testing\\recovery_backup_20261027",
+  "open_questions": []
+}

@@ -1,0 +1,128 @@
+{
+  "audit_metadata": {
+    "timestamp": "2026-10-21T01:52:00Z",
+    "framework": "browser-use",
+    "framework_version": "0.13.10",
+    "python_runtime": "3.11.9",
+    "token_proxy_method": "regex_whitespace_and_punctuation_split",
+    "token_proxy_limitation": "Proxy heuristic approximating BPE tokenizers within ~15% margin of error."
+  },
+  "channels": {
+    "channel_1_jsonld": {
+      "channel_name": "Schema.org JSON-LD in <script>",
+      "target_tokens": [
+        "application/ld+json",
+        "schema.org",
+        "SoundFlow Air 3"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": true,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 0.0,
+      "pruning_mechanism": "serializer.py:DISABLED_ELEMENTS includes 'script'; unconditionally pruned in _create_simplified_tree (L480-482)",
+      "evaluated_in_protocol_v3": false,
+      "source_token_proxy": 2587,
+      "prompt_token_proxy": 6000
+    },
+    "channel_2_aria_interactive": {
+      "channel_name": "WAI-ARIA on Interactive Elements (Buttons)",
+      "target_tokens": [
+        "aria-label=Add SoundFlow Air 3 to cart"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": false,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 100.0,
+      "pruning_mechanism": "None (retained via DEFAULT_INCLUDE_ATTRIBUTES on interactive nodes)",
+      "evaluated_in_protocol_v3": true,
+      "confound_identified": "Button aria-label co-locates product title ('SoundFlow Air 3') onto the clickable action target, changing hierarchical reference resolution to direct label matching."
+    },
+    "channel_3_aria_non_interactive": {
+      "channel_name": "WAI-ARIA on Non-Interactive Elements (Spans/Divs)",
+      "target_tokens": [
+        "aria-label=Price: $49.99",
+        "Rating: 4.5 out of 5 stars"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": true,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 0.0,
+      "pruning_mechanism": "serializer.py:L1046-L1058 constructs attributes ONLY if node.is_interactive or scrollable; non-interactive span tags are stripped entirely.",
+      "evaluated_in_protocol_v3": false
+    },
+    "channel_4_data_attrs_default": {
+      "channel_name": "Developer data-* Attributes (Default Config)",
+      "target_tokens": [
+        "data-action=add-to-cart",
+        "data-product-id=wh-001"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": true,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 0.0,
+      "pruning_mechanism": "views.py:DEFAULT_INCLUDE_ATTRIBUTES omits data-*; serializer.py:L1214 discards non-whitelisted attributes.",
+      "evaluated_in_protocol_v3": false
+    },
+    "channel_5_data_attrs_extended": {
+      "channel_name": "Developer data-* Attributes (Extended Whitelist Config)",
+      "target_tokens": [
+        "data-action=add-to-cart",
+        "data-product-id=wh-001"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": true,
+      "prompt_buffer_present": true,
+      "reachability_percentage": 100.0,
+      "non_interactive_reachability": "0.0% (data-amount on span is still stripped due to L1046)",
+      "pruning_mechanism": "Runner injects EXTENDED_ATTRIBUTES to Agent; survives on buttons but dropped on spans.",
+      "evaluated_in_protocol_v3": true
+    },
+    "channel_6_temporal_meta": {
+      "channel_name": "Temporal / Evidence <meta> Elements",
+      "target_tokens": [
+        "evidence-date",
+        "2026-09-01T00:00:00Z"
+      ],
+      "source_html_present": false,
+      "parsed_dom_present": false,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 0.0,
+      "pruning_mechanism": "serializer.py:DISABLED_ELEMENTS includes 'meta'; stripped in _create_simplified_tree (L480-482).",
+      "evaluated_in_protocol_v3": false
+    },
+    "channel_7_temporal_time": {
+      "channel_name": "Temporal <time> Elements",
+      "target_tokens": [
+        "2026-09-01"
+      ],
+      "source_html_present": true,
+      "parsed_dom_present": true,
+      "prompt_buffer_present": false,
+      "reachability_percentage": 100.0,
+      "semantic_tag_retained": false,
+      "pruning_mechanism": "<time> is not interactive; tag stripped; inner text emitted as plain text.",
+      "evaluated_in_protocol_v3": false,
+      "confound_identified": "Renders as ordinary visible typography; cannot be isolated from plain text."
+    }
+  },
+  "edge_cases": {
+    "non_interactive_container_section": {
+      "in_source": true,
+      "aria_label_in_prompt": false,
+      "data_container_in_prompt_default": false,
+      "data_container_in_prompt_extended": false,
+      "finding": "Non-interactive <section> tags have both aria-label and data-* stripped, regardless of whitelist."
+    },
+    "empty_attribute_values": {
+      "in_source": true,
+      "retained_in_prompt": false,
+      "finding": "Empty attributes (aria-label='', data-action='') are pruned by serializer.py:L1214 (str(value).strip() != '')."
+    },
+    "nested_button_elements": {
+      "in_source": true,
+      "button_aria_retained": true,
+      "child_spans_retained_as_text": true,
+      "finding": "Interactive <button> retains its attributes; child text nodes are concatenated into the button's text representation."
+    }
+  }
+}

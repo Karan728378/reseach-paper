@@ -1,0 +1,11 @@
+TechMart Fixture Search Candidates (10 files found):
+  C:/testing\.venv311\Lib\site-packages\win32com\HTML\index.html | 1654 bytes | 655577838750ed6f48dace88bc5ad8c9fb14d368b5b6b1e421f96bd8763afa64
+  C:/testing\.venv\Lib\site-packages\win32com\HTML\index.html | 1654 bytes | 655577838750ed6f48dace88bc5ad8c9fb14d368b5b6b1e421f96bd8763afa64
+  C:/testing\index.html | 9128 bytes | 4dbada49e746b976d9247382f8b052051416819e2bd763e41da7f7ec0295944c
+  C:/testing\shared\app-core.js | 27904 bytes | ccae98e0218402bd78f7c4548ca743fde79b89b4baee466447b72821621b80c7
+  C:/testing\shared\products.js | 4857 bytes | b182ac6bdb6704f2c56f3718de41262aa2e9689ac2e965cae256ae1ae9278c11
+  C:/testing\variants\v0-baseline\index.html | 8322 bytes | aa042e92caaab5ceac20a04552e18e182ab4f5812e54b6d28a6899fce3df43ae
+  C:/testing\variants\v1-jsonld\index.html | 9078 bytes | 9bad542fff4b6db719ae643ff60a48ff8ac4966c603158132e366c48852f70d7
+  C:/testing\variants\v2-aria\index.html | 9714 bytes | e5e303ab0c6de3108258fcf4603192b539784af747e8c35f1073182dc097a612
+  C:/testing\variants\v3-data-attrs\index.html | 10062 bytes | 4db1305a1bc4623499f82a863148602f39e5db8dd9922f8f5eee71229b39df4d
+  C:/testing\variants\v4-evidence-meta\index.html | 8657 bytes | 6183427afe7d2fcafa1e68582dad515123482440d42af5b572d008fe0d802120

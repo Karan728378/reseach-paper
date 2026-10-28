@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 # Paths
-BASE_DIR = Path("C:/testing/research_execution_20261018")
+BASE_DIR = Path(__file__).resolve().parent
 MANUSCRIPT_TEX = BASE_DIR / "research_paper_final.tex"
 BIB_FILE = BASE_DIR / "references.bib"
 V3_3ARM_CSV = BASE_DIR / "results" / "v3_3arm_summary.csv"
@@ -226,7 +226,7 @@ class TestManuscriptIntegrityRegressions(unittest.TestCase):
             self.assertIn(key, bib_content)
 
     def test_abstract_numerical_claims_alignment(self):
-        """Abstract numbers must match body tables."""
+        """Abstract numbers must match body tables and authoritative registry."""
         tex_content = MANUSCRIPT_TEX.read_text(encoding="utf-8")
         
         # Extract abstract
@@ -236,9 +236,11 @@ class TestManuscriptIntegrityRegressions(unittest.TestCase):
 
         # Assert key numbers are in abstract
         self.assertIn("0.13.10", abstract, "browser-use version 0.13.10 must be in abstract")
-        self.assertIn("27 of 34", abstract, "27 of 34 must be in abstract")
-        self.assertIn("10.8", abstract, "10.8% power must be in abstract")
-        self.assertIn("49.6", abstract, "49.6% power must be in abstract")
+        self.assertIn("11.5", abstract, "11.5% power must be in abstract")
+        self.assertIn("48.5", abstract, "48.5% power must be in abstract")
+        self.assertIn("39", abstract, "N=39 must be in abstract")
+        self.assertIn("41", abstract, "N=41 must be in abstract")
+        self.assertIn("46", abstract, "46 traces reconciled must be in abstract")
 
 
 

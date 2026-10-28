@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-10-22T20:17:00+05:30",
+  "auditor": "Antigravity Senior Research Engineer, Browser-Agent Systems Specialist & Reproducibility Lead",
+  "workspace": "C:\\testing",
+  "execution_workspace": "C:\\testing\\research_execution_20261018",
+  "python_executable": "C:\\testing\\.venv311\\Scripts\\python.exe",
+  "git": {
+    "branch": "main",
+    "remote": "origin (https://github.com/Karan728378/reseach-paper.git)",
+    "status": "clean tracking with local runner and test updates"
+  },
+  "initial_file_hashes": {
+    "research_execution_20261018/protocol_v3_runner.py": {
+      "sha256": "d8564bb5f822c7398626fad68d5b7c283e148c3998311bf96c60b026e2a2340a",
+      "bytes": 33480
+    },
+    "research_execution_20261018/protocol_v4_config.json": {
+      "sha256": "6c21f0a31f23816a1a0fb4420a246b529d12921c046c77da43ed26f945e12985",
+      "bytes": 1910
+    },
+    "research_execution_20261018/offline_test_suite.py": {
+      "sha256": "26feadfd95f2649340469846361ac701648d26346be422dc4e621828ff791394",
+      "bytes": 23302
+    },
+    "research_execution_20261018/test_mutation_audit.py": {
+      "sha256": "a578df650ea019f369e1dcaa417ccd654edf66e053c282850e9e71c04b2176a9",
+      "bytes": 6779
+    },
+    "research_execution_20261018/test_t6_verifier_isolated.py": {
+      "sha256": "63d30239ab6599e995ee9ac3f81f03f45e590c0d676c71ff2d543664c16014a2",
+      "bytes": 8364
+    },
+    "research_execution_20261018/test_power_audit.py": {
+      "sha256": "b5950c5a6537a54e1970255a85547e417e9033ba9078de9030d62a76426fe1eb",
+      "bytes": 5390
+    },
+    "research_execution_20261018/test_analyze_v3_results.py": {
+      "sha256": "8a98cdfb13d432c2731c7480091bf67d795561fface890304e60e255db9ca42b",
+      "bytes": 26522
+    },
+    "research_execution_20261018/test_accessibility_tree_comparison.py": {
+      "sha256": "36ccef282cd065508557e3bbbffa1da1175cf761c0db00fc3c8e55af08467cae",
+      "bytes": 7610
+    },
+    "research_execution_20261018/test_agent_prompt_pipeline.py": {
+      "sha256": "898c315f9e4a68139306bfd7c9e469bc2b065a4d50a65b48458c366376ca9429",
+      "bytes": 8098
+    },
+    "research_execution_20261018/t6_verifier_isolated.py": {
+      "sha256": "8c0daba0dd09fdc0d64263ac03065172d819a0248d0718d159a59b3b4a65ba00",
+      "bytes": 4893
+    },
+    "runner/verifier.py": {
+      "sha256": "890b968345e82b59cb0545263d8e438a6ef6de9f521b90da5b98e5680850b378",
+      "bytes": 33927
+    },
+    "research_execution_20261018/proposed_randomized_schedule.csv": {
+      "sha256": "107c790e8de411849120e580dd987fe641a9112585667a0f7dc26bd913f778ce",
+      "bytes": 3524
+    },
+    "research_execution_20261018/proposed_smoke_schedule.csv": {
+      "sha256": "05079365d287e4eda7396198f0d57c774c5e35b4189de9abe02954cbca28c096",
+      "bytes": 212
+    },
+    "NEXT_LIVE_EXECUTION_READINESS.md": {
+      "sha256": "cc4515e625444bfa128d0cecdcc3e75944a7f32229bc10f93bd2fe831f9683f8",
+      "bytes": 12397
+    }
+  },
+  "initial_test_execution_results": {
+    "offline_test_suite.py": { "exit_code": 0, "passed": 13, "total": 13 },
+    "test_mutation_audit.py": { "exit_code": 0, "passed": 6, "total": 6 },
+    "test_t6_verifier_isolated.py": { "exit_code": 0, "passed": 7, "total": 7 },
+    "test_power_audit.py": { "exit_code": 0, "passed": 7, "total": 7 },
+    "test_analyze_v3_results.py": { "exit_code": 0, "passed": 11, "total": 11 },
+    "test_accessibility_tree_comparison.py": { "exit_code": 0, "passed": 10, "total": 10 },
+    "test_agent_prompt_pipeline.py": { "exit_code": 0, "passed": 5, "total": 5 }
+  }
+}

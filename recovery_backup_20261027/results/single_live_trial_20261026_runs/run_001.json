@@ -1,0 +1,65 @@
+{
+  "run_index": 1,
+  "attempt_number": 1,
+  "block_id": 1,
+  "within_block_order": 1,
+  "arm": "DATA-CFG",
+  "task_id": "T2",
+  "variant_mapping": "v3-data-attrs",
+  "target_entity": "mkp-001",
+  "model": "openai/gpt-oss-120b",
+  "timestamps": {
+    "start": "2026-10-26T01:58:31.727586",
+    "end": "2026-10-26T01:58:37.250749"
+  },
+  "total_time_seconds": 5.516,
+  "total_steps": 2,
+  "status": "completed",
+  "termination_reason": "max_steps_reached",
+  "error_message": "",
+  "error_traceback": null,
+  "agent_final_text": null,
+  "pre_state": {
+    "pre_cart_count": null
+  },
+  "terminal_browser_state": {
+    "url": "http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home",
+    "title": "TechMart",
+    "cart": [],
+    "order_confirmed": false,
+    "last_order_items": []
+  },
+  "verifier_result": {
+    "success": false,
+    "score": 0.0,
+    "details": {
+      "target_sku": "mkp-001",
+      "cart_skus": []
+    }
+  },
+  "treatment_delivery": {
+    "arm": "DATA-CFG",
+    "treatment_attribute_observed": true,
+    "evidence": "DATA-CFG in serialized observation (complete_delivery=True): data-action=True, data-product-id=True, data-amount=False, data-rating=False"
+  },
+  "token_and_cost_estimates": {
+    "estimated_input_tokens": 14000,
+    "estimated_output_tokens": 200,
+    "estimated_cost_usd": 0.00222
+  },
+  "action_history": [
+    {
+      "step": 1,
+      "thinking": "",
+      "actions": [
+        "is_done=False success=None judgement=None error=None attachments=None images=None long_term_memory='Navigated to http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home' extracted_content='\ud83d\udd17 Navigated to http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home' include_extracted_content_only_once=False metadata=None include_in_memory=False"
+      ]
+    },
+    {
+      "step": 2,
+      "actions": [
+        "is_done=False success=None judgement=None error=\"Groq API returned HTTP 413: Error code: 413 - {'error': {'message': 'Request too large for model `openai/gpt-oss-120b` in organization `org_01kxy145rqfsqsczgw05w5er6t` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 14161, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}\" attachments=None images=None long_term_memory=None extracted_content=None include_extracted_content_only_once=False metadata=None include_in_memory=False"
+      ]
+    }
+  ]
+}

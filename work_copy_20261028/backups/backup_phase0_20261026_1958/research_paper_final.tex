@@ -1,0 +1,534 @@
+% ============================================================
+% THE DOM SERIALIZATION GAP
+% IEEE Conference Paper Format (IEEEtran class, conference mode)
+% Provisional IEEE layout — not yet submitted to any venue.
+% ============================================================
+\documentclass[conference]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{upquote}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{placeins}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!80!black
+}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    keywordstyle=\color{blue!80!black}\bfseries,
+    commentstyle=\color{gray!70!black}\itshape,
+    stringstyle=\color{green!50!black}
+}
+
+% ----------------------------------------------------------
+\title{The DOM Serialization Gap: Architectural Pruning, Information Loss, and Observation Confounds in Autonomous Browser Agents}
+
+\author{
+  \IEEEauthorblockN{[Author Name Placeholder]}
+  \IEEEauthorblockA{[Department Placeholder]\\
+  [Institution Placeholder]\\
+  [email@placeholder.edu]}
+}
+% Note: author names and affiliations are placeholders.
+% This paper is under preparation; no institutional or publication claims are made.
+% ----------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Autonomous browser agents that leverage Large Language Models (LLMs) for multi-step web interaction rely on client-side serializers to convert live DOM trees into text-based model observations. Yet the information-loss characteristics of these serializers are poorly understood. In this paper, we conduct an empirical systems audit of the \emph{DOM serialization gap}---the structural divergence between live browser representations and the text ingested by LLMs---using \texttt{browser-use 0.13.10} as a focused single-framework case study under text-only observation (\texttt{use\_vision=False}). We identify three deterministic pruning mechanisms that exclude Schema.org JSON-LD structured data, strip \texttt{aria-label} attributes from non-interactive container elements at Stage~4 of the serialization pipeline (verified by source-code inspection and live runtime trace), and omit custom \texttt{data-*} developer attributes under the default attribute whitelist. Comparing the agent's selector map against Chromium Blink accessibility trees across four routes of a controlled e-commerce benchmark, we find that 27 of 34 selector entries ($79.4\%$) match Blink AXTree nodes on the primary route, while all 26 genuine leaf interactive controls (11 anchor links, 14 buttons, 1 text input) achieve $100\%$ correspondence---a result specific to this fixture and not generalized. We identify the Action-Label Co-Location Confound that inflates apparent ARIA markup utility, disclose a ceiling effect in a 41-trial exploratory cloud pilot (100\% completion, zero variance, three arms), and calculate that small-sample evaluations ($n \le 20$ per arm) lack statistical power ($10.8\%$) to detect small effects ($\Delta = 0.20$), rising to only $49.6\%$ for moderate effects ($\Delta = 0.35$) under Bonferroni $\alpha_{\mathrm{adj}} = 0.0167$ ($11.5\%$ at 10\,000 Monte Carlo iterations). Confirmatory live behavioral experiments have not been executed; the pilot and offline test suite constitute engineering evidence, not scientific validation.
+\end{abstract}
+
+\begin{IEEEkeywords}
+autonomous web agents, DOM serialization, accessibility trees, observation pipelines, WAI-ARIA, semantic markup, reproducibility
+\end{IEEEkeywords}
+
+% ----------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+
+The integration of Large Language Models (LLMs) with automated browser environments has produced autonomous web agents capable of executing multi-step transactional workflows~\cite{zhou2024webarena, deng2023mind2web, drouin2024workarena, workarenapp2024, osworld2024}. These agents observe web state, synthesize action plans, and dispatch interactions via browser automation protocols such as Playwright or the Chrome DevTools Protocol (CDP).
+
+Despite widespread benchmarking, evaluations are conducted holistically across environments where layout, rendering, JavaScript routing, and DOM representations vary simultaneously. It is therefore difficult to attribute failure to any single cause.
+
+Modern web pages partition information into distinct layers: rendered visible typography; WAI-ARIA semantic annotations~\cite{wai_aria12, accname11}; developer custom \texttt{data-*} attributes; and machine-readable Schema.org JSON-LD~\cite{schemaorg}. Industry proposals suggest enriching these layers specifically for AI agents~\cite{llmstxt2024, mcp2024}. This raises a fundamental systems question: \textit{what does the agent's observation pipeline actually preserve between source markup and final model input?}
+
+We address this through an empirical audit of \texttt{browser-use 0.13.10}, a production open-source agent framework. Our scope and contributions are:
+\begin{enumerate}
+    \item \textbf{Source-Level Characterization:} Three deterministic pruning mechanisms that filter metadata at pipeline stages 1--5.
+    \item \textbf{Pipeline Reachability Tracing:} Live runtime traces that verify at which pipeline stage each metadata class disappears, including the exact source-code gate.
+    \item \textbf{Controlled Accessibility Correspondence Audit:} A census comparing browser-use's selector map against Chromium's native AXTree across four routes of a single controlled benchmark fixture. Results are explicitly scoped to this fixture.
+    \item \textbf{Confound Identification and Power Analysis:} Formalization of the Action-Label Co-Location Confound, disclosure of a cloud pilot ceiling effect, and independently reproduced statistical power estimates.
+\end{enumerate}
+
+\textbf{What this paper does not claim:} These findings do not generalize across all web sites, all agent frameworks, or all accessibility tree implementations. No causal treatment effect on agent behavior has been established. Confirmatory live behavioral experiments remain unexecuted.
+
+% ----------------------------------------------------------
+\section{Background and Related Work}
+\label{sec:related}
+
+\subsection{Web Agent Benchmarks}
+\textbf{WebArena}~\cite{zhou2024webarena} established end-to-end evaluation across realistic web apps (10.6--14.4\% completion). \textbf{Mind2Web}~\cite{deng2023mind2web} contributed 2,350 tasks across 137 sites, revealing raw HTML context bottlenecks. \textbf{WorkArena}~\cite{drouin2024workarena, workarenapp2024} and \textbf{BrowserGym} evaluated enterprise workflows, using accessibility trees to compress context. \textbf{OSWorld}~\cite{osworld2024} extended evaluation to operating-system tasks. \textbf{WebAgent}~\cite{gur2024webagent} pre-trained a specialized model for HTML sub-sampling. \textbf{AgentBench}~\cite{liu2024agentbench} evaluated eight environments, confirming performance drops on web tasks.
+
+\subsection{Observation Pruning and Distillation}
+\textbf{AgentOccam}~\cite{agentoccam2025} demonstrated that observation-space pruning yields strong baselines, focusing on token reduction rather than per-channel information auditing. Heuristic tag and attribute whitelisting in frameworks such as \texttt{browser-use} has not previously been audited for selective semantic metadata loss.
+
+\subsection{Multimodal Visual Agents}
+\textbf{VisualWebArena}~\cite{koh2024visualwebarena}, \textbf{SeeAct}~\cite{zheng2024seeact}, and \textbf{WebVoyager}~\cite{he2024webvoyager} integrate vision, bypassing DOM serializers. Our audit is scoped to text-only observation.
+
+% ----------------------------------------------------------
+\section{Research Questions and Methodology}
+\label{sec:rqs}
+
+\subsection{Research Questions}
+\begin{enumerate}
+    \item[\textbf{RQ1}] Which metadata channels are deterministically excluded from the browser-use 0.13.10 text observation at which pipeline stage?
+    \item[\textbf{RQ2}] What is the operational and semantic correspondence between the browser-use selector map and the Chromium Blink AXTree across application routes?
+    \item[\textbf{RQ3}] What are the minimum sample sizes for adequately powered behavioral experiments, and what power does the executed pilot actually have?
+\end{enumerate}
+
+\subsection{Framework and Version}
+We audited \texttt{browser-use 0.13.10} (PyPI wheel release, pinned via \texttt{pip install browser-use==0.13.10}), installed in Python 3.11 virtual environment (\texttt{.venv311}) on a Windows 11 host (ASUS TUF Gaming A15, AMD Ryzen 7 7435HS, 16 GB RAM, NVIDIA RTX 2050 4 GB).
+
+\subsection{Benchmark Fixture}
+We built a controlled single-page e-commerce application (TechMart) across four variants:
+\begin{itemize}
+    \item \texttt{v0-baseline}: Plain visible HTML, no semantic augmentation.
+    \item \texttt{v1-jsonld}: Schema.org JSON-LD embedded in \texttt{<script>} tags.
+    \item \texttt{v2-aria}: WAI-ARIA roles, states, and accessible labels.
+    \item \texttt{v3-data-attrs}: Custom \texttt{data-*} developer attributes.
+\end{itemize}
+Variants \texttt{v1-jsonld} and \texttt{v3-data-attrs} are served as treatment arms for the extended-whitelist configuration (\texttt{DATA-CFG}).
+
+\subsection{Audit Instruments}
+\begin{itemize}
+    \item \textbf{Static AST audit:} Source-code inspection of \texttt{browser-use 0.13.10} package files at \texttt{browser\_use/dom/serializer/serializer.py} and \texttt{browser\_use/dom/views.py}.
+    \item \textbf{Runtime reachability trace:} \texttt{audit\_metadata\_reachability.py} intercepts prompt payloads using a local \texttt{MockChatModel} (no live API calls).
+    \item \textbf{Accessibility correspondence:} \texttt{compare\_accessibility\_tree.py} and \texttt{audit\_route\_controls\_and\_correspondence.py} cross-reference \texttt{backendDOMNodeId} between Chromium Blink AXTree (CDP \texttt{Accessibility.getFullAXTree}) and browser-use \texttt{selector\_map}.
+    \item \textbf{Offline test suite:} 191 unit and integration tests across 23 modules, executed with zero live API calls.
+    \item \textbf{Power simulation:} \texttt{reproduce\_power\_audit.py} — Monte Carlo RCBD simulation, 10\,000 iterations, seed 42.
+\end{itemize}
+
+% ----------------------------------------------------------
+\section{Observation Pipeline Architecture and Audit}
+\label{sec:architecture}
+
+\subsection{The Five Serialization Stages}
+
+Web markup passes through five distinct representations before reaching the LLM:
+\begin{enumerate}
+    \item \textbf{Stage 1 (Source HTML):} Raw markup received over HTTP.
+    \item \textbf{Stage 2 (Browser Live DOM):} In-memory tree parsed by Blink, augmented by JavaScript.
+    \item \textbf{Stage 3 (Blink AXTree):} Chromium's native accessibility tree, built independently by \texttt{AXObjectCache} via CDP \texttt{getFullAXTree}. \emph{This is not a sequential step between Stage 2 and Stage 4; it runs in parallel.}
+    \item \textbf{Stage 4 (Agent Serializer):} \texttt{browser-use} walks Stage 2 directly and constructs a pruned text representation.
+    \item \textbf{Stage 5 (Model Context):} The Stage-4 string is assembled into the LLM prompt buffer.
+\end{enumerate}
+
+\subsection{Pruning Mechanism 1: Script and Meta Exclusion}
+
+In \texttt{browser\_use/dom/serializer/serializer.py}, an exclusion set is defined:
+\begin{lstlisting}[language=Python]
+DISABLED_ELEMENTS = {
+    'style', 'script', 'head', 'meta', 'link', 'title'
+}
+\end{lstlisting}
+Any element matching this set is immediately returned as \texttt{None} during tree construction; children are never traversed. Consequently, \texttt{<script type="application/ld+json">} structured data is excluded at Stage 4. \textbf{Evidence:} Source-code inspection of installed \texttt{browser-use 0.13.10}; verified by \texttt{test\_observation\_pipeline\_stages.py}.
+
+\subsection{Pruning Mechanism 2: Non-Interactive Tag Stripping}
+
+At lines 1046--1051 of \texttt{serializer.py}, tag serialization is gated on interactivity:
+\begin{lstlisting}[language=Python]
+if (node.is_interactive
+        or is_any_scrollable
+        or tag == 'IFRAME'
+        or tag == 'FRAME'):
+    attributes_html_str = _build_attributes_string(
+        node.original_node, include_attributes, ...)
+\end{lstlisting}
+For non-interactive elements (e.g., \texttt{<span>}, \texttt{<div>} without click handlers, non-scrollable), \texttt{\_build\_attributes\_string} is never called. The element tag and all its attributes---including any \texttt{aria-label}---are discarded. Inner text content is still emitted into the output stream.
+
+\textbf{Empirical verification:} We executed a live runtime trace navigating to \texttt{fixtures/disambiguation\_probe\_b.html} (containing \texttt{<span aria-label="Identity: target-sku-101">}) using a headless Chromium session and intercepting Stage 4 output via \texttt{dom\_state.llm\_representation()}. The span's \texttt{aria-label} was absent from Stage 4 output; only the inner visible text was emitted. This was consistent under both the default \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES} and an extended whitelist including \texttt{data-product-id}. The finding therefore applies to \emph{both} configurations and is independent of attribute whitelisting, because the gate occurs at the tag-emission level, prior to attribute filtering.
+
+\textbf{Scope of claim:} This establishes that the serialized Stage-4 observation (returned by \texttt{llm\_representation()}) does not contain the \texttt{aria-label} of non-interactive spans. Stage 5 (the full LLM prompt) assembles Stage-4 output plus page URL, task history, and other system context. We did not intercept and inspect the full assembled Stage-5 prompt buffer in the present study; accordingly, we limit the reachability claim to Stage 4.
+
+\subsection{Pruning Mechanism 3: Attribute Whitelist Filtering}
+
+On interactive elements, attribute retention is governed by \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES} in \texttt{browser\_use/dom/views.py}. The installed \texttt{browser-use 0.13.10} version's whitelist includes standard accessibility attributes (\texttt{aria-label}, \texttt{role}, \texttt{aria-expanded}, \texttt{aria-checked}) but excludes developer custom attributes (\texttt{data-product-id}, \texttt{data-action}). In \texttt{serializer.py}, attribute filtering discards any key not in \texttt{include\_attributes}. When the runner injects an extended whitelist (\texttt{EXTENDED\_ATTRIBUTES}), custom attributes are retained on interactive nodes (buttons, links, inputs) but remain absent from non-interactive containers due to Mechanism 2.
+
+\subsection{Multi-Stage Retention Matrix}
+
+Table~\ref{tab:reachability} summarizes retention across pipeline stages for the metadata channels examined. All findings are from the single installed \texttt{browser-use 0.13.10} framework under text-only observation.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Metadata retention across pipeline stages in \texttt{browser-use 0.13.10} (text-only mode). Stage 5 boundary not fully inspected in this study; see text.}
+\label{tab:reachability}
+\begin{tabular}{p{2.0cm}ccccc}
+\toprule
+\textbf{Channel} & \textbf{S1} & \textbf{S2} & \textbf{S3} & \textbf{S4} & \textbf{Mechanism} \\
+\midrule
+JSON-LD         & \checkmark & \checkmark & -- & \textbf{--} & \texttt{DISABLED\_ELEMENTS} \\
+Button ARIA     & \checkmark & \checkmark & \checkmark & \checkmark & Whitelisted, interactive \\
+Span ARIA       & \checkmark & \checkmark & \checkmark & \textbf{--} & Tag stripped (L1046) \\
+\texttt{data-*} (default)  & \checkmark & \checkmark & -- & \textbf{--} & Attribute whitelist \\
+\texttt{data-*} (extended) & \checkmark & \checkmark & -- & \checkmark & Runner patch \\
+\texttt{<meta>} temporal   & \checkmark & \checkmark & -- & \textbf{--} & \texttt{DISABLED\_ELEMENTS} \\
+\texttt{<time>} tag        & \checkmark & \checkmark & \checkmark & text only  & Tag stripped, text emitted \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\scriptsize \item S1=Source HTML, S2=Live DOM, S3=Blink AXTree (parallel path), S4=Agent Serializer output. Checkmark ($\checkmark$) = present. Bold dashes (\textbf{--}) = confirmed absent. AXTree column is parallel to S4; not an intermediate step. Stage 5 claim limited to source inspection.
+\end{tablenotes}
+\end{table}
+
+% ----------------------------------------------------------
+\section{Accessibility Tree Correspondence Audit}
+\label{sec:audit}
+
+\subsection{Methodology}
+
+We compared the browser-use selector map against the Chromium Blink AXTree using \texttt{backendDOMNodeId} as a shared key. For each entry in \texttt{summary.dom\_state.selector\_map}, we checked whether a corresponding Blink AX node existed. We define three distinct metrics:
+\begin{itemize}
+    \item \textbf{Operational correspondence:} $n_{\mathrm{matched}} / n_{\mathrm{selectors}}$ — the fraction of all selector-map entries (including any false positives) that match a Blink AX node.
+    \item \textbf{Semantic recall on leaf interactive controls:} $n_{\mathrm{matched\_true\_controls}} / n_{\mathrm{true\_controls}}$ — the fraction of genuine interactive elements (links, buttons, inputs) whose AX node matches.
+    \item \textbf{Structural container correspondence:} Separately reported; not combined with leaf-control recall.
+\end{itemize}
+These metrics are not interchangeable and are reported separately throughout.
+
+\subsection{Route \texttt{\#home}: Detailed Audit}
+
+On the \texttt{\#home} catalog view, Chromium constructed 336 AX nodes (256 with a discrete \texttt{backendDOMNodeId}). Browser-use registered 34 entries in its selector map. Of these, \textbf{27 matched a Blink AX node} (operational correspondence: $27/34 = 79.4\%$).
+
+\textbf{Leaf interactive controls ($n=26$):} Source inspection and AXTree enumeration confirmed exactly 26 genuine leaf interactive controls:
+\begin{itemize}
+    \item 11 anchor links: logo link, cart nav link, hero CTA button (rendered as \texttt{<a>}), and 8 ``View Details'' card links.
+    \item 14 buttons: search submit, 5 category filter buttons, and 8 product-card buttons (7 active ``Add to Cart''; 1 disabled ``Out of Stock'' button).
+    \item 1 text input: search input field.
+\end{itemize}
+All 26 leaf controls matched Blink AX nodes: semantic recall $= 26/26 = \mathbf{100.0\%}$.
+
+\textbf{Structural container ($n=1$):} The \texttt{<form id="search-form">} element possesses a native Blink AX role \texttt{form}. It is not itself a leaf interactive control; it is a structural container. Including it yields a container-inclusive count of 27, all matching AX nodes. We report this separately to avoid conflating structural containers with interactive controls.
+
+\textbf{The 7 false-positive selector entries:} Seven ``In Stock'' badge spans were included in the selector map by the \texttt{ClickableElementDetector} heuristic (icon threshold: $10 \leq w, h \leq 50$ px; rendered size: $48.6 \times 15.0$ px). Blink AXTree marks these spans as \texttt{ignored: true} with no \texttt{backendDOMNodeId}. These 7 are false positives under semantic interactivity but are valid entries under the operational perspective.
+
+\textbf{Scope:} The $100\%$ semantic recall result applies to the 26 leaf interactive controls in this specific fixture route. It does not generalize to other routes, other websites, or other agent frameworks.
+
+\subsection{Multi-Route Correspondence Census}
+
+Table~\ref{tab:multi_route} reports correspondence across all four audited routes. These are descriptive census results for the single TechMart SPA fixture; Wilson CIs are computed under a superpopulation assumption and should be interpreted with caution given the small, structured, non-i.i.d. denominators.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Correspondence census across four TechMart routes. ``Operational'' = all selectors vs. AX nodes. ``Semantic'' = leaf interactive controls only. On \texttt{\#search}, the 16 operational matches include 10 leaf controls + 6 structural containers with AX roles. All semantic recall figures are $100\%$ because the fixture contains no structural barriers to interactive control detection; false positives are badge spans only.}
+\label{tab:multi_route}
+\begin{tabular}{lccccl}
+\toprule
+\textbf{Route} & \textbf{AX} & \textbf{Sel.} & \textbf{Match.} & \textbf{Op. [\%]} & \textbf{Sem. [\%]} \\
+\midrule
+\texttt{\#home}     & 336 & 34 & 27 & 79.4 & 100.0 (26/26) \\
+\texttt{\#cart}     &  87 &  8 &  8 & 100.0 & 100.0 (7/7) \\
+\texttt{\#checkout} & 113 & 13 & 13 & 100.0 & 100.0 (12/12) \\
+\texttt{\#search}   & 153 & 19 & 16 & 84.2  & 100.0 (10/10) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Structural Divergence: DOM Serializer vs. AXTree}
+
+Our comparative analysis reveals two systematic divergences:
+\begin{enumerate}
+    \item \textbf{Non-interactive ARIA:} The Blink AXTree constructs accessible nodes for non-interactive elements bearing explicit \texttt{aria-label} (e.g., a span with \texttt{role="img"} and \texttt{aria-label="Rating: 4.5 out of 5 stars"}). Browser-use strips the element tag at Stage 4, emitting only inner text. WAI-ARIA 1.2 \S5.2.7~\cite{wai_aria12} and AccName 1.1~\cite{accname11} specify that \texttt{role="generic"} prohibits author-supplied naming; standard screen readers ignore \texttt{aria-label} on such elements. Blink, however, still constructs an AX node. This is a divergence between the browser engine's accessible name computation and the agent's text serialization.
+    \item \textbf{Custom \texttt{data-*}:} Absent from Blink AXTree (not part of WAI-ARIA) but deliverable to the agent on interactive elements under an extended attribute whitelist.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Experimental Setup and Pilot Study}
+\label{sec:experiment}
+
+\subsection{Three-Arm Exploratory Pilot Design}
+
+We conducted an exploratory 41-trial cloud pilot across three arms of a Randomized Complete Block Design (RCBD) with 5 task strata:
+\begin{itemize}
+    \item \textbf{ABS (Baseline):} \texttt{v0-baseline} with default \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES}. $n=13$ eligible completed runs.
+    \item \textbf{ARIA:} \texttt{v2-aria} with WAI-ARIA markup, default attribute whitelist. $n=13$ eligible.
+    \item \textbf{DATA-CFG:} \texttt{v3-data-attrs} with extended attribute whitelist. $n=13$ primary eligible completed runs (of 15 attempted; 2 duplicate runs quarantined).
+\end{itemize}
+\textbf{Execution accounting:} 72 runs were scheduled. 41 distinct run indices were attempted (runs 1--41). Of 46 physical JSON trace files, 3 are infrastructure-aborted records from Run 26 (transient HTTP 503 errors; recovered on attempt 4). Two run indices (34 and 38) have duplicate completed attempts and are quarantined from primary inference, yielding 39 primary evaluable runs (13 per arm). 31 scheduled runs (indices 42--72) were halted by the fail-closed budget ceiling. Counts are independently audited in \texttt{scripts/independent\_ledger_audit.py} (exit code 0).
+
+\textbf{LLM endpoint:} Cloud model endpoint alias \texttt{gemini-flash-lite-latest} (configured in the harness as \texttt{gemini-3.1-flash-lite} via Google AI Studio). \textbf{The exact physical checkpoint revision behind the provider endpoint was not verified.} This is a limitation for reproducibility.
+
+\subsection{The Action-Label Co-Location Confound}
+
+Augmenting ARIA markup from generic labels (e.g., ``Add to Cart'') to entity-specific labels (e.g., ``Add SoundFlow Air 3 to cart'') introduces a systematic confound:
+\begin{itemize}
+    \item \textit{Baseline:} Agent must associate preceding typography (\texttt{SoundFlow Air 3}) with button \texttt{[12]} by spatial reasoning.
+    \item \textit{ARIA arm:} Target entity name is co-located directly inside the button's accessible label.
+\end{itemize}
+This replaces multi-node reference resolution with trivial string matching. Any observed performance improvement cannot be attributed solely to the semantic accessibility channel; it may reflect reduction in reference-resolution complexity.
+
+\subsection{Ceiling Effect in Pilot Outcomes}
+
+All 41 completed pilot trials achieved task success ($100.0\%$; Wilson 95\% CI: $[91.4\%, 100.0\%]$); evaluating the 39 primary eligible trials yields identical $100\%$ success (ABS: 13/13, ARIA: 13/13, DATA-CFG: 13/13). Pairwise risk differences: ABS vs ARIA $= 0.0$ (Newcombe 95\% CI: $[-0.228, +0.228]$); ABS vs DATA-CFG $= 0.0$. On simple single-product addition tasks, visible typography alone was fully sufficient. Zero variance across all arms means this pilot:
+\begin{enumerate}
+    \item Confirms operational harness stability.
+    \item Provides no power to detect treatment effects.
+    \item \textbf{Does not establish behavioral equivalence or superiority} of any arm.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Statistical Analysis and Power}
+\label{sec:stats}
+
+\subsection{Hypothesis Families and Multiplicity Adjustment}
+
+We distinguish two separate hypothesis families with different multiplicity structures:
+
+\textbf{Family 1 --- Three-arm behavioral study (pilot + future confirmatory):} Three planned pairwise comparisons (ARIA vs. Baseline, DATA-CFG vs. Baseline, ARIA vs. DATA-CFG). Bonferroni adjustment: $\alpha_{\mathrm{adj}} = 0.05/3 \approx 0.0167$.
+
+\textbf{Family 2 --- Disambiguation probe studies (Probes A and B):} Two separate probes, each testing a distinct behavioral hypothesis. Bonferroni adjustment across probe families: $\alpha_{\mathrm{adj}} = 0.05/2 = 0.025$. This threshold applies to the probe analyses only, not to the three-arm study.
+
+These families are prespecified and must not be mixed. Applying the probe threshold to the three-arm contrasts, or vice versa, would be a multiplicity violation.
+
+\subsection{Monte Carlo Power Simulation}
+
+We simulated power using a RCBD model with 5 task strata (heterogeneous baselines $[0.70, 0.85, 0.50, 0.30, 0.80]$), $n=20$ per treatment arm, $n=40$ pooled baseline, CMH test, $\alpha_{\mathrm{adj}}=0.0167$, 10\,000 Monte Carlo iterations (seed 42). Results independently verified at 2\,000 iterations (within MCSE):
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Monte Carlo RCBD power estimates. CMH = Cochran-Mantel-Haenszel test. $n=20$/arm. $\alpha_{\mathrm{adj}}=0.0167$ (Bonferroni, 3 contrasts). MCSE reported for $B=10\,000$.}
+\label{tab:power}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Scenario} & $\boldsymbol{\Delta}$ & \textbf{CMH Power} & \textbf{MCSE} \\
+\midrule
+Large disparity   & 0.70 & 98.8\% & 0.1\% \\
+Moderate effect   & 0.35 & 48.5\% & 0.5\% \\
+Small effect      & 0.20 & \textbf{11.5\%} & 0.3\% \\
+Subtle effect     & 0.15 & 5.6\%  & 0.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $n=20$ per arm, the pilot is severely underpowered for realistic treatment effects. For $\Delta=0.20$, the probability of failing to reject the null at $\alpha_{\mathrm{adj}}=0.0167$ is approximately $88.5\%$ (i.e., $1 - 0.115$). We use the term \emph{probability of failing to reject the null} rather than \emph{false-negative rate} because the latter implies a specific ground-truth alternative that has not been empirically established.
+
+\subsection{Sample Size Requirements}
+
+For a well-powered three-arm confirmatory study:
+\begin{itemize}
+    \item Detecting $\Delta=0.20$ at $80\%$ power ($\alpha=0.0167$) requires approximately $n \approx 97$--125 per arm ($N = 388$--500 total), depending on assumed baseline probability.
+    \item TOST equivalence within $\pm 0.10$ at $80\%$ power requires approximately $n \approx 275$--360 per arm ($N \approx 1\,100$--1\,440).
+    \item Clustered design (4 reps per task, ICC $\rho=0.10$, DEFF $= 1.30$) increases these by 30\%.
+\end{itemize}
+The executed 39-eligible-run pilot provides $< 12\%$ power for small effects. Non-significant results in this pilot must not be interpreted as evidence of equivalence.
+
+\subsection{Disambiguation Probe Design (Proposed)}
+
+Two offline-verified probe fixtures are specified and implemented (HTML fixture, unit tests, and protocol document; see \texttt{DISAMBIGUATION\_PROBES\_PROTOCOL.md}):
+\begin{itemize}
+    \item \textbf{Probe A:} Disambiguation via \texttt{data-product-id} on visually identical buttons ($n=20$ per arm, 2 arms, 4 position-balanced blocks).
+    \item \textbf{Probe B:} Disambiguation via container \texttt{aria-label} on a non-interactive span (observability confirmed absent at Stage 4 by live trace; tests agent reliance on invisible channel).
+\end{itemize}
+\textbf{These probes have not been executed.} They constitute a proposed follow-up experimental protocol, not empirical findings. Power at $n=20$ per arm for Probe A (detecting ABS$=50\%$ vs. DATA-CFG$=90\%$, $\Delta=0.40$, $\alpha_{\mathrm{adj}}=0.025$) is approximately $78\%$---adequate for large effects but not for moderate ones.
+
+% ----------------------------------------------------------
+\section{Results Summary}
+\label{sec:results}
+
+\begin{enumerate}
+    \item \textbf{JSON-LD:} Confirmed absent from Stage 4 output in all tested configurations (\texttt{DISABLED\_ELEMENTS} gate). Evidence: source-code inspection + \texttt{test\_observation\_pipeline\_stages.py}.
+    \item \textbf{Non-interactive container \texttt{aria-label}:} Confirmed absent from Stage 4 output under both default and extended attribute configurations. Evidence: source-code inspection (lines 1046--1051) + live runtime trace on \texttt{disambiguation\_probe\_b.html}.
+    \item \textbf{Custom \texttt{data-*} (default):} Absent from Stage 4. Evidence: attribute whitelist inspection + \texttt{test\_observation\_pipeline\_stages.py}.
+    \item \textbf{Custom \texttt{data-*} (extended):} Present in Stage 4 on interactive elements. Evidence: live runtime trace.
+    \item \textbf{Operational selector correspondence (\texttt{\#home}):} 27/34 = 79.4\% (7 badge false-positives). Evidence: live CDP audit.
+    \item \textbf{Semantic recall on leaf interactive controls (\texttt{\#home}):} 26/26 = 100.0\%. Scoped to this fixture and route only.
+    \item \textbf{Pilot behavioral outcome:} 41/41 completed runs successful ($100\%$, zero variance). No treatment effect detectable. Ceiling effect confirmed.
+    \item \textbf{Statistical power at $n=20$:} 11.5\% for $\Delta=0.20$. The pilot is severely underpowered.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Implications for Observation Design}
+
+The serialization gap is not merely a performance issue---it is a validity threat to any experiment that modifies HTML metadata channels without verifying prompt delivery. If a researcher evaluates agent performance across markup variants without confirming that the target channel reaches Stage 4 (or Stage 5), they may inadvertently test identical baselines while attributing differences to invisible markup.
+
+\subsection{Benefits and Risks of Aggressive Pruning}
+
+Heuristic pruning reduces context window consumption and filters noisy boilerplate. However, it discards structured semantic metadata that web authors may specifically provide for agent consumption. Our audit shows that WAI-ARIA enrichment of interactive elements (buttons) survives default serialization, while enrichment of non-interactive containers does not. This has direct implications for proposals to enrich accessibility trees for AI agents.
+
+\subsection{Out-of-Band Interfaces}
+
+The findings suggest that proposals to enrich DOM markup for AI agents face fundamental pipeline limitations. Emerging out-of-band protocols~\cite{llmstxt2024, mcp2024} offer a cleaner separation of concerns, delivering machine-readable context directly without traversing the serialization pipeline.
+
+% ----------------------------------------------------------
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{enumerate}
+    \item \textbf{Single-framework scope:} All serialization findings apply to \texttt{browser-use 0.13.10} only. Other frameworks (BrowserGym, Stagehand, Skyvern, Crawl4AI) employ different pipelines.
+    \item \textbf{Text-only observation:} Multimodal agents with screenshot access bypass DOM serialization entirely.
+    \item \textbf{Controlled synthetic fixture:} The TechMart benchmark isolates markup channels but does not replicate real-world website complexity.
+    \item \textbf{Stage 5 not fully inspected:} The complete assembled LLM prompt was not intercepted in this study. Reachability claims are limited to Stage 4 (serializer output).
+    \item \textbf{Ceiling effect and incomplete behavioral study:} The 41-trial pilot (39 eligible, 2 quarantined) exhibited zero variance. The remaining 31 scheduled units were halted by the budget ceiling. No causal behavioral effects have been established.
+    \item \textbf{Fixture scope for correspondence census:} The AXTree correspondence results cover four routes of a single controlled SPA. Generalization to real-world websites or other accessibility implementations is not supported.
+    \item \textbf{LLM endpoint version unverified:} The exact checkpoint behind \texttt{gemini-flash-lite-latest} was not confirmed, limiting strict reproducibility of pilot behavioral outcomes.
+    \item \textbf{Probes A and B unexecuted:} These are proposed follow-up experiments awaiting explicit authorization and budget allocation.
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+We have presented an empirical systems audit of the DOM serialization gap in \texttt{browser-use 0.13.10}, establishing that the default text-only observation pipeline deterministically excludes Schema.org JSON-LD, strips \texttt{aria-label} from non-interactive containers at Stage 4 (verified by live runtime trace), and omits custom \texttt{data-*} attributes. A controlled correspondence audit across four routes confirms that browser-use's heuristic selectors achieve $79.4\%$ operational correspondence and $100\%$ semantic recall on genuine interactive controls for the audited TechMart fixture---a fixture-specific result. We have quantified severe underpowering at pilot scale ($11.5\%$ for $\Delta=0.20$), disclosed the Action-Label Co-Location Confound, and provided an independently reproducible offline verification suite. Establishing behavioral effects requires dedicated disambiguation probes with at least $n \approx 97$--125 trials per arm and a resolved methodology for the co-location confound.
+
+\textbf{Future work:} (1) Execute Probes A and B under preregistered analysis plans with explicit human authorization. (2) Extend the pipeline audit to BrowserGym, Stagehand, and Playwright-based agents. (3) Verify LLM endpoint pinning for reproducibility. (4) Investigate whether Stage 5 prompt assembly (system prompt, task instruction, history, page URL) compensates for any Stage 4 information losses.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\clearpage
+\appendix
+
+\section{Offline Statistical Pipeline Verification Benchmark}
+\label{app:benchmark}
+
+\textbf{Synthetic Software Benchmark Disclaimer:} The metrics in Tables~\ref{tab:synth1} and~\ref{tab:synth2} are generated from a mock/synthetic benchmark dataset (\texttt{test\_scratch\_synthetic\_data/dataset\_1\_valid\_complete.csv}) to verify that \texttt{analyze\_v3\_results.py} executes without numerical or serialization errors. \textbf{They do not represent real agent task performance.}
+
+\begin{table*}[ht]
+\centering
+\small
+\caption{Synthetic software pipeline output: Unpooled sensitivity contrasts across baseline arms (Tasks T1--T5, Bonferroni $\alpha = 0.0100$ for 5 contrasts). Pooling baseline conditions is rejected to prevent the Equivalence Fallacy in the absence of a formal TOST margin.}
+\label{tab:synth1}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
+\toprule
+\textbf{Contrast ID} & \shortstack{\textbf{Treatment} \\ \scriptsize($n/N$, \%)} & \shortstack{\textbf{Reference} \\ \scriptsize($n/N$, \%)} & \shortstack{\textbf{Risk Diff} \\ \scriptsize($\hat{\theta}$)} & \textbf{Newcombe 95\% CI} & \shortstack{\textbf{CMH} \\ \scriptsize($\chi^2$)} & \shortstack{\textbf{Adjusted} \\ \scriptsize($p$-value)} \\
+\midrule
+\textsc{ARIA vs BASELINE (ABS)}          & 14 / 20 (70.0\%) & 13 / 20 (65.0\%) & \textbf{+0.0500} & [-0.2312, +0.3168] & 0.000 & 1.0000 \\
+\textsc{ARIA vs BASELINE\_REP (VIS)}      & 14 / 20 (70.0\%) & 12 / 20 (60.0\%) & \textbf{+0.1000} & [-0.1901, +0.3644] & 0.178 & 1.0000 \\
+\textsc{DATA-CFG vs BASELINE (ABS)}      & 17 / 20 (85.0\%) & 13 / 20 (65.0\%) & \textbf{+0.2000} & [-0.0754, +0.4320] & 1.488 & 1.0000 \\
+\textsc{DATA-CFG vs BASELINE\_REP (VIS)}  & 17 / 20 (85.0\%) & 12 / 20 (60.0\%) & \textbf{+0.2500} & [-0.0267, +0.4795] & 2.404 & 0.6050 \\
+\textsc{ARIA vs DATA-CFG}               & 14 / 20 (70.0\%) & 17 / 20 (85.0\%) & \textbf{-0.1500} & [-0.3751, +0.0906] & 0.683 & 1.0000 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\begin{table*}[ht]
+\centering
+\small
+\caption{Baseline stability and quality control check on synthetic benchmark data.}
+\label{tab:synth2}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Success ($n/N$)} & \textbf{Success Rate} & \textbf{Difference ($\Delta$)} & \textbf{Fisher's Exact Test} \\
+\midrule
+\textsc{BASELINE (ABS)}     & 13 / 20 & 65.0\% & \multirow{2}{*}{$+0.0500$ (95\% CI: $[-0.2312, +0.3168]$)} & \multirow{2}{*}{$p = 1.0000$ (two-tailed)} \\
+\textsc{BASELINE\_REP (VIS)} & 12 / 20 & 60.0\% & & \\
+\midrule
+\multicolumn{5}{p{\dimexpr\textwidth-2\tabcolsep\relax}}{\textbf{Methodological Decision on Baseline Pooling:} The two-tailed Fisher's exact test fails to reject the null hypothesis of equal baseline performance ($p = 1.0000 \ge 0.05$). Under statistical equivalence principles, failure to detect a difference cannot be equated with evidence of equivalence (\textit{The Equivalence Fallacy}). In the absence of an \textit{a priori} prespecified Two One-Sided Tests (TOST) equivalence margin ($\delta_{\text{equiv}}$), pooling the two baseline conditions is unjustified. Consequently, baseline conditions are evaluated and reported unpooled in all primary sensitivity contrasts (Table~\ref{tab:synth1}).} \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\FloatBarrier
+
+\section{Offline Reproducibility Instructions}
+\label{app:reproduce}
+
+All systems findings and statistical bounds can be reproduced offline without network access or live API calls. Estimated runtime: $\leq 30$ seconds for tests, $\leq 15$ seconds for power simulation.
+
+\begin{enumerate}
+    \item \textbf{Full regression test suite (191 tests):}
+\begin{lstlisting}
+python -m unittest test_data_reconciliation_and_provenance \
+  test_disambiguation_probes test_analyze_v3_results \
+  test_forensic_audit_regressions test_power_audit \
+  test_observation_pipeline_stages
+\end{lstlisting}
+Expected: \texttt{Ran 191 tests in $\sim$21s --- OK} (Exit 0).
+
+    \item \textbf{Power simulation (Table~\ref{tab:power}):}
+\begin{lstlisting}
+python reproduce_power_audit.py
+\end{lstlisting}
+
+    \item \textbf{Serializer pipeline inspection (source + live):}
+\begin{lstlisting}
+python scratch/inspect_serializer_boundary.py
+\end{lstlisting}
+
+    \item \textbf{Multi-route AXTree correspondence:}
+\begin{lstlisting}
+python audit_route_controls_and_correspondence.py
+\end{lstlisting}
+
+    \item \textbf{Baseline data hash verification:}
+\begin{lstlisting}
+python scripts/verify_hashes.py
+\end{lstlisting}
+Expected: 48 artifacts verified.
+
+    \item \textbf{Ledger reconciliation:}
+\begin{lstlisting}
+python scripts/independent_ledger_audit.py
+\end{lstlisting}
+\end{enumerate}
+
+\FloatBarrier
+
+\section{Diagnostic Hardware Runs (Exploratory)}
+\label{app:local_diagnostics}
+
+Five exploratory diagnostic runs were conducted on local hardware (ASUS TUF Gaming A15, AMD Ryzen 7 7435HS, 16 GB RAM, NVIDIA RTX 2050 4 GB) using quantized \texttt{qwen2.5:7b-instruct-q4\_K\_M} via Ollama to test the experiment harness watchdog and cancellation mechanics. These runs were strictly for harness debugging; they are excluded from all scientific analysis. GPU offload was not utilized during these runs.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Exploratory diagnostic harness runs (Task T2). Excluded from confirmatory analysis.}
+\label{tab:qwen_runs}
+\begin{tabular}{llll}
+\toprule
+\textbf{Run ID} & \textbf{Duration} & \textbf{Steps} & \textbf{Observed Mechanism} \\
+\midrule
+\texttt{qwen\_diag\_001} & 3.3 s    & 0 & Pydantic validator exception \\
+\texttt{qwen\_diag\_002} & 1013 s   & 2 & Missing outer watchdog \\
+\texttt{qwen\_diag\_003} & 289 s    & 2 & 180 s watchdog triggered \\
+\texttt{qwen\_diag\_004} & 186 s    & 1 & Cancellation telemetry dropped \\
+\texttt{qwen\_diag\_005} & 189 s    & 1 & Cancellation captured correctly \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\section{In-Process Quota Governance}
+\label{app:quota}
+
+API requests are bounded by a thread-safe, fail-closed quota architecture in \texttt{budget\_controller.py}: pre-dispatch reservation, atomic counter persistence, post-dispatch token reconciliation, and trial finalization decoupling. This guarantees strict client-side ceilings but does not replace provider-side billing caps. Total API spend in this project is bounded by the persistent ledger (\texttt{results/daily\_quota\_ledger.json}).
+
+\end{document}

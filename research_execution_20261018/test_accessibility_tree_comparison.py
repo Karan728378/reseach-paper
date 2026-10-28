@@ -10,7 +10,7 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-WORKSPACE_ROOT = Path(r"C:\testing")
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 RESEARCH_DIR = WORKSPACE_ROOT / "research_execution_20261018"
 JSON_PATH = RESEARCH_DIR / "accessibility_tree_comparison.json"
 MD_PATH = RESEARCH_DIR / "ACCESSIBILITY_TREE_COMPARISON.md"

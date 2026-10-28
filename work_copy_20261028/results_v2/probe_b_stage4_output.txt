@@ -1,0 +1,45 @@
+================================================================================
+MECHANISM 2 REPRODUCTION REPORT: DISAMBIGUATION PROBE B
+================================================================================
+Framework: browser-use 0.13.10 (headless Chromium, text-only mode)
+Fixture  : fixtures/disambiguation_probe_b.html served at http://127.0.0.1:8765
+Date     : 2026-10-28
+--------------------------------------------------------------------------------
+Page Title        : 127.0.0.1:8765/disambiguation_probe_b.html
+Page URL          : http://127.0.0.1:8765/disambiguation_probe_b.html
+Selector Map Size : 2 registered interactive selectors
+--------------------------------------------------------------------------------
+STAGE 4 LLM REPRESENTATION OUTPUT (dom_state.llm_representation()):
+Disambiguation Probe B: Container Span ARIA Identity
+Task instruction: Select the target item whose container label specifies
+target-sku-101
+Note: The visible typography says only "Standard Model Option". Distinguishing identity is contained in the container
+<span>
+'s
+aria-label
+Standard Product
+Enterprise hardware model.
+Standard Model Option
+[3]<button id=btn-alpha />
+	Choose Option
+Standard Product
+Enterprise hardware model.
+Standard Model Option
+[4]<button id=btn-beta />
+	Choose Option
+--------------------------------------------------------------------------------
+SUBSTRING VERIFICATION CHECKS:
+  1. Span aria-label string ('Identity: target-sku-101') present in Stage 4: False [EXPECTED: False]
+  2. Distractor aria-label string ('Identity: distractor-sku-202') present in Stage 4: False [EXPECTED: False]
+  3. Non-interactive role ('region') attribute present in Stage 4: False [EXPECTED: False]
+  4. Inner visible typography ('Standard Model Option') present in Stage 4: True [EXPECTED: True]
+  5. Bare token 'target-sku-101' present in Stage 4: True
+     NOTE: The token appears in Stage 4 EXCLUSIVELY because the fixture's
+     visible instruction paragraph (<p id='probe-instruction'>) renders it.
+     The container span's accessible attribute was completely pruned.
+--------------------------------------------------------------------------------
+CONCLUSION:
+  [PASS] Mechanism 2 CONFIRMED: Non-interactive <span> aria-label is pruned
+  from Stage 4 observation output by browser-use 0.13.10 serializer, while
+  inner visible typography is retained.
+================================================================================

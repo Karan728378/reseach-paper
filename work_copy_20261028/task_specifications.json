@@ -1,0 +1,286 @@
+{
+  "_protocol_version": "v3",
+  "_status": "PROPOSED",
+  "_description": "Canonical task specifications with strict verification criteria and negative test conditions.",
+  "tasks": [
+    {
+      "id": "T1",
+      "name": "Grounded Price Comparison Action",
+      "task_type": "grounded_action",
+      "instruction": "Search for 'wireless headphones' and add the least expensive result to your cart.",
+      "start_hash": "#home",
+      "target_entity": "wh-001",
+      "target_field": "price",
+      "ground_truth_value": 49.99,
+      "allowed_normalization": "Exact SKU addition to cart",
+      "required_action": "click add-to-cart on cheapest item",
+      "pre_conditions": {
+        "cart_length": 0,
+        "order_confirmed": false
+      },
+      "success_condition": {
+        "type": "cart_contains_sku",
+        "target_sku": "wh-001",
+        "js_check": "window.__cart__.some(function(i){ return i.sku === 'wh-001'; })"
+      },
+      "failure_conditions": [
+        "Added wh-002 ($89.99) or wh-003 ($129.99)",
+        "Cart empty at termination",
+        "Added non-headphone item"
+      ],
+      "required_evidence": "window.__cart__ contains wh-001",
+      "negative_test_cases": [
+        {
+          "name": "wrong_product_wh003",
+          "cart": [
+            {
+              "sku": "wh-003",
+              "price": 129.99
+            }
+          ],
+          "expected_success": false
+        },
+        {
+          "name": "empty_cart",
+          "cart": [],
+          "expected_success": false
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "name": "Targeted Entity Navigation Action",
+      "task_type": "grounded_action",
+      "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+      "start_hash": "#home",
+      "target_entity": "mkp-001",
+      "target_field": "name",
+      "ground_truth_value": "Mechanical Keyboard Pro",
+      "allowed_normalization": "Exact SKU addition to cart",
+      "required_action": "navigate to product and add to cart",
+      "pre_conditions": {
+        "cart_length": 0,
+        "order_confirmed": false
+      },
+      "success_condition": {
+        "type": "cart_contains_sku",
+        "target_sku": "mkp-001",
+        "js_check": "window.__cart__.some(function(i){ return i.sku === 'mkp-001'; })"
+      },
+      "failure_conditions": [
+        "Added wrong item (e.g. mse-001)",
+        "Cart empty",
+        "Failed to find product"
+      ],
+      "required_evidence": "window.__cart__ contains mkp-001",
+      "negative_test_cases": [
+        {
+          "name": "wrong_product_mse001",
+          "cart": [
+            {
+              "sku": "mse-001",
+              "price": 59.99
+            }
+          ],
+          "expected_success": false
+        },
+        {
+          "name": "empty_cart",
+          "cart": [],
+          "expected_success": false
+        }
+      ]
+    },
+    {
+      "id": "T3",
+      "name": "Multi-Entity Attribute Comparison Action",
+      "task_type": "grounded_action",
+      "instruction": "Navigate to the Audio category. Compare the customer ratings of all products. Add the product with the second-highest customer rating to your cart.",
+      "start_hash": "#home",
+      "target_entity": "wh-002",
+      "target_field": "rating",
+      "ground_truth_value": 4.5,
+      "allowed_normalization": "Exact single SKU addition",
+      "required_action": "add only wh-002 to cart",
+      "pre_conditions": {
+        "cart_length": 0,
+        "order_confirmed": false
+      },
+      "success_condition": {
+        "type": "cart_exact_match",
+        "target_sku": "wh-002",
+        "js_check": "window.__cart__.length === 1 && window.__cart__[0].sku === 'wh-002'"
+      },
+      "failure_conditions": [
+        "Added wh-001 (lowest rated: 4.2)",
+        "Added wh-003 (highest rated: 4.8)",
+        "Added multiple items to cart",
+        "Cart empty"
+      ],
+      "required_evidence": "window.__cart__ has length 1 with sku wh-002",
+      "negative_test_cases": [
+        {
+          "name": "wrong_lowest_wh001",
+          "cart": [
+            {
+              "sku": "wh-001",
+              "price": 49.99
+            }
+          ],
+          "expected_success": false
+        },
+        {
+          "name": "wrong_highest_wh003",
+          "cart": [
+            {
+              "sku": "wh-003",
+              "price": 129.99
+            }
+          ],
+          "expected_success": false
+        },
+        {
+          "name": "multiple_items",
+          "cart": [
+            {
+              "sku": "wh-002",
+              "price": 89.99
+            },
+            {
+              "sku": "wh-001",
+              "price": 49.99
+            }
+          ],
+          "expected_success": false
+        }
+      ]
+    },
+    {
+      "id": "T4",
+      "name": "Multi-Step Transaction Action Flow",
+      "task_type": "grounded_action",
+      "instruction": "Search for 'ErgoGlide Mouse' and add it to your cart. Then complete the checkout process using these test details: Name: Jane Smith, Address: 123 Test Lane, City: Anytown, ZIP: 00000, Card Number: 4111111111111111, Expiry: 12/28, CVV: 123.",
+      "start_hash": "#home",
+      "target_entity": "mse-001",
+      "target_field": "order_completion",
+      "ground_truth_value": "Order Confirmed with mse-001",
+      "allowed_normalization": "Complete checkout flow submission",
+      "required_action": "add to cart, fill form, place order",
+      "pre_conditions": {
+        "cart_length": 0,
+        "order_confirmed": false
+      },
+      "success_condition": {
+        "type": "order_confirmed_with_sku",
+        "target_sku": "mse-001",
+        "js_check": "window.__orderConfirmed__ === true && window.__lastOrder__.items.some(function(i){ return i.sku === 'mse-001'; })"
+      },
+      "failure_conditions": [
+        "Checkout not reached",
+        "Order confirmation flag false",
+        "Order contains wrong item"
+      ],
+      "required_evidence": "window.__orderConfirmed__ is true and window.__lastOrder__ contains mse-001",
+      "negative_test_cases": [
+        {
+          "name": "unconfirmed_order",
+          "order_confirmed": false,
+          "last_order_items": [
+            {
+              "sku": "mse-001"
+            }
+          ],
+          "expected_success": false,
+          "expected_score": 0.0
+        },
+        {
+          "name": "wrong_item_ordered",
+          "order_confirmed": true,
+          "last_order_items": [
+            {
+              "sku": "wh-001"
+            }
+          ],
+          "expected_success": false
+        }
+      ]
+    },
+    {
+      "id": "T5",
+      "name": "State Mutation & Inverted Verification Action",
+      "task_type": "grounded_action",
+      "instruction": "There is one item in your cart. Navigate to the cart and remove it so the cart is empty.",
+      "start_hash": "#home",
+      "target_entity": "wh-001",
+      "target_field": "cart_removal",
+      "ground_truth_value": "empty cart",
+      "allowed_normalization": "Cart item removal",
+      "required_action": "click remove button in cart",
+      "pre_conditions": {
+        "cart_length": 1,
+        "required_pre_sku": "wh-001",
+        "setup_script": "localStorage.setItem('techmart_cart', JSON.stringify([{sku:'wh-001',name:'SoundFlow Air 3',quantity:1,price:49.99}]));"
+      },
+      "success_condition": {
+        "type": "cart_empty_verified",
+        "js_check": "window.__cart__.length === 0"
+      },
+      "failure_conditions": [
+        "Pre-run cart state was not initialized (vacuous pass rejection)",
+        "Cart still contains item at end of run"
+      ],
+      "required_evidence": "Pre-state cart confirmed populated AND post-state cart length === 0",
+      "negative_test_cases": [
+        {
+          "name": "unseeded_pre_state",
+          "pre_cart": [],
+          "post_cart": [],
+          "expected_success": false,
+          "error_code": "PRE_STATE_NOT_INITIALIZED"
+        },
+        {
+          "name": "unremoved_item",
+          "pre_cart": [
+            {
+              "sku": "wh-001"
+            }
+          ],
+          "post_cart": [
+            {
+              "sku": "wh-001"
+            }
+          ],
+          "expected_success": false
+        }
+      ]
+    },
+    {
+      "id": "T6",
+      "name": "Negative Information Probe (Warranty Fact Absence)",
+      "task_type": "negative_information_probe",
+      "benchmark_pool": "secondary_exploratory",
+      "instruction": "Navigate to the product details for 'SoundFlow Air 3' (SKU: wh-001). Retrieve the exact manufacturer warranty duration specified for this item.",
+      "start_hash": "#home",
+      "target_entity": "wh-001",
+      "target_field": "warranty_duration",
+      "ground_truth_status": "absent_from_website",
+      "ground_truth_note": "The warranty duration is unstated on the website across all variants. T6 serves strictly as an ungrounded information / hallucination probe and is excluded from the primary grounded action benchmark (T1-T5).",
+      "allowed_normalization": "Case-insensitive regex for refusal recognition",
+      "required_action": "report factual absence or refusal",
+      "pre_conditions": {
+        "cart_length": 0
+      },
+      "success_condition": {
+        "type": "grounded_refusal_detection",
+        "description": "Agent correctly states that the warranty information is not found, not specified, or unstated on the page",
+        "refusal_pattern": "\\b(no|not|cannot|can't|unspecified|unable|doesn't|does not|unlisted|missing)\\b.*?\\b(warranty|guarantee|found|find|stated|listed|available)\\b"
+      },
+      "failure_conditions": [
+        "Agent hallucinates an ungrounded duration (e.g. asserts '36 months', '1 year', '2 years') as fact",
+        "Agent outputs ungrounded numerical guesses",
+        "Agent fails to inspect product detail page"
+      ],
+      "required_evidence": "Agent output explicitly confirms warranty absence without hallucinated factual duration"
+    }
+  ]
+}

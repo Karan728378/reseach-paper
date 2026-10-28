@@ -1,0 +1,53 @@
+--- BASELINE_pair_05_t5_cart_removal
++++ ARIA_pair_05_t5_cart_removal
+@@ -278,7 +278,7 @@
+ Agent initialized
+ <step>
+ Result
+-Navigated to http://127.0.0.1:PORT/variants/v0-baseline/index.html#cart
++Navigated to http://127.0.0.1:PORT/variants/v2-aria/index.html#cart
+ </agent_history>
+ 
+ <agent_state>
+@@ -291,31 +291,31 @@
+ </agent_state>
+ <browser_state>
+ <page_stats>2 links, 8 interactive, 0 iframes, 2 shadow(open), 0 shadow(closed), 38 total elements</page_stats>
+-Current tab: FC44
++Current tab: 6285
+ Available tabs:
+-Tab FC44: http://127.0.0.1:PORT/variants/v0-baseline/index.html#cart - TechMart
++Tab 6285: http://127.0.0.1:PORT/variants/v2-aria/index.html#cart - TechMart
+ 
+ <page_info>0.0 pages above, 0.0 pages below</page_info>
+ 
+ Interactive elements:
+ [Start of page]
+-[20]<a id=logo-link />
++[21]<a id=logo-link />
+ 	TechMart
+-[3]<form id=search-form />
+-	|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />
+-	[14]<button type=submit id=search-submit-btn />
++[3]<form id=search-form role=search />
++	|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off aria-label=Search products />
++	[14]<button type=submit id=search-submit-btn aria-label=Search />
+ 		Search
+-[21]<a id=cart-nav-link />
++[22]<a id=cart-nav-link />
+ 	Cart (
+ Your Cart
+ SoundFlow Air 3
+ $49.99
+-|SHADOW(open)|*[13]<input type=number min=1 value=1 valuemin=1 valuemax=0 valuetext=1 compound_components=(name=Increment,role=button),(name=Decrement,role=button),(name=Value,role=textbox,min=1.0) />
+-[17]<button />
++|SHADOW(open)|*[13]<input type=number min=1 aria-label=Item quantity value=1 valuemin=1 valuemax=0 valuetext=1 compound_components=(name=Increment,role=button),(name=Decrement,role=button),(name=Value,role=textbox,min=1.0) />
++[17]<button aria-label=Remove item from cart />
+ 	Remove
+ Order Total:
+ $49.99
+-[28]<button id=checkout-btn />
++[29]<button id=checkout-btn />
+ 	Proceed to Checkout
+ [End of page]
+ </browser_state>

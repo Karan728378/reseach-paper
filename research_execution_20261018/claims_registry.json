@@ -1,0 +1,104 @@
+{
+  "audit_timestamp": "2026-10-26T19:42:46.136945+00:00",
+  "statistical_simulation_results": {
+    "simulation_method": "Cochran-Mantel-Haenszel (CMH) with 0.5 continuity correction",
+    "iterations": 10000,
+    "seed": 42,
+    "power_delta_0_70": {
+      "power_pct": 98.77,
+      "mc_se_pct": 0.11
+    },
+    "power_delta_0_35": {
+      "power_pct": 48.51,
+      "mc_se_pct": 0.5
+    },
+    "power_delta_0_20": {
+      "power_pct": 11.45,
+      "mc_se_pct": 0.32
+    },
+    "power_delta_0_15": {
+      "power_pct": 5.58,
+      "mc_se_pct": 0.23
+    },
+    "null_rejection_rate_alpha_0_0167": {
+      "rejection_pct": 0.57,
+      "mc_se_pct": 0.08
+    }
+  },
+  "pilot_observed_results": {
+    "model": "gemini-3.1-flash-lite (harness alias gemini-flash-lite-latest)",
+    "denominator_primary": 39,
+    "success_rate_primary": {
+      "ABS": {
+        "success": 13,
+        "total": 13,
+        "rate": 1.0,
+        "clopper_pearson_95_ci": [
+          0.7529,
+          1.0
+        ]
+      },
+      "ARIA": {
+        "success": 13,
+        "total": 13,
+        "rate": 1.0,
+        "clopper_pearson_95_ci": [
+          0.7529,
+          1.0
+        ]
+      },
+      "DATA-CFG": {
+        "success": 13,
+        "total": 13,
+        "rate": 1.0,
+        "clopper_pearson_95_ci": [
+          0.7529,
+          1.0
+        ]
+      }
+    },
+    "pairwise_risk_difference_ci_uncorrected_newcombe": [
+      -0.2281,
+      0.2281
+    ],
+    "interpretation": "Harness stability observation under a ceiling effect; does not test hypothesis or prove sufficiency."
+  },
+  "interactive_control_census": {
+    "route": "#home",
+    "anchor_links": 11,
+    "buttons": 14,
+    "inputs": 1,
+    "leaf_controls_total": 26,
+    "container_forms": 1,
+    "container_inclusive_total": 27,
+    "heuristic_misclassified_spans": 7,
+    "browser_use_emitted_selectors": 34,
+    "leaf_control_ax_match_rate": 1.0,
+    "circularity_disclosure": "Selector map interactive determination directly queries node.ax_node.role from Blink AXTree; correspondence is partially circular by construction."
+  },
+  "pruning_rules_verified": {
+    "disabled_elements": [
+      "style",
+      "script",
+      "head",
+      "meta",
+      "link",
+      "title"
+    ],
+    "disabled_elements_code": "serializer.py L18, L481",
+    "interactivity_gate_code": "serializer.py L1046-L1051",
+    "attribute_whitelist_code": "views.py L18 (DEFAULT_INCLUDE_ATTRIBUTES), serializer.py L1214",
+    "jsonld_pruning_stage": "Stage 2 (Element Pruning via DISABLED_ELEMENTS)",
+    "developer_data_pruning_stage": "Stage 4 (Attribute Whitelist Filtering)"
+  },
+  "banned_or_deprecated_phrases": [
+    "independently reproduced",
+    "independently reproducible",
+    "191 tests across 23 modules",
+    "visible typography alone was fully sufficient",
+    "not previously audited",
+    "fundamental pipeline limitations",
+    "validity threat to any experiment",
+    "spatial reasoning"
+  ]
+}

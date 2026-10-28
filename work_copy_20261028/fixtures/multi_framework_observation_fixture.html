@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Framework Observation Audit Benchmark Fixture</title>
+  <!-- 1. Schema.org JSON-LD in script tag -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "Wireless Headphones Pro",
+    "sku": "target-sku-101",
+    "offers": {
+      "@type": "Offer",
+      "price": "49.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; }
+    .card { background: #fff; padding: 1.5rem; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 400px; }
+    .product-badge { display: inline-block; padding: 0.25rem 0.5rem; background: #e0f2fe; color: #0369a1; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <!-- 5. Visible text -->
+  <h1 id="title">Wireless Headphones Pro</h1>
+  <p class="desc">High-fidelity audio with 30h battery life.</p>
+  <p class="price-text">$49.99 in stock</p>
+
+  <div class="card">
+    <!-- 3. Non-interactive span with aria-label -->
+    <span class="product-badge" id="badge-discount" aria-label="Special Discount: 20% off">Discount Available</span>
+
+    <!-- 2. Interactive control with aria-label -->
+    <div style="margin-top: 1rem;">
+      <button id="btn-buy" aria-label="Confirm Purchase of Wireless Headphones Pro">Buy Now</button>
+    </div>
+
+    <!-- 4. Custom data-* attribute on interactive button -->
+    <div style="margin-top: 0.5rem;">
+      <button id="btn-quick" data-product-id="target-sku-101" data-action="quick-checkout">Quick Buy</button>
+    </div>
+
+    <!-- 6. Nested interactive control -->
+    <div style="margin-top: 0.5rem;">
+      <a href="#product/wh-001" id="link-parent">
+        <button id="btn-nested">Open Product Card</button>
+      </a>
+    </div>
+
+    <!-- 7. Hidden control -->
+    <div style="margin-top: 0.5rem;">
+      <button id="btn-hidden" style="display: none;" aria-hidden="true">Hidden Admin Action</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+% TikZ Architecture Pipeline Diagram for "The DOM Serialization Gap"
+% Depicts the 5-stage transformation pipeline, pruning bottlenecks, and auxiliary channels.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm and 0.8cm,
+    box/.style={draw, rounded corners=3pt, thick, align=center, fill=blue!5, font=\footnotesize, inner sep=6pt},
+    prunebox/.style={draw=red!70!black, dashed, rounded corners=3pt, thick, align=left, fill=red!5, font=\scriptsize, inner sep=5pt},
+    survivebox/.style={draw=green!60!black, rounded corners=3pt, thick, align=left, fill=green!5, font=\scriptsize, inner sep=5pt},
+    arrow/.style={->, >=stealth, thick, color=gray!80!black},
+    prunearrow/.style={->, >=stealth, dashed, thick, color=red!70!black}
+]
+
+% Top Pipeline Stages
+\node[box, fill=gray!10] (s1) {\textbf{Stage 1: Source HTML \& Live DOM}\\
+\texttt{<script type="application/ld+json">} (JSON-LD)\\
+\texttt{<span aria-label="Price: \$49">\$49</span>} (Non-interactive ARIA)\\
+\texttt{<button data-action="add-cart">} (Custom \texttt{data-*})\\
+\texttt{<button aria-label="Add item">} (Button ARIA)\\
+\texttt{"SoundFlow Air 3"} (Visible Typography)};
+
+\node[box, right=1.2cm of s1, fill=blue!8] (s2) {\textbf{Stage 2: Chromium Blink AXTree}\\
+\textit{CDP Accessibility.getFullAXTree}\\
+AXObjectCache generates accessibility nodes.\\
+$\bullet$ JSON-LD: Omitted (non-rendered)\\
+$\bullet$ Button ARIA: Retained (\texttt{role: button})\\
+$\bullet$ Non-Interactive ARIA: \textbf{Retained} (\texttt{name: "Price"})\\
+$\bullet$ Custom \texttt{data-*}: Omitted (non-semantic)};
+
+\node[box, right=1.2cm of s2, fill=purple!8] (s3) {\textbf{Stage 3: browser-use Serializer}\\
+\textit{Tree Pruning \& Filtering (v0.13.10)}\\
+Constructs internal \texttt{selector\_map}.\\
+$\bullet$ \texttt{backendDOMNodeId} matched ($79.4\%$)\\
+$\bullet$ 3 Deterministic Pruning Bottlenecks\\
+applied to in-memory DOM nodes};
+
+\node[box, right=1.2cm of s3, fill=orange!10] (s4) {\textbf{Stage 4: Serialized Observation}\\
+\textit{Stringified Markdown / Text Buffer}\\
+$\bullet$ Raw visible typography delivered ($100\%$)\\
+$\bullet$ Interactive button tags \& IDs delivered\\
+$\bullet$ Extended \texttt{data-*} on buttons delivered\\
+$\bullet$ JSON-LD \& Non-interactive ARIA \textbf{LOST}};
+
+\node[box, below=1.8cm of s4, fill=cyan!10] (s5) {\textbf{Stage 5: LLM Context Prompt}\\
+\textit{Language Model Action Planning}\\
+Model perceives serialized text stream.\\
+Decision-making grounded exclusively on\\
+surviving observation channels.};
+
+% Auxiliary Channel
+\node[box, below=1.8cm of s2, fill=yellow!15, draw=orange!80!black] (aux) {\textbf{Auxiliary Channels (Optional)}\\
+$\bullet$ CDP \texttt{Runtime.evaluate} (JavaScript execution)\\
+$\bullet$ Multimodal Vision (Pixel screenshots)\\
+\textit{Bypasses DOM serializer pruning entirely}};
+
+% Connect Main Pipeline
+\draw[arrow] (s1) -- node[above, font=\scriptsize] {Blink Parse} (s2);
+\draw[arrow] (s2) -- node[above, font=\scriptsize] {DOM Walk} (s3);
+\draw[arrow] (s3) -- node[above, font=\scriptsize] {Serialize} (s4);
+\draw[arrow] (s4) -- node[right, font=\scriptsize] {Assemble} (s5);
+
+% Connect Auxiliary Channels
+\draw[arrow, dashed, color=orange!80!black] (s1) |- (aux);
+\draw[arrow, dashed, color=orange!80!black] (aux) -| node[above right, font=\scriptsize] {Tool Calls / Vision} (s5);
+
+% Bottleneck Callouts below Stage 3
+\node[prunebox, below=0.3cm of s3, xshift=-1.5cm] (b1) {
+\textbf{Bottleneck 1: \texttt{DISABLED\_ELEMENTS} (L18)}\\
+\texttt{\{'script', 'meta', 'link', 'title', ...\}}\\
+$\implies$ Schema.org JSON-LD dropped ($0\%$ reachability)
+};
+
+\node[prunebox, below=0.3cm of s3, xshift=1.8cm] (b2) {
+\textbf{Bottleneck 2: Tag Stripping (L1046--1058)}\\
+\texttt{if not (is\_interactive or is\_scrollable):}\\
+$\implies$ Spans/divs tagless; parent ARIA dropped!
+};
+
+\node[survivebox, below=1.5cm of s3] (b3) {
+\textbf{Bottleneck 3: Attribute Whitelist (L18--45)}\\
+\texttt{DEFAULT\_INCLUDE\_ATTRIBUTES}: Custom \texttt{data-*} dropped.\\
+\textit{Extended Whitelist}: \texttt{data-*} delivered on interactive buttons only.
+};
+
+\draw[prunearrow] (s3.south) -- (b1.north);
+\draw[prunearrow] (s3.south) -- (b2.north);
+\draw[arrow] (s3.south) -- (b3.north);
+
+\end{tikzpicture}
+\caption{End-to-end architecture of the autonomous browser agent observation pipeline (\texttt{browser-use 0.13.10}). Web markup transitions across five discrete representations from source HTML to final LLM prompt. Three deterministic pruning bottlenecks in Stage 3 selectively purge structured Schema.org JSON-LD, strip non-interactive WAI-ARIA annotations, and filter custom developer attributes. Auxiliary channels (CDP JavaScript evaluation or visual screenshots) bypass serializer pruning entirely.}
+\label{fig:pipeline_architecture}
+\end{figure*}

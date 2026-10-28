@@ -1,0 +1,38 @@
+{
+  "trial_type": "local_qwen3_smoke_test",
+  "run_id": "qwen3_smoke_001_init_failed",
+  "model_id": "qwen3:4b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "context_window": 4096,
+  "task_id": "T2",
+  "arm": "DATA-CFG",
+  "variant": "v3-data-attrs",
+  "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+  "timestamps": {
+    "start": "2026-10-24T12:47:59.715545",
+    "end": "2026-10-24T12:48:03.058233",
+    "duration_seconds": 3.343
+  },
+  "total_steps": 0,
+  "status": "failed",
+  "termination_reason": "init_exception",
+  "error_message": "max_history_items must be None or greater than 5",
+  "agent_final_text": "",
+  "actions_executed": [],
+  "terminal_cart_state": [],
+  "verifier_outcome": {
+    "success": false,
+    "score": 0.0,
+    "details": {}
+  },
+  "financial_cost_usd": 0.0,
+  "resource_snapshot": {
+    "free_ram_mb": 5964.4,
+    "gpu_vram": {
+      "available": true,
+      "total_vram_mb": 4096.0,
+      "used_vram_mb": 721.0,
+      "free_vram_mb": 3242.0
+    }
+  }
+}

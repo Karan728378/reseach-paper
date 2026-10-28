@@ -17,7 +17,7 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-OUTPUT_DIR = Path("C:/testing/research_execution_20261018")
+OUTPUT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def norm_cdf(x):

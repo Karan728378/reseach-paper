@@ -1,0 +1,69 @@
+======================================================================
+MANUSCRIPT COMPILATION & BUILD STATUS AUDIT
+Source Document: research_paper_final.tex
+Bibliography: references.bib
+Compilation Engine: TeX Live 2026 (pdflatex / Overleaf workflow)
+Local Host Environment: Windows 11 / Python 3.11.9
+Build Status: READY FOR EXTERNAL COMPILATION / LOCAL TOOLCHAIN ABSENT
+Visual QA Status: UNVERIFIED (Awaiting External Render via Overleaf)
+Timestamp (UTC): 2026-10-27T19:20:00Z
+======================================================================
+
+1. LOCAL COMPILER DISCOVERY
+----------------------------------------------------------------------
+Checked system PATH for LaTeX compilers:
+  - pdflatex: NOT FOUND on host PATH
+  - xelatex:  NOT FOUND on host PATH
+  - lualatex: NOT FOUND on host PATH
+  - latexmk:  NOT FOUND on host PATH
+  - tectonic: NOT FOUND on host PATH
+
+Pursuant to Non-Negotiable Rule 8:
+"Do not substitute a static source scan or a generated checklist for rendered-page inspection. If visual rendering is unavailable, explicitly mark visual QA as UNVERIFIED and provide the exact remaining steps."
+
+Local PDF compilation was not executed because the pdflatex executable is not installed on this host environment. Compilation must occur via Overleaf (TeX Live 2026) or a workstation with TeX Live installed.
+
+2. STATIC PRE-FLIGHT SOURCE VERIFICATION (AST & LINTING)
+----------------------------------------------------------------------
+While visual rendering is UNVERIFIED pending external compilation, static pre-flight syntax and reference checks were executed using Python 3.11:
+
+A. Citation Cross-References (`audit_citation_keys.py`):
+   - Total citation call sites in .tex: 33
+   - Unique cited keys: 25
+   - Total entries in references.bib: 26
+   - Undefined citations ([?]): 0 (PASS)
+   - Duplicate BibTeX keys: 0 (PASS)
+   - Unused BibTeX keys: 1 (wai_aria11)
+
+B. Label and Reference Cross-References (`check_labels_refs.py`):
+   - Total declared labels: 19
+   - Total cross-references (\ref, \pageref, \eqref): 5
+   - Undefined references (??): 0 (PASS)
+
+C. Table Column Specification & Ampersand Balance:
+   - Table I (tab:evidence_classes): tabularx (\columnwidth), 3 cols, 8 rows (PASS)
+   - Table II (tab:retention_matrix): tabular* (\textwidth), 9 cols, 9 rows (PASS)
+   - Table III (tab:solvability): tabularx (\columnwidth), 4 cols, 5 rows (PASS)
+   - Table IV (tab:power): tabular (lcccc), 5 cols, 6 rows (PASS)
+   - Table V (tab:synth1): tabular* (\textwidth), 7 cols, 6 rows (PASS)
+   - Table VI (tab:synth2): tabular* (\textwidth), 5 cols, 3 rows + multicolumn (PASS)
+   - Table VII (tab:qwen_runs): tabular (llll), 4 cols, 7 rows (PASS)
+
+D. Abstract Word Count:
+   - Exactly 198 words (PASS: strictly <= 200 words IEEE limit).
+
+E. Character Escaping in Body Text:
+   - Zero bare unescaped % signs before numbers.
+   - Zero bare unescaped underscores outside math mode, urls, labels, or cite keys.
+
+3. INSTRUCTIONS FOR EXTERNAL COMPILATION (OVERLEAF / TEX LIVE 2026)
+----------------------------------------------------------------------
+To produce the final rendered PDF:
+1. Upload manuscript_submission_bundle.zip (or research_paper_final.tex + references.bib) to Overleaf.
+2. In Overleaf Project Settings, select:
+   - Compiler: pdfLaTeX
+   - TeX Live Version: 2026 (or 2025/2024)
+   - Main Document: research_paper_final.tex
+3. Click Recompile.
+   Expected Outcome: Zero errors, zero undefined citations, zero undefined references.
+======================================================================

@@ -1,0 +1,103 @@
+{
+  "protocol_version": "5.0-CONFIRMATORY",
+  "created_utc": "2026-10-27T01:35:00Z",
+  "status": "FROZEN_PRE_REGISTRATION_ONLY",
+  "study_type": "Randomized Complete Block Design (RCBD)",
+  "evidence_class": "E5",
+  "hypotheses": {
+    "primary": "Expanding DOM whitelist (DATA-CFG) significantly increases task success on attribute-isolated tasks compared to default whitelist (ABS)",
+    "null": "No difference in task success across whitelist configurations (theta_MH = 0)"
+  },
+  "primary_outcome": {
+    "name": "binary_task_success",
+    "type": "binary",
+    "evaluation_method": "DOM-state oracle (localStorage.cart item inspection)",
+    "target_sku": "target-sku-101",
+    "distractor_sku": "distractor-sku-202"
+  },
+  "design": {
+    "arms": [
+      {
+        "id": "ABS",
+        "name": "Default Whitelist Baseline",
+        "attribute_whitelist": "DEFAULT_INCLUDE_ATTRIBUTES",
+        "expected_probe_a_reachability": 0.5
+      },
+      {
+        "id": "ARIA",
+        "name": "ARIA Baseline",
+        "attribute_whitelist": "DEFAULT_INCLUDE_ATTRIBUTES",
+        "expected_probe_b_reachability": 0.5
+      },
+      {
+        "id": "DATA-CFG",
+        "name": "Extended Developer Attribute Whitelist",
+        "attribute_whitelist": "EXTENDED_ATTRIBUTES",
+        "expected_probe_a_reachability": 1.0
+      }
+    ],
+    "task_strata": [
+      {
+        "id": "PROBE-A",
+        "name": "Isolated Attribute Contrast",
+        "fixture": "fixtures/disambiguation_probe_a.html",
+        "decisive_channel": "data_attribute",
+        "is_negative_control": false
+      },
+      {
+        "id": "PROBE-B",
+        "name": "Container ARIA Contrast",
+        "fixture": "fixtures/disambiguation_probe_b.html",
+        "decisive_channel": "container_aria",
+        "is_negative_control": true
+      },
+      {
+        "id": "PROBE-CONTROL",
+        "name": "Visible Typography Positive Control",
+        "fixture": "fixtures/disambiguation_control.html",
+        "decisive_channel": "visible_typography",
+        "is_negative_control": false
+      },
+      {
+        "id": "PROBE-DISTRACTOR",
+        "name": "Negative Control Probe",
+        "fixture": "fixtures/disambiguation_probe_a.html",
+        "decisive_channel": "none",
+        "is_negative_control": true
+      }
+    ],
+    "position_swap_factor": [false, true],
+    "blocks_count": 4,
+    "trials_per_block": 24,
+    "total_trials": 96,
+    "trials_per_arm": 32,
+    "randomization_seed": 421098
+  },
+  "confound_controls": {
+    "use_vision": false,
+    "temperature": 0.0,
+    "max_steps_per_trial": 4,
+    "incognito_context": true,
+    "viewport": {"width": 1280, "height": 800},
+    "locale": "en-US",
+    "stage_5_prompt_assertion": {
+      "enabled": true,
+      "DATA-CFG": "assert 'data-product-id' in prompt",
+      "ABS": "assert 'data-product-id' not in prompt"
+    }
+  },
+  "budget_and_safety": {
+    "max_requests": 400,
+    "max_spend_usd": 0.50,
+    "inter_trial_sleep_seconds": 6.0,
+    "max_retries_per_unit": 1,
+    "abort_on_consecutive_errors": 3
+  },
+  "analysis_plan": {
+    "primary_test": "Cochran-Mantel-Haenszel (CMH) stratified test",
+    "primary_estimand": "Stratified risk difference (theta_MH)",
+    "variance_estimator": "Sato (1989) / Greenland-Robins (1985)",
+    "alpha": 0.05,
+    "multiplicity_correction": "Bonferroni (alpha_adj = 0.0167 for 3 pairwise contrasts)"
+  }
+}

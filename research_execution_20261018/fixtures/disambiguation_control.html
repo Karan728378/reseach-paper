@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disambiguation Control — Visible Text Identity</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 2rem; background: #f8fafc; color: #1e293b; }
+    .card-container { display: flex; gap: 2rem; margin-top: 1.5rem; }
+    .item-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.5rem; width: 240px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .item-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .item-sku { font-size: 0.95rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem; }
+    .item-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; }
+    .select-btn { background: #059669; color: #ffffff; border: none; border-radius: 4px; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; width: 100%; }
+    .select-btn:hover { background: #047857; }
+    #selection-outcome { margin-top: 2rem; padding: 1rem; border-radius: 4px; font-weight: 600; display: none; }
+    .success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .failure { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  </style>
+</head>
+<body>
+  <h1>Disambiguation Positive Control: Visible Typography Identity</h1>
+  <p id="probe-instruction">Task instruction: Select the target item with SKU <code>target-sku-101</code>.</p>
+  <p id="probe-notice">Note: Distinguishing SKU identity is explicitly rendered in the human-visible text typography.</p>
+
+  <div class="card-container" id="cards-wrapper">
+    <!-- Option A -->
+    <div class="item-card" id="card-alpha">
+      <div class="item-title">Hardware Unit Alpha</div>
+      <div class="item-sku">SKU: target-sku-101</div>
+      <div class="item-desc">Enterprise hardware model.</div>
+      <button class="select-btn" id="btn-alpha">Select Alpha Model</button>
+    </div>
+
+    <!-- Option B -->
+    <div class="item-card" id="card-beta">
+      <div class="item-title">Hardware Unit Beta</div>
+      <div class="item-sku">SKU: distractor-sku-202</div>
+      <div class="item-desc">Enterprise hardware model.</div>
+      <button class="select-btn" id="btn-beta">Select Beta Model</button>
+    </div>
+  </div>
+
+  <div id="selection-outcome"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const swap = urlParams.get('swap') === 'true' || urlParams.get('order') === 'reversed';
+    const wrapper = document.getElementById('cards-wrapper');
+    const cardAlpha = document.getElementById('card-alpha');
+    const cardBeta = document.getElementById('card-beta');
+
+    if (swap) {
+      wrapper.insertBefore(cardBeta, cardAlpha);
+    }
+
+    window.SELECTED_OPTION = null;
+    window.SELECTION_SUCCESS = false;
+
+    function handleSelection(optionId) {
+      window.SELECTED_OPTION = optionId;
+      const outcome = document.getElementById('selection-outcome');
+      outcome.style.display = 'block';
+      if (optionId === 'alpha') {
+        window.SELECTION_SUCCESS = true;
+        outcome.className = 'success';
+        outcome.textContent = 'Correct selection: Alpha Model (target-sku-101) chosen.';
+      } else {
+        window.SELECTION_SUCCESS = false;
+        outcome.className = 'failure';
+        outcome.textContent = 'Incorrect selection: Beta Model (distractor-sku-202) chosen.';
+      }
+    }
+
+    document.getElementById('btn-alpha').addEventListener('click', () => handleSelection('alpha'));
+    document.getElementById('btn-beta').addEventListener('click', () => handleSelection('beta'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+================================================================================
+DISAMBIGUATION PROBE A: STATISTICAL POWER AUDIT REPORT
+================================================================================
+Design Parameters: n1 = 20 (ABS, p=0.50), n2 = 20 (DATA-CFG, p=0.90)
+Hypothesis Test: Two-sided test, nominal alpha = 0.05, Bonferroni alpha_adj = 0.025
+Monte Carlo Iterations: B = 20,000, Random Seed = 42
+--------------------------------------------------------------------------------
+MONTE CARLO SIMULATION RESULTS:
+  (a) Two-sided Fisher exact test    : Power = 0.6290 (62.91%)  [MCSE = 0.0034]
+  (b) Two-sided Pooled Z-test (no CC): Power = 0.7450 (74.50%)  [MCSE = 0.0031]
+  (c) Two-sided Z-test with CC (Yates): Power = 0.6217 (62.17%)  [MCSE = 0.0034]
+--------------------------------------------------------------------------------
+EXACT ANALYTICAL ENUMERATION RESULTS (All 441 Binomial Outcomes):
+  (a) Exact Fisher Exact Test Power  : 0.6267 (62.67%)
+  (b) Exact Pooled Z-test Power (no CC): 0.7424 (74.24%)
+  (c) Exact Z-test with CC Power     : 0.6198 (61.98%)
+================================================================================
+FINDING AND AUDIT CONCLUSION:
+  - The manuscript claim of '~78% power' is UNSUPPORTED for Fisher's exact test (exact power = 62.7%).
+  - A two-sided pooled z-test without continuity correction yields 74.2%, which is close to ~78%,
+    suggesting the '~78%' figure was derived from an uncorrected asymptotic z-test (or 1-sided test),
+    not the prespecified two-sided Fisher exact test (which yields 62.7%).
+  - Recommended Paper Statement: 'Power at n=20 per arm for Probe A (detecting ABS=50% vs.
+    DATA-CFG=90%, Delta=0.40, two-sided Fisher exact test, alpha_adj=0.025) is 63%'
+================================================================================

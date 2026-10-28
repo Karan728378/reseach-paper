@@ -1,0 +1,265 @@
+"""
+Defensible Budget Controls and Preflight Cost Estimation Module
+Part of: "The DOM Serialization Gap" Research Infrastructure
+
+Provides:
+1. Model pricing tables with fail-closed behavior for unknown models.
+2. Conservative preflight budget bounding before trial dispatch.
+3. Real-time per-step and per-run accumulation using provider metadata when present,
+   falling back to verified conservative estimates.
+4. Pre-run check preventing trial dispatch when worst-case step budget exceeds remaining ceiling.
+5. Explicit documentation of client-side guard limitations vs provider billing caps.
+"""
+
+from typing import Dict, Any, Optional, Tuple
+import math
+
+# Authoritative standard pricing table (USD per 1,000,000 tokens) as of late 2024 / 2025
+# Standardized to conservative upper tiers (<= 128k prompt context)
+MODEL_PRICING_TABLE = {
+    # Gemini models
+    "gemini-flash-lite-latest": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-2.0-flash-lite": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-2.0-flash-lite-preview-02-05": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-1.5-flash": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-1.5-flash-8b": {"input_per_million": 0.075, "output_per_million": 0.30},
+    "gemini-1.5-pro": {"input_per_million": 2.50, "output_per_million": 10.00},
+    "gemini-2.0-flash": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-3-flash-preview": {"input_per_million": 0.15, "output_per_million": 0.60},
+    "gemini-3.1-flash-lite": {"input_per_million": 0.15, "output_per_million": 0.60},
+    # Anthropic models
+    "claude-3-5-sonnet-20241022": {"input_per_million": 3.00, "output_per_million": 15.00},
+    "claude-3-5-haiku-20241022": {"input_per_million": 1.00, "output_per_million": 5.00},
+    # OpenAI models
+    "gpt-4o": {"input_per_million": 2.50, "output_per_million": 10.00},
+    "gpt-4o-mini": {"input_per_million": 0.15, "output_per_million": 0.60},
+}
+
+# Conservative default upper bounds per step
+WORST_CASE_INPUT_TOKENS_PER_STEP = 10000
+WORST_CASE_OUTPUT_TOKENS_PER_STEP = 500
+
+class BudgetExceededError(RuntimeError):
+    """Raised when an operation would exceed the configured client budget ceiling."""
+    pass
+
+class UnknownModelPricingError(ValueError):
+    """Raised when a model has no pricing defined, failing closed."""
+    pass
+
+def get_model_pricing(model_name: str) -> Dict[str, float]:
+    """
+    Look up pricing for a model name. Normalizes case and common prefixes.
+    Fails closed if the model pricing cannot be bounded.
+    """
+    clean_name = model_name.strip().lower()
+    # Remove provider prefixes if present (e.g., 'google/', 'anthropic/')
+    if "/" in clean_name:
+        clean_name = clean_name.split("/", 1)[1]
+        
+    for key, pricing in MODEL_PRICING_TABLE.items():
+        if key.lower() == clean_name or clean_name.startswith(key.lower()):
+            return pricing
+            
+    raise UnknownModelPricingError(
+        f"UNKNOWN MODEL PRICING: Cannot establish bounded budget for '{model_name}'. "
+        f"Known models: {list(MODEL_PRICING_TABLE.keys())}. "
+        f"Failing closed to prevent unbounded financial risk."
+    )
+
+def compute_step_cost(
+    model_name: str,
+    prompt_tokens: int,
+    completion_tokens: int
+) -> float:
+    """Compute cost in USD for given token counts."""
+    pricing = get_model_pricing(model_name)
+    input_cost = (prompt_tokens / 1_000_000.0) * pricing["input_per_million"]
+    output_cost = (completion_tokens / 1_000_000.0) * pricing["output_per_million"]
+    return input_cost + output_cost
+
+def compute_worst_case_run_cost(
+    model_name: str,
+    max_steps: int = 15,
+    worst_case_input_per_step: int = WORST_CASE_INPUT_TOKENS_PER_STEP,
+    worst_case_output_per_step: int = WORST_CASE_OUTPUT_TOKENS_PER_STEP
+) -> float:
+    """Compute the theoretical maximum cost of a single trial at max steps."""
+    max_in = max_steps * worst_case_input_per_step
+    max_out = max_steps * worst_case_output_per_step
+    return compute_step_cost(model_name, max_in, max_out)
+
+def estimate_preflight_budget(
+    total_runs: int,
+    model_name: str,
+    cost_ceiling_usd: float,
+    max_steps: int = 15
+) -> Dict[str, Any]:
+    """
+    Perform conservative preflight cost calculation across an entire planned schedule.
+    Returns audit details and indicates whether the budget is sufficient under worst-case bounds.
+    """
+    pricing = get_model_pricing(model_name)
+    worst_case_single_run = compute_worst_case_run_cost(model_name, max_steps=max_steps)
+    worst_case_total_usd = total_runs * worst_case_single_run
+    
+    # Expected realistic cost (e.g. average 5.5 steps, ~6,500 input tokens/step)
+    realistic_single_run = compute_step_cost(model_name, int(5.5 * 6500), int(5.5 * 100))
+    realistic_total_usd = total_runs * realistic_single_run
+    
+    worst_case_exceeds = worst_case_total_usd > cost_ceiling_usd
+    
+    return {
+        "model_name": model_name,
+        "pricing": pricing,
+        "total_runs": total_runs,
+        "max_steps_per_run": max_steps,
+        "worst_case_single_run_usd": round(worst_case_single_run, 6),
+        "worst_case_total_usd": round(worst_case_total_usd, 4),
+        "realistic_expected_total_usd": round(realistic_total_usd, 4),
+        "cost_ceiling_usd": cost_ceiling_usd,
+        "worst_case_exceeds_ceiling": worst_case_exceeds,
+        "guaranteed_provider_limit": False,
+        "disclaimer": (
+            "NOTICE: The local cost ceiling is a client-side software guardrail that halts "
+            "execution when cumulative estimated or provider-reported cost reaches the limit. "
+            "It does NOT replace provider-side billing caps. In the event of network timeouts, "
+            "partial stream billing, or out-of-band requests, charges may occur before the client "
+            "can halt. Users MUST configure provider-side billing limits in their cloud console."
+        )
+    }
+
+class LocalBudgetGuard:
+    """
+    Thread-safe client-side budget accumulator and guard.
+    Fails closed when:
+    - Model pricing is undefined.
+    - Cumulative cost reaches or exceeds ceiling (when ceiling > 0).
+    - Cumulative model requests reach or exceed free-tier ceiling (when is_free_tier or ceiling == 0).
+    - Pre-run check shows remaining budget or request headroom cannot accommodate the trial.
+    """
+    def __init__(
+        self,
+        cost_ceiling_usd: float,
+        model_name: str,
+        max_steps_per_run: int = 15,
+        max_requests_ceiling: Optional[int] = None,
+        is_free_tier: bool = False
+    ):
+        self.cost_ceiling_usd = float(cost_ceiling_usd)
+        self.model_name = model_name
+        self.max_steps_per_run = max_steps_per_run
+        self.max_requests_ceiling = max_requests_ceiling
+        self.is_free_tier = is_free_tier or (self.cost_ceiling_usd == 0.0)
+        self.pricing = get_model_pricing(model_name)
+        self.cumulative_cost_usd = 0.0
+        self.cumulative_prompt_tokens = 0
+        self.cumulative_completion_tokens = 0
+        self.cumulative_requests = 0
+        self.runs_completed = 0
+        self.halted_due_to_ceiling = False
+
+    def check_can_dispatch_trial(self, require_worst_case_headroom: bool = False) -> Tuple[bool, str]:
+        """
+        Check if another trial can be safely dispatched.
+        Enforces both dollar spending limits and free-tier request ceilings.
+        """
+        if self.is_free_tier:
+            if self.max_requests_ceiling is not None:
+                if self.cumulative_requests >= self.max_requests_ceiling:
+                    self.halted_due_to_ceiling = True
+                    return False, (
+                        f"Cumulative requests ({self.cumulative_requests}) reached free-tier quota ceiling "
+                        f"({self.max_requests_ceiling}). Failing closed to maintain $0.00 spending."
+                    )
+                if require_worst_case_headroom and (self.cumulative_requests + self.max_steps_per_run > self.max_requests_ceiling):
+                    return False, (
+                        f"Remaining free-tier requests ({self.max_requests_ceiling - self.cumulative_requests}) "
+                        f"is less than worst-case trial steps ({self.max_steps_per_run}). Failing closed."
+                    )
+            return True, f"Free-tier quota available ({self.cumulative_requests}/{self.max_requests_ceiling or 'unlimited'} requests used). Billed spend locked at $0.00."
+
+        remaining = self.cost_ceiling_usd - self.cumulative_cost_usd
+        if remaining <= 0.0:
+            self.halted_due_to_ceiling = True
+            return False, f"Cumulative cost (${self.cumulative_cost_usd:.4f}) reached or exceeded ceiling (${self.cost_ceiling_usd:.2f})."
+            
+        if require_worst_case_headroom:
+            worst_case_run = compute_worst_case_run_cost(self.model_name, self.max_steps_per_run)
+            if remaining < worst_case_run:
+                return False, (
+                    f"Remaining budget (${remaining:.4f}) is less than worst-case trial cost (${worst_case_run:.4f}). "
+                    f"Failing closed before trial dispatch."
+                )
+                
+        return True, "Budget available."
+
+    def record_step(
+        self,
+        prompt_tokens: Optional[int] = None,
+        completion_tokens: Optional[int] = None
+    ) -> float:
+        """
+        Record a step's token consumption and increment request counter.
+        If tokens are missing or None (e.g. provider did not report them),
+        substitutes conservative upper bounds to guarantee non-zero cost tracking.
+        """
+        p_tokens = prompt_tokens if prompt_tokens is not None else WORST_CASE_INPUT_TOKENS_PER_STEP
+        c_tokens = completion_tokens if completion_tokens is not None else WORST_CASE_OUTPUT_TOKENS_PER_STEP
+        
+        step_cost = compute_step_cost(self.model_name, p_tokens, c_tokens)
+        self.cumulative_prompt_tokens += p_tokens
+        self.cumulative_completion_tokens += c_tokens
+        self.cumulative_cost_usd += step_cost
+        self.cumulative_requests += 1
+        
+        if not self.is_free_tier and self.cumulative_cost_usd >= self.cost_ceiling_usd:
+            self.halted_due_to_ceiling = True
+        elif self.is_free_tier and self.max_requests_ceiling is not None and self.cumulative_requests >= self.max_requests_ceiling:
+            self.halted_due_to_ceiling = True
+            
+        return step_cost
+
+    def record_trial_completion(
+        self,
+        total_steps: int,
+        provider_prompt_tokens: Optional[int] = None,
+        provider_completion_tokens: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Finalize a trial and update cumulative ledger.
+        Prefers provider-reported tokens if available; otherwise uses conservative step-based estimate.
+        """
+        if provider_prompt_tokens is not None and provider_completion_tokens is not None:
+            p_tokens = provider_prompt_tokens
+            c_tokens = provider_completion_tokens
+            source = "provider_reported"
+        else:
+            # Conservative estimate: 7000 in, 100 out per step
+            p_tokens = total_steps * 7000
+            c_tokens = total_steps * 100
+            source = "conservative_step_estimate"
+            
+        trial_cost = compute_step_cost(self.model_name, p_tokens, c_tokens)
+        self.cumulative_prompt_tokens += p_tokens
+        self.cumulative_completion_tokens += c_tokens
+        self.cumulative_cost_usd += trial_cost
+        self.cumulative_requests += total_steps
+        self.runs_completed += 1
+        
+        if not self.is_free_tier and self.cumulative_cost_usd >= self.cost_ceiling_usd:
+            self.halted_due_to_ceiling = True
+        elif self.is_free_tier and self.max_requests_ceiling is not None and self.cumulative_requests >= self.max_requests_ceiling:
+            self.halted_due_to_ceiling = True
+            
+        return {
+            "trial_cost_usd": round(trial_cost, 6),
+            "token_source": source,
+            "prompt_tokens": p_tokens,
+            "completion_tokens": c_tokens,
+            "cumulative_cost_usd": round(self.cumulative_cost_usd, 6),
+            "remaining_budget_usd": round(max(0.0, self.cost_ceiling_usd - self.cumulative_cost_usd), 6) if not self.is_free_tier else 0.0,
+            "cumulative_requests": self.cumulative_requests,
+            "max_requests_ceiling": self.max_requests_ceiling,
+            "halted": self.halted_due_to_ceiling
+        }

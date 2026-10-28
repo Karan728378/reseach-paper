@@ -1,0 +1,34 @@
+--- BASELINE_pair_07_edge_cases_fixture
++++ ARIA_pair_07_edge_cases_fixture
+@@ -291,9 +291,9 @@
+ </agent_state>
+ <browser_state>
+ <page_stats>0 links, 5 interactive, 0 iframes, 27 total elements</page_stats>
+-Current tab: 2323
++Current tab: 6F4D
+ Available tabs:
+-Tab 2323: http://127.0.0.1:PORT/research_execution_20261018/fixtures/edge_cases.html - 127.0.0.1:8098/research_execut
++Tab 6F4D: http://127.0.0.1:PORT/research_execution_20261018/fixtures/edge_cases.html - 127.0.0.1:8098/research_execut
+ 
+ <page_info>0.0 pages above, 0.0 pages below</page_info>
+ 
+@@ -301,14 +301,14 @@
+ [Start of page]
+ Showcase Container
+ $99.00
+-[40]<span id=icon-span aria-label=Audio Product Icon />
+-[48]<button id=btn-aria aria-label=Add EdgeCase Unit to cart />
++[42]<span id=icon-span aria-label=Audio Product Icon />
++[50]<button id=btn-aria aria-label=Add EdgeCase Unit to cart />
+ 	Add to Cart
+-[56]<button id=btn-data />
++[58]<button id=btn-data />
+ 	Add to Cart
+-[64]<button id=btn-empty />
++[66]<button id=btn-empty />
+ 	Empty Action
+-[72]<button id=btn-nested aria-label=Nested Button Wrapper />
++[74]<button id=btn-nested aria-label=Nested Button Wrapper />
+ 	Buy Now
+ September 1, 2026
+ [End of page]

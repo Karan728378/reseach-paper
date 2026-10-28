@@ -1,0 +1,80 @@
+[
+  {
+    "name": "test_serializer_disabled_elements",
+    "status": "PASS",
+    "message": "DISABLED_ELEMENTS contains 'script' and 'meta' (CONFIRMED)",
+    "duration_ms": 4.2
+  },
+  {
+    "name": "test_views_default_include_attributes",
+    "status": "PASS",
+    "message": "DEFAULT_INCLUDE_ATTRIBUTES includes 'aria-label' and excludes custom data-* (CONFIRMED)",
+    "duration_ms": 0.0
+  },
+  {
+    "name": "test_patched_include_attributes",
+    "status": "PASS",
+    "message": "Patched whitelist successfully exposes custom data-* attributes (CONFIRMED)",
+    "duration_ms": 0.0
+  },
+  {
+    "name": "test_historical_vs_strict_t3_verifier",
+    "status": "PASS",
+    "message": "Historical T3 verifier flaw confirmed (accepted 6 SKUs); Protocol v3 strictly enforces wh-002 only (CONFIRMED)",
+    "duration_ms": 0.0
+  },
+  {
+    "name": "test_historical_vs_strict_t4_verifier",
+    "status": "PASS",
+    "message": "Historical T4 unconditional 0.25 flaw confirmed; Protocol v3 strictly enforces 0.0 on failure (CONFIRMED)",
+    "duration_ms": 0.0
+  },
+  {
+    "name": "test_historical_vs_strict_t5_verifier",
+    "status": "PASS",
+    "message": "T5 verifier strictly requires pre_cart_count == 1; rejects missing or unseeded pre-state (CONFIRMED)",
+    "duration_ms": 0.0
+  },
+  {
+    "name": "test_t6_strict_grounded_refusal_verifier",
+    "status": "PASS",
+    "message": "T6 grounded refusal correctly scores valid refusal and rejects hallucination (CONFIRMED)",
+    "duration_ms": 0.1
+  },
+  {
+    "name": "test_t6_regression_battery",
+    "status": "PASS",
+    "message": "T6 comprehensive regression battery passed (44 diverse test cases validated in active runner) (CONFIRMED)",
+    "duration_ms": 0.3
+  },
+  {
+    "name": "test_treatment_leakage_in_variants",
+    "status": "PASS",
+    "message": "Treatment leakage confirmed: visible text is rendered across v0, v2, v3 via shared app-core.js (CONFIRMED)",
+    "duration_ms": 1.6
+  },
+  {
+    "name": "test_runner_retry_logic_survivorship_flaw",
+    "status": "PASS",
+    "message": "Runner survivorship bias flaw verified; Protocol v3 preserves valid failures (CONFIRMED)",
+    "duration_ms": 10.5
+  },
+  {
+    "name": "test_schedule_rcbd_balance",
+    "status": "PASS",
+    "message": "3-arm RCBD schedule is perfectly balanced: 4 blocks of 18, 24/arm, 12/task (CONFIRMED)",
+    "duration_ms": 3.8
+  },
+  {
+    "name": "test_original_files_unmodified",
+    "status": "PASS",
+    "message": "All tracked application source files match authentic post-refactor SHA-256 hashes (CONFIRMED)",
+    "duration_ms": 40.1
+  },
+  {
+    "name": "test_accessibility_tree_comparison_artifacts",
+    "status": "PASS",
+    "message": "Accessibility tree comparison artifacts valid: critical divergence on Ch3 and concordant loss on Ch1 verified (CONFIRMED)",
+    "duration_ms": 0.8
+  }
+]

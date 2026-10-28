@@ -64,6 +64,10 @@ class TestMutationAudit(unittest.TestCase):
         real_res = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[], pre_cart_count=0)
         self.assertFalse(real_res["success"], "Production v3 verifier must reject unseeded pre-state (pre_cart_count=0)")
         
+        # Production v3 verifier with pre_cart_count = None (missing precondition)
+        real_res_missing = protocol_v3_runner.verify_task_result("T5", cart=[], order_confirmed=False, last_order_items=[], pre_cart_count=None)
+        self.assertFalse(real_res_missing["success"], "Production v3 verifier must reject missing pre-state (pre_cart_count=None)")
+        
         # Mutated verifier would pass
         self.assertTrue(mutated_t5(0, 0))
         self.assertNotEqual(real_res["success"], mutated_t5(0, 0), "Test assertion detects unseeded vacuous pass")
@@ -119,6 +123,49 @@ class TestMutationAudit(unittest.TestCase):
         res_swapped = analyze_v3_results.cmh_test(tables_swapped)
         self.assertLess(res_swapped["common_odds_ratio"], 1.0)
         self.assertNotEqual(res_normal["common_odds_ratio"], res_swapped["common_odds_ratio"])
+
+    # ── Mutation 7: T1 Verifier Mutation (Accepting expensive headphone) ─────
+    def test_mutation_t1_rejects_expensive_headphones(self):
+        """Mutation: T1 verifier accepts wh-002 ($89.99) or wh-003 ($129.99)."""
+        # Ground truth: cheapest is wh-001 ($49.99)
+        expensive_cart = [{"sku": "wh-002", "price": 89.99}]
+        cheapest_cart = [{"sku": "wh-001", "price": 49.99}]
+        
+        real_fail = protocol_v3_runner.verify_task_result("T1", cart=expensive_cart, order_confirmed=False, last_order_items=[])
+        real_pass = protocol_v3_runner.verify_task_result("T1", cart=cheapest_cart, order_confirmed=False, last_order_items=[])
+        
+        self.assertFalse(real_fail["success"], "T1 must reject wh-002 as cheapest headphone")
+        self.assertTrue(real_pass["success"], "T1 must accept wh-001 as cheapest headphone")
+
+    # ── Mutation 8: T2 Verifier Mutation (Accepting wrong product) ───────────
+    def test_mutation_t2_rejects_wrong_product(self):
+        """Mutation: T2 verifier accepts mse-001 instead of mkp-001."""
+        wrong_cart = [{"sku": "mse-001"}]
+        correct_cart = [{"sku": "mkp-001"}]
+        
+        real_fail = protocol_v3_runner.verify_task_result("T2", cart=wrong_cart, order_confirmed=False, last_order_items=[])
+        real_pass = protocol_v3_runner.verify_task_result("T2", cart=correct_cart, order_confirmed=False, last_order_items=[])
+        
+        self.assertFalse(real_fail["success"], "T2 must reject mse-001")
+        self.assertTrue(real_pass["success"], "T2 must accept mkp-001")
+
+    # ── Mutation 9: T3 Verifier Mutation (Multi-item cart pass) ──────────────
+    def test_mutation_t3_rejects_multi_item_cart(self):
+        """Mutation: T3 verifier accepts cart with wh-002 plus extraneous items."""
+        # Cart with target wh-002 AND an extraneous item
+        multi_cart = [{"sku": "wh-002"}, {"sku": "wh-001"}]
+        
+        real_res = protocol_v3_runner.verify_task_result("T3", cart=multi_cart, order_confirmed=False, last_order_items=[])
+        self.assertFalse(real_res["success"], "T3 must strictly reject multi-item cart even if wh-002 is present")
+
+    # ── Mutation 10: T4 Verifier Mutation (Confirmed checkout of wrong item) ──
+    def test_mutation_t4_rejects_wrong_product_checkout(self):
+        """Mutation: T4 verifier passes confirmed order of wrong product (wh-001 instead of mse-001)."""
+        wrong_order_items = [{"sku": "wh-001"}]
+        
+        real_res = protocol_v3_runner.verify_task_result("T4", cart=[], order_confirmed=True, last_order_items=wrong_order_items)
+        self.assertFalse(real_res["success"], "T4 must reject checkout containing wrong item")
+        self.assertEqual(real_res["score"], 0.0)
 
 if __name__ == "__main__":
     unittest.main()

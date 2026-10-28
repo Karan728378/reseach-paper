@@ -1,0 +1,82 @@
+{
+  "raw_dom": {
+    "framework": "Static DOM Parser (bs4/lxml)",
+    "observation_method": "Full DOM AST parse (tree walk, zero layout engine)",
+    "jsonld_retained": true,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": true,
+    "data_attributes_retained": true,
+    "visible_text_retained": true,
+    "hidden_elements_retained": true,
+    "test_method": "Local execution on multi_framework_observation_fixture.html",
+    "evidence_label": "Observed in local execution",
+    "limitations": "No dynamic JS execution, no computed CSS styling/visibility, lacks actionability mapping."
+  },
+  "blink_axtree": {
+    "framework": "Chromium Blink AXTree (CDP Accessibility.getFullAXTree)",
+    "observation_method": "Native accessibility tree compiled by browser engine (roles, accessible names, states)",
+    "jsonld_retained": false,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": true,
+    "data_attributes_retained": false,
+    "visible_text_retained": true,
+    "hidden_elements_retained": false,
+    "test_method": "Local execution via CDP session on multi_framework_observation_fixture.html",
+    "evidence_label": "Observed in local execution",
+    "limitations": "Excludes non-standard attributes (data-*), strips script tags; non-interactive nodes may require explicit accessible roles to avoid generic pruning."
+  },
+  "browser_use_default": {
+    "framework": "browser-use 0.13.10 (Default)",
+    "observation_method": "Interactive DOM serialization with DEFAULT_INCLUDE_ATTRIBUTES whitelist",
+    "jsonld_retained": false,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": false,
+    "data_attributes_retained": false,
+    "visible_text_retained": true,
+    "hidden_elements_retained": false,
+    "test_method": "Local execution on multi_framework_observation_fixture.html",
+    "evidence_label": "Observed in local execution",
+    "limitations": "Prunes script/style/meta tags via DISABLED_ELEMENTS; filters out non-whitelisted attributes; strips tags of non-interactive elements."
+  },
+  "browser_use_extended": {
+    "framework": "browser-use 0.13.10 (Extended Whitelist)",
+    "observation_method": "Interactive DOM serialization with EXTENDED_ATTRIBUTES whitelist (runner patch)",
+    "jsonld_retained": false,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": false,
+    "data_attributes_retained": true,
+    "visible_text_retained": true,
+    "hidden_elements_retained": false,
+    "test_method": "Local execution on multi_framework_observation_fixture.html",
+    "evidence_label": "Observed in local execution",
+    "limitations": "Retains data-* on interactive nodes only; still prunes script/meta and strips non-interactive container tags."
+  },
+  "playwright": {
+    "framework": "Playwright (page.accessibility.snapshot / aria_snapshot)",
+    "observation_method": "W3C Accessibility Tree snapshot / YAML aria_snapshot locator abstraction",
+    "jsonld_retained": false,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": true,
+    "data_attributes_retained": false,
+    "visible_text_retained": true,
+    "hidden_elements_retained": false,
+    "test_method": "Source code and API specification inspection (playwright.dev/python/docs/api/class-accessibility)",
+    "evidence_label": "Unsupported in current environment",
+    "source_inspection_note": "Verified by source inspection only. Playwright accessibility snapshot serializes native AXTree nodes; data-* and script elements are excluded by specification.",
+    "limitations": "Package playwright is not installed in .venv311. Cannot serialize non-standard DOM attributes."
+  },
+  "browsergym": {
+    "framework": "BrowserGym (browsergym.core 0.3.x)",
+    "observation_method": "Hybrid AXTree extraction ('axtree_txt') or pruned HTML extraction via Playwright harness",
+    "jsonld_retained": false,
+    "interactive_aria_label_retained": true,
+    "non_interactive_span_aria_label_retained": true,
+    "data_attributes_retained": false,
+    "visible_text_retained": true,
+    "hidden_elements_retained": false,
+    "test_method": "Source code inspection of browsergym/core/observation.py",
+    "evidence_label": "Unsupported in current environment",
+    "source_inspection_note": "Verified by source inspection only. Default BrowserGym AXTree mode strictly mirrors Blink accessibility tree semantics.",
+    "limitations": "Package browsergym is not installed in .venv311. Requires Playwright backend."
+  }
+}

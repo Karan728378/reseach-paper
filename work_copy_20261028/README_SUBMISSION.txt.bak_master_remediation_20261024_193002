@@ -1,0 +1,28 @@
+================================================================================
+MANUSCRIPT SUBMISSION & COMPILATION PACKAGE
+================================================================================
+Paper Title:
+The DOM Serialization Gap: Architectural Pruning, Information Loss, and 
+Experimental Confounds in Autonomous Browser Agents
+
+Date: October 2026
+Target Architecture: LaTeX (article class, standard packages)
+
+FILES IN THIS PACKAGE:
+1. research_paper_final.tex  - Complete LaTeX source manuscript.
+2. references.bib            - Complete BibTeX bibliography (14 verified entries).
+3. RESEARCH_PAPER_DRAFT_V2.md - Authoritative Markdown manuscript equivalent.
+
+HOW TO COMPILE MANUALLY (Windows / Linux / macOS):
+Prerequisites: A standard TeX distribution (TeX Live, MiKTeX, or MacTeX).
+
+Command Line:
+  pdflatex research_paper_final.tex
+  bibtex research_paper_final
+  pdflatex research_paper_final.tex
+  pdflatex research_paper_final.tex
+
+Overleaf / Online Service:
+  Create a new project -> Upload research_paper_final.tex and references.bib.
+  Set compiler to pdfLaTeX -> Click Recompile.
+================================================================================

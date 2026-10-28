@@ -1,0 +1,5 @@
+run_index,block_id,within_block_order,arm,task_id,variant_mapping,target_entity
+1,0,1,ABS,T1,v0-baseline,wh-001
+2,0,2,ARIA,T3,v2-aria,wh-002
+3,0,3,DATA-CFG,T5,v3-data-attrs,wh-001
+4,0,4,VIS,T6,v0-baseline,wh-001

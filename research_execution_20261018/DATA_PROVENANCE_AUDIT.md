@@ -2,19 +2,20 @@
 
 **Project:** Autonomous Browser Agent Additive Semantic Markup Study (Option A)  
 **Workspace:** [`C:/testing/research_execution_20261018/`](file:///C:/testing/research_execution_20261018/)  
-**Audit Date:** October 21, 2026  
+**Audit Date:** October 22, 2026  
+**Auditor:** Antigravity Senior Research Engineer, Browser-Agent Systems Specialist & Reproducibility Lead  
 **Operating Mode:** Strict Read-Only Audit · Zero Data Mutations · Zero Paid API Calls  
 
 ---
 
 ## 1. Executive Summary & Provenance Taxonomy
 
-A rigorous forensic audit of all CSV, JSON, JSONL, and report files across `C:\testing` reveals that the workspace contains **three completely distinct classes of data** that must never be pooled, conflated, or cross-analyzed:
+A rigorous forensic audit of all CSV, JSON, JSONL, and report files across `C:\testing` reveals that the workspace contains **four completely distinct classes of data** that must never be pooled, conflated, or cross-analyzed:
 
 1. **Historical Real-API Pilot Trials ($N=261$ raw, $N=250$ cleaned):** Genuine API calls to Google Gemini executed on October 6–7, 2026. While physically real, this data is **scientifically compromised** due to library-level treatment pruning (`browser-use` stripped JSON-LD and custom `data-*`), selective retries of domain failures in Repetition 9, and loose verifier logic.
 2. **Truncated Live Experiment ($N=147$ attempted):** Genuine API calls executed on October 11, 2026. This run crashed at run 105 due to free-tier API quota exhaustion (500 RPD limit), resulting in 42 consecutive HTTP 429 aborts. It was permanently discontinued.
-3. **Synthetic Validation Benchmarks & Offline Demo Traces:** Deterministic mock datasets used exclusively to validate the post-experiment statistical pipeline ([`analyze_v3_results.py`](file:///C:/testing/research_execution_20261018/analyze_v3_results.py)), verify browser state transitions (6 micro-trials), and prove token delivery into prompt buffers (4 mock traces).
-4. **Protocol v3 Confirmatory Experiment ($N=96$ planned):** The approved 4-arm Randomized Complete Block Design (RCBD). **ZERO CONFIRMATORY RUNS HAVE BEEN EXECUTED TO DATE.** The live safety gate remains strictly locked.
+3. **Synthetic Validation Benchmarks & Offline Demo Traces:** Deterministic mock datasets used exclusively to validate the post-experiment statistical pipeline ([`analyze_v3_results.py`](file:///C:/testing/research_execution_20261018/analyze_v3_results.py)), verify browser state transitions (6 micro-trials), prove token delivery into prompt buffers (4 mock traces), and test runner mock execution.
+4. **Protocol v4 Primary Schedule ($N=96$ planned) & Segregated Smoke Harness ($N=4$ planned):** The approved 4-arm Randomized Complete Block Design (RCBD) and segregated smoke harness. **ZERO PRIMARY CONFIRMATORY RUNS HAVE BEEN EXECUTED TO DATE.** The live safety gate remains strictly locked.
 
 ---
 
@@ -52,26 +53,32 @@ A rigorous forensic audit of all CSV, JSON, JSONL, and report files across `C:\t
 - **Failure Cause:** Run 106 hit the free-tier API quota ceiling of 500 requests per day (RPD) and 15 requests per minute (RPM). Every subsequent trial failed within 7–10 seconds with `RESOURCE_EXHAUSTED` / HTTP 429.
 - **Scientific Audit Verdict: TRUNCATED / ABORTED.** Cannot be used for inferential analysis.
 
-### Dataset 4: Protocol v3 Confirmatory Schedule (`proposed_randomized_schedule.csv`)
+### Dataset 4: Protocol v4 Primary Schedule (`proposed_randomized_schedule.csv`)
 - **File Path:** [`C:/testing/research_execution_20261018/proposed_randomized_schedule.csv`](file:///C:/testing/research_execution_20261018/proposed_randomized_schedule.csv) (3,524 bytes)
-- **Data Provenance:** Frozen specification file; deterministic seed `seed=42`.
+- **Data Provenance:** Frozen specification file; deterministic seed `seed=42`. Validated via `validate_schedule_rows`.
 - **Design:** 4 arms (`BASELINE`, `BASELINE_REP`, `ARIA`, `DATA-CFG`) $\times$ 6 tasks (T1–T6) $\times$ 4 blocks = 96 rows.
 - **Current Execution Status:** **0 completed runs, 0 failed runs, 96 pending runs.** The confirmatory experiment has NOT been run.
 
-### Dataset 5: Complete Synthetic Benchmark (`dataset_1_valid_complete.csv`)
+### Dataset 5: Segregated Smoke Schedule (`proposed_smoke_schedule.csv`)
+- **File Path:** [`C:/testing/research_execution_20261018/proposed_smoke_schedule.csv`](file:///C:/testing/research_execution_20261018/proposed_smoke_schedule.csv) (212 bytes)
+- **Data Provenance:** Frozen smoke specification file. Validated via `validate_schedule_rows`.
+- **Design:** 4 arms $\times$ 4 tasks (ABS/T1, ARIA/T3, DATA-CFG/T5, VIS/T6) = 4 trials.
+- **Current Execution Status:** Segregated from primary study dataset. Output directed to `smoke_run_summary.csv` and `smoke_runs/`.
+
+### Dataset 6: Complete Synthetic Benchmark (`dataset_1_valid_complete.csv`)
 - **File Path:** [`C:/testing/research_execution_20261018/test_scratch_synthetic_data/dataset_1_valid_complete.csv`](file:///C:/testing/research_execution_20261018/test_scratch_synthetic_data/dataset_1_valid_complete.csv) (8,139 bytes)
 - **Data Provenance:** 100% Synthetic / Mock benchmark.
 - **Total Records:** 96 rows matching the exact RCBD schedule structure.
 - **Outcomes:** 73 successes, 23 failures.
 - **Purpose:** Used strictly to validate the mathematical and pipeline execution of [`analyze_v3_results.py`](file:///C:/testing/research_execution_20261018/analyze_v3_results.py) without paid API calls.
 
-### Dataset 6: Offline Browser Mechanics Runs (`demo_browser_mechanics_and_verifier_runs.csv`)
+### Dataset 7: Offline Browser Mechanics Runs (`demo_browser_mechanics_and_verifier_runs.csv`)
 - **File Path:** [`C:/testing/research_execution_20261018/results/demo_browser_mechanics_and_verifier_runs.csv`](file:///C:/testing/research_execution_20261018/results/demo_browser_mechanics_and_verifier_runs.csv) (2,152 bytes)
-- **Data Provenance:** Direct headless Chromium DOM manipulation via Playwright.
+- **Data Provenance:** Direct headless Chromium DOM manipulation.
 - **Total Records:** 6 rows (Tasks T1–T6).
 - **Outcomes:** 6 passes. Validates TechMart SPA state transitions (`window.__cart__`, `window.__orderConfirmed__`) and verifier logic. Does NOT measure autonomous agent intelligence.
 
-### Dataset 7: Offline Agent Prompt Capture Runs (`demo_agent_prompt_delivery_runs.csv`)
+### Dataset 8: Offline Agent Prompt Capture Runs (`demo_agent_prompt_delivery_runs.csv`)
 - **File Path:** [`C:/testing/research_execution_20261018/results/demo_agent_prompt_delivery_runs.csv`](file:///C:/testing/research_execution_20261018/results/demo_agent_prompt_delivery_runs.csv) (1,154 bytes)
 - **Data Provenance:** Single-step mock LLM execution via `MockChatModel` + `browser-use.Agent(use_vision=False)`.
 - **Total Records:** 4 rows (BASELINE, ARIA, DATA-CFG, JSON-LD).
@@ -84,6 +91,6 @@ A rigorous forensic audit of all CSV, JSON, JSONL, and report files across `C:\t
 1. **Dashboard Feed Isolation:**  
    The interactive dashboard ([`results/dashboard.html`](file:///C:/testing/research_execution_20261018/results/dashboard.html)) and the statistical report ([`results/analysis_report.md`](file:///C:/testing/research_execution_20261018/results/analysis_report.md)) are fed **exclusively** by `dataset_1_valid_complete.csv` (synthetic benchmark) and the two offline demo CSVs.
 2. **Zero Contamination from Historical Experiments:**  
-   Neither `pilot-summary-clean.csv` nor `main_experiment/full-summary.csv` is imported, read, or merged into the Protocol v3 results pipeline.
+   Neither `pilot-summary-clean.csv` nor `main_experiment/full-summary.csv` is imported, read, or merged into the Protocol v4 results pipeline.
 3. **Mandatory Provenance Watermarking:**  
-   All tables, charts, and KPI cards in `dashboard.html` visibly state that confirmatory experimental trials are **PENDING** and that the displayed numbers are synthetic engineering validation metrics.
+   All tables, charts, and KPI cards visibly state that confirmatory experimental trials are **PENDING** and that the displayed numbers are synthetic engineering validation metrics.

@@ -1,0 +1,54 @@
+{
+  "trial_type": "local_qwen3_smoke_test",
+  "run_id": "qwen3_smoke_004",
+  "model_id": "qwen3:4b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "context_window": 4096,
+  "task_id": "T2",
+  "arm": "ABS",
+  "variant": "v3-data-attrs",
+  "instruction": "Find the product called 'Mechanical Keyboard Pro' and add it to your cart.",
+  "timestamps": {
+    "start": "2026-10-24T14:16:41.804957",
+    "end": "2026-10-24T14:19:47.298908",
+    "duration_seconds": 185.5
+  },
+  "step_durations_seconds": [
+    0.0
+  ],
+  "total_steps": 1,
+  "status": "timed_out",
+  "termination_reason": "llm_or_step_timeout",
+  "error_message": "Step 1 timed out after 180 seconds",
+  "agent_final_text": "\ud83d\udd17 Navigated to http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home",
+  "actions_executed": [
+    {
+      "step": 1,
+      "duration_seconds": 0.0,
+      "thinking": "thinking=None evaluation_previous_goal='Start' memory='' next_goal='Initial navigation'",
+      "actions": [
+        "root=NavigateActionModel(navigate=NavigateAction(url='http://127.0.0.1:8080/variants/v3-data-attrs/index.html#home', new_tab=False))"
+      ]
+    }
+  ],
+  "terminal_cart_state": [],
+  "verifier_outcome": {
+    "success": false,
+    "score": 0.0,
+    "details": {
+      "target_sku": "mkp-001",
+      "cart_skus": []
+    }
+  },
+  "model_call_telemetry": [],
+  "financial_cost_usd": 0.0,
+  "resource_snapshot": {
+    "free_ram_mb": 5416.6,
+    "gpu_vram": {
+      "available": true,
+      "total_vram_mb": 4096.0,
+      "used_vram_mb": 2929.0,
+      "free_vram_mb": 1034.0
+    }
+  }
+}

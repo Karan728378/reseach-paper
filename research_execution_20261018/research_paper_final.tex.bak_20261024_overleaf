@@ -1,0 +1,374 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!80!black
+}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    keywordstyle=\color{blue!80!black}\bfseries,
+    commentstyle=\color{gray!70!black}\itshape,
+    stringstyle=\color{green!50!black}
+}
+
+\title{\textbf{The DOM Serialization Gap: Architectural Pruning, Information Loss, and Experimental Confounds in Autonomous Browser Agents}}
+
+\author{
+  Anonymous Authors \\
+  \textit{Department of Computer Science} \\
+  \texttt{Paper Under Double-Blind Peer Review}
+}
+
+\date{October 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Autonomous web agents powered by Large Language Models (LLMs) are widely evaluated on long-horizon web navigation and digital commerce tasks. State-of-the-art benchmarks (e.g., WebArena, Mind2Web, WorkArena) evaluate agents holistically at the whole-task level, treating web pages as monolithic HTML documents, accessibility hierarchies, or rendered screenshot streams. Consequently, existing literature leaves unexamined the client-side Document Object Model (DOM) observation pipelines that filter, prune, and transform web markup before it enters the LLM context prompt. In modern web engineering, factual information is distributed across distinct technical layers: rendered typography, semantic accessibility annotations (WAI-ARIA), developer custom attributes (\texttt{data-*}), and structured metadata (Schema.org JSON-LD).
+
+In this paper, we present an empirical systems audit of the \textbf{DOM serialization gap}---the structural discrepancy between what exists in the client-side DOM and what actually reaches the LLM context prompt. Through source-code analysis and dynamic observation tracing of modern browser-agent infrastructure (\texttt{browser-use 0.13.10}), we document three critical architectural bottlenecks:
+(1) default DOM serializers unconditionally prune \texttt{<script>} and \texttt{<meta>} elements via hardcoded exclusion rules (\texttt{DISABLED\_ELEMENTS}), preventing Schema.org JSON-LD structured data from reaching the LLM prompt buffer ($0.0\%$ token reachability);
+(2) the serializer constructs HTML element tags and attributes \textbf{only for interactive (clickable/scrollable) elements or frames} (\texttt{serializer.py:L1046--L1058}), meaning non-interactive elements (\texttt{<span>}, \texttt{<div>}, \texttt{<section>}) have their tags stripped entirely and parent attributes discarded ($0.0\%$ attribute reachability); and
+(3) custom developer attributes (\texttt{data-*}) are stripped by default whitelist filtering unless explicitly overridden by custom runner configuration.
+
+Through direct Chromium Chrome DevTools Protocol (CDP) accessibility tree extraction (\texttt{Accessibility.getFullAXTree}), we refute the widespread assumption that ``DOM pruning is equivalent to an accessibility tree.'' We document a \textbf{Critical Divergence}: non-interactive ARIA labels are retained by Chromium Blink's native accessibility tree but $100\%$ stripped by agent DOM serializers; conversely, developer \texttt{data-*} attributes are absent from accessibility trees but can be delivered to agents under extended whitelisting. By pairing Blink's unique \texttt{backendDOMNodeId}, we establish a 1-to-1 node-level correspondence rate of $79.4\%$ (27 of 34 interactive elements) on route \texttt{\#home}, identifying shadow DOM boundaries as the primary source of alignment divergence.
+
+Furthermore, we expose the \textbf{Action-Label Co-Location Confound}: augmenting button labels with target product titles converts hierarchical reference resolution into trivial string matching. We pre-register a hardened 4-arm evaluation blueprint equipped with deterministic state-asserted verifiers and zero-dependency statistical estimators (Cochran--Mantel--Haenszel, Newcombe hybrid score CIs). Monte Carlo power simulations (10,000 trials) prove that small-sample agent experiments ($n=20$/arm) possess $<11\%$ power to detect realistic effect sizes ($\Delta \le 0.20$), establishing a strict methodological prohibition against the Equivalence Fallacy. Finally, we report a diagnostic case study on local quantized models (\texttt{qwen3:4b}), demonstrating how cumulative context expansion causes prompt evaluation latency to breach fixed 180-second step watchdogs, and proving how cancellation telemetry safely captures in-flight timeouts without corrupting server metrics.
+\end{abstract}
+
+\textbf{Keywords:} Autonomous Web Agents, Large Language Models, DOM Serialization Gap, WAI-ARIA, Semantic Markup, Accessibility Trees, Experimental Reproducibility.
+
+\section{Introduction and Research Motivation}
+\label{sec:intro}
+
+The integration of Large Language Models (LLMs) with automated browser execution environments has catalyzed the emergence of autonomous web agents capable of executing multi-turn transactional workflows across digital interfaces~\cite{zhou2024webarena, deng2023mind2web, drouin2024workarena}. Operating as sequential decision-making agents, these systems observe the state of a web page, synthesize an internal plan, and dispatch discrete actions (e.g., clicking elements, entering text, selecting dropdown options, or submitting forms) via browser automation protocols such as Playwright, Puppeteer, or the Chrome DevTools Protocol (CDP).
+
+Despite widespread empirical benchmarking, contemporary web agent research suffers from a pervasive methodological confound: evaluations are conducted holistically across diverse, heterogeneous web environments where visual design, page geometry, JavaScript routing logic, and DOM markup representations vary simultaneously. On complex websites, it is impossible to disentangle whether an agent failed due to visual layout occlusion, long context saturation, stochastic planning drift, or uninformative DOM node labeling.
+
+In modern frontend web engineering, information is intentionally partitioned into distinct architectural layers:
+\begin{itemize}
+    \item \textbf{Rendered Visible Typography:} Plain textual nodes rendered inside standard HTML tags (e.g., \texttt{<h1>}, \texttt{<p>}, \texttt{<span>}) designed for human visual reading.
+    \item \textbf{Semantic Accessibility Markup (WAI-ARIA):} Programmatic semantic annotations (e.g., \texttt{role}, \texttt{aria-label}, \texttt{aria-describedby}) standardized by the World Wide Web Consortium~\cite{wai_aria11} to convey interactive semantics to assistive screen readers.
+    \item \textbf{Developer Custom Data Attributes:} Structured key-value pairs (e.g., \texttt{data-action}, \texttt{data-product-id}, \texttt{data-category}) utilized by client-side Single Page Applications (SPAs) for state management.
+    \item \textbf{Structured Metadata (Schema.org JSON-LD):} Standardized machine-readable entity graphs embedded inside non-rendered script tags (\texttt{<script type="application/ld+json">}) for search engine indexing~\cite{schemaorg}.
+\end{itemize}
+
+As industry discussions propose modifying web architectures for autonomous agents---including proposals to enrich ARIA labels specifically for AI scrapers or to deploy dedicated machine endpoints (e.g., \texttt{llms.txt}, Model Context Protocol APIs)---a fundamental systems question arises:
+\begin{quote}
+\textit{Do client-side DOM serializers in modern autonomous agent frameworks preserve these metadata channels, or do heuristic pruning algorithms strip them before they can reach the LLM context prompt?}
+\end{quote}
+
+If an agent framework silently purges structured metadata, web developers' efforts to markup pages for AI agents are completely lost. Furthermore, if academic researchers attempt to benchmark agent performance across markup variants without verifying prompt delivery, they risk evaluating an unaugmented text baseline while mistakenly attributing performance variations to invisible channels.
+
+\section{Related Work and Systems Gap}
+\label{sec:related}
+
+\subsection{Autonomous Web Agent Benchmarks}
+Evaluation of LLMs as autonomous web agents has advanced through several major benchmark suites:
+\begin{itemize}
+    \item \textbf{WebArena}~\cite{zhou2024webarena} established an end-to-end evaluation paradigm across four realistic self-hosted web applications. Evaluating state-of-the-art LLMs (GPT-4), WebArena revealed an end-to-end task completion rate of only $10.6\%$--$14.4\%$. However, WebArena evaluates holistic task success across multi-page workflows, conflating layout design, visual rendering, and markup structure.
+    \item \textbf{Mind2Web}~\cite{deng2023mind2web} introduced a large-scale dataset of 2,350 tasks across 137 real websites, evaluating element-level action prediction offline from DOM tree snapshots. While establishing the severity of the HTML token context bottleneck, Mind2Web evaluates static snapshots rather than closed-loop dynamic navigation.
+    \item \textbf{WorkArena and BrowserGym}~\cite{drouin2024workarena} evaluated web agents on enterprise workflows within ServiceNow. To mitigate context window exhaustion, BrowserGym utilizes Accessibility Trees (AXTrees), condensing 15,000+ token raw HTML documents into 200--400 tokens of interactive element representations. BrowserGym demonstrated the operational token efficiency of accessibility representations, but treated AXTree generation as an operational shortcut rather than auditing whether semantic attributes inside the tree provide additive cognitive utility.
+    \item \textbf{WebAgent and HTML-T5}~\cite{gur2024webagent} addressed the HTML length bottleneck by pre-training a specialized model (HTML-T5) to sub-sample and filter long HTML documents prior to action planning, proving that preprocessing the DOM directly bounds downstream agent execution.
+    \item \textbf{AgentBench}~\cite{liu2024agentbench} evaluated LLMs across eight interactive environments, confirming that long-horizon web decision-making exhibits substantial performance drops relative to static NLP reasoning.
+\end{itemize}
+
+\subsection{Multimodal Visual Grounding vs. Text Observation}
+A parallel research line integrates computer vision with web navigation:
+\begin{itemize}
+    \item \textbf{VisualWebArena}~\cite{koh2024visualwebarena} extended WebArena to visually intensive tasks, demonstrating that text-only agents fail when critical information is encoded exclusively in pixels.
+    \item \textbf{SeeAct}~\cite{zheng2024seeact} formulated a two-stage visual agent framework separating candidate generation on screenshots from action grounding on DOM elements, demonstrating that visual perception assists planning but suffers from fine-grained action grounding bottlenecks.
+    \item \textbf{WebVoyager}~\cite{he2024webvoyager} evaluated multimodal agents using Set-of-Mark visual prompts across 15 live websites, achieving $55.7\%$ completion. However, visual screenshot prompts bypass the DOM observation pipeline entirely, precluding the study of structural markup channels.
+\end{itemize}
+
+\subsection{The Unaddressed Systems Gap}
+Prior literature addresses task complexity, visual grounding, and model capabilities. \textbf{However, no prior study has systematically audited the client-side DOM serialization algorithms in open-source agent libraries to measure information loss between source HTML, live DOM trees, browser accessibility trees, and final LLM prompt buffers.}
+
+\section{Systems Architecture and Pruning Heuristics}
+\label{sec:architecture}
+
+We performed a static AST source-code audit and runtime trace of \texttt{browser-use 0.13.10}, a widely deployed open-source browser agent framework.
+
+\subsection{Script and Meta Pruning (\texttt{DISABLED\_ELEMENTS})}
+In \texttt{browser\_use/dom/serializer/serializer.py} (Line 18), the framework defines an explicit blacklist:
+\begin{lstlisting}[language=Python]
+DISABLED_ELEMENTS = {'style', 'script', 'head', 'meta', 'link', 'title'}
+\end{lstlisting}
+During simplified tree creation (\texttt{\_create\_simplified\_tree}, Lines 480--482):
+\begin{lstlisting}[language=Python]
+elif node.node_type == NodeType.ELEMENT_NODE:
+    if node.node_name.lower() in DISABLED_ELEMENTS:
+        return None
+\end{lstlisting}
+Any element matching \texttt{DISABLED\_ELEMENTS} is immediately pruned from the observation graph; child nodes are never traversed. Consequently, \texttt{<script type="application/ld+json">} structured data and \texttt{<meta name="evidence-date">} tags suffer complete, irreversible $100\%$ information loss.
+
+\subsection{Non-Interactive Element Tag Stripping}
+In \texttt{browser\_use/dom/serializer/serializer.py} (Lines 1046--1058), element tag serialization is conditionally gated:
+\begin{lstlisting}[language=Python]
+is_any_scrollable = node.original_node.is_actually_scrollable or node.original_node.is_scrollable
+if (
+    node.is_interactive
+    or is_any_scrollable
+    or node.original_node.tag_name.upper() == 'IFRAME'
+    or node.original_node.tag_name.upper() == 'FRAME'
+):
+    next_depth += 1
+    attributes_html_str = DOMTreeSerializer._build_attributes_string(
+        node.original_node, include_attributes, text_content
+    )
+\end{lstlisting}
+If an element is \textbf{not interactive} (not clickable, not scrollable, and not an iframe):
+\begin{itemize}
+    \item \texttt{\_build\_attributes\_string} is never executed.
+    \item No opening or closing tag is output for that element.
+    \item The serializer processes child text nodes, emitting raw strings, but all element attributes (\texttt{aria-label}, \texttt{data-*}, \texttt{role}) are discarded.
+\end{itemize}
+
+\subsection{Attribute Whitelist Filtering}
+Attribute retention on interactive elements is governed by \texttt{DEFAULT\_INCLUDE\_ATTRIBUTES} (\texttt{browser\_use/dom/views.py}, Line 18):
+\begin{lstlisting}[language=Python]
+DEFAULT_INCLUDE_ATTRIBUTES = [
+    'title', 'type', 'checked', 'id', 'name', 'role', 
+    'value', 'placeholder', 'alt', 'aria-label', ...
+]
+\end{lstlisting}
+While standard accessibility attributes (\texttt{aria-label}, \texttt{role}) are included, developer custom attributes (\texttt{data-action}, \texttt{data-product-id}) are omitted. In \texttt{serializer.py} (Lines 1211--1215), attributes are discarded if \texttt{key not in include\_attributes}.
+
+\section{Empirical Systems Audit: The 5-Stage Observation Pipeline}
+\label{sec:audit}
+
+\subsection{The 5 Observation Pipeline Stages}
+We define five discrete architectural stages through which web information flows before model ingestion:
+\begin{enumerate}
+    \item \textbf{Stage 1 (Source HTML \& Static Markup):} Raw HTML markup received over HTTP.
+    \item \textbf{Stage 2 (Browser Live DOM):} In-memory DOM tree parsed by Blink and augmented by client-side JavaScript.
+    \item \textbf{Stage 3 (Browser Accessibility Tree):} Chromium Blink native \texttt{AXObjectCache} queried via CDP \texttt{Accessibility.getFullAXTree}.
+    \item \textbf{Stage 4 (Agent DOM Serializer):} The simplified tree constructed by \texttt{browser-use 0.13.10}.
+    \item \textbf{Stage 5 (Final Model Context Prompt):} The stringified observation buffer compiled into the LLM context.
+\end{enumerate}
+
+\subsection{Multi-Channel Quantitative Reachability Findings}
+We executed our automated verification harness (\texttt{audit\_metadata\_reachability.py}) across four website variants and an edge-case fixture (\texttt{fixtures/edge\_cases.html}). All prompt payloads were intercepted using a local \texttt{MockChatModel}. Table~\ref{tab:reachability} reports the verified reachability metrics.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Quantitative reachability across semantic metadata channels in \texttt{browser-use 0.13.10}.}
+\label{tab:reachability}
+\begin{tabular}{lcccccl}
+\toprule
+\textbf{Metadata Channel} & \textbf{Source HTML} & \textbf{Live DOM} & \textbf{Blink AXTree} & \textbf{Prompt Buffer} & \textbf{Reachability} & \textbf{Suppression Mechanism} \\
+\midrule
+Schema.org JSON-LD       & Present & Present & Absent  & Absent  & \textbf{0.0\%}   & \texttt{DISABLED\_ELEMENTS} (\texttt{serializer.py:L18}) \\
+Button WAI-ARIA          & Present & Present & Present & Present & \textbf{100.0\%} & Retained on interactive nodes \\
+Non-Interactive ARIA     & Present & Present & Present & Absent  & \textbf{0.0\%}   & Stripped non-interactive tags (L1046) \\
+Custom \texttt{data-*} (Default)  & Present & Present & Absent  & Absent  & \textbf{0.0\%}   & Omitted from default whitelist \\
+Custom \texttt{data-*} (Extended) & Present & Present & Absent  & Present & \textbf{100.0\%} & Delivered on buttons under whitelist \\
+Temporal \texttt{<meta>} & Present & Present & Absent  & Absent  & \textbf{0.0\%}   & \texttt{DISABLED\_ELEMENTS} (\texttt{serializer.py:L18}) \\
+Temporal \texttt{<time>} & Present & Present & Present & Present & \textbf{100.0\%} & Tag stripped; inner text emitted \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Node-Level Correspondence: Chromium AXTree vs. Selector Map}
+To evaluate structural alignment between Chromium's native accessibility tree and the agent's observation tree, we implemented \texttt{compare\_accessibility\_tree.py}:
+\begin{itemize}
+    \item CDP \texttt{Accessibility.getFullAXTree} extracts Blink's unique \texttt{backendDOMNodeId} for every accessibility node.
+    \item In \texttt{browser-use 0.13.10}, \texttt{summary.dom\_state.selector\_map} indexes interactive elements containing the matching Blink \texttt{backend\_node\_id}.
+\end{itemize}
+
+\textbf{Empirical Findings on Route \texttt{\#home}:}
+Across 336 Chromium AXNodes constructed across variants (256 possessing \texttt{backendDOMNodeId}), \texttt{browser-use} detected 34 interactive elements. Exactly \textbf{27 of 34 interactive elements ($79.4\%$)} matched 1-to-1 to a corresponding Blink AXNode. The 7 unmatched elements corresponded to shadow DOM boundaries and synthetic input wrappers where Blink does not generate top-level accessibility nodes matching the DOM backend ID.
+
+\subsection{Refutation of the ``DOM Pruning == Accessibility Tree'' Fallacy}
+Our multi-layer extraction disproves the common assumption that agent DOM pruning approximates an accessibility tree:
+\begin{itemize}
+    \item \textbf{Critical Divergence (Non-Interactive ARIA):} Retained by Blink's AXTree (e.g., accessible name \texttt{"Price: \$49.99"}), but \textbf{$100\%$ stripped} by \texttt{browser-use}. Screen readers receive structured semantics, but LLM agents receive bare typography.
+    \item \textbf{Reversed Divergence (Custom \texttt{data-*}):} Absent from Blink's AXTree, but \textbf{$100\%$ deliverable} to agents on interactive elements under an extended whitelist.
+\end{itemize}
+
+\section{Methodological Analysis and Experimental Confounds}
+\label{sec:methodology}
+
+\subsection{The Action-Label Co-Location Confound}
+When ARIA markup does reach the prompt (on \texttt{<button>} elements), modifying button labels from generic text (e.g., \texttt{"Add to Cart"}) to entity-specific ARIA labels (e.g., \texttt{aria-label="Add SoundFlow Air 3 to cart"}) introduces an acute experimental confound:
+\begin{itemize}
+    \item In unaugmented baseline (\textsc{ABS}): The agent observes:
+    \begin{quote}
+    \texttt{SoundFlow Air 3} \\
+    \texttt{\$49.99} \\
+    \texttt{[12] <button>Add to Cart</button>}
+    \end{quote}
+    The agent must perform \textbf{hierarchical reference resolution}: locate the card boundary, verify product title and price, and infer that button \texttt{[12]} belongs to SoundFlow Air 3.
+    \item In confounded ARIA: The agent observes:
+    \begin{quote}
+    \texttt{[12] <button aria-label="Add SoundFlow Air 3 to cart">Add to Cart</button>}
+    \end{quote}
+    The agent performs \textbf{direct string matching}: finding \texttt{"SoundFlow Air 3"} directly within the button tag. Any observed accuracy improvement measures label disambiguation, not semantic markup comprehension.
+\end{itemize}
+To eliminate this confound, our de-confounded stimulus design in \texttt{shared/app-core.js:L35} standardizes generic action triggers across all variants: \texttt{addBtn.setAttribute('aria-label', 'Add item to cart')}.
+
+\subsection{Hardened State-Asserted Verifiers}
+To prevent scoring inflation, all verifiers enforce deterministic DOM state assertions:
+\begin{itemize}
+    \item \textbf{T1--T2:} Programmatic assertion of exact SKU matches in \texttt{window.\_\_cart\_\_}.
+    \item \textbf{T3 (2nd-Highest Audio):} Strictly enforces \texttt{len(cart) == 1 and cart[0] == "wh-002"}, rejecting the 6-SKU pass vulnerability of earlier verifiers.
+    \item \textbf{T4 (Transactional Checkout):} Enforces \texttt{order\_confirmed == True} via DOM form submission assertion, eliminating partial credit on incomplete checkouts.
+    \item \textbf{T5 (Cart Removal):} Asserts precondition \texttt{pre\_cart\_count == 1} before checking empty final cart (\texttt{len(cart) == 0}).
+    \item \textbf{T6 (Absent Fact Probe):} Evaluates grounded refusal vs. hallucinated warranty duration in strict isolation from primary task accuracy.
+\end{itemize}
+All verifiers pass $100\%$ of offline regression tests (\texttt{test\_t6\_verifier\_isolated.py}, \texttt{test\_verifier\_ground\_truth\_battery.py}).
+
+\section{Statistical Power Boundaries and The Equivalence Fallacy}
+\label{sec:power}
+
+\subsection{Task-Stratified Cochran--Mantel--Haenszel (CMH) and Newcombe CIs}
+To account for task heterogeneity across $K=5$ primary strata, post-experiment inference utilizes the continuity-corrected CMH test statistic~\cite{agresti2002categorical}:
+\begin{equation}
+\chi^2_{\text{CMH}} = \frac{\left( \left| \sum_{k=1}^K n_{11k} - \sum_{k=1}^K \mu_k \right| - 0.5 \right)^2}{\sum_{k=1}^K \text{Var}(n_{11k})}
+\end{equation}
+Risk differences are reported alongside 95\% Newcombe hybrid score confidence intervals~\cite{newcombe1998interval} utilizing independent Wilson score limits~\cite{wilson1927probable}. In \texttt{test\_analyze\_v3\_results.py}, our zero-dependency Python implementation matches published clinical trial benchmarks to four decimal places (Agresti 2002: $\chi^2 = 6.3841, p = 0.0115$; Newcombe 1998: $\hat{\theta} = 0.3250$, 95\% CI: $[+0.1764, +0.4578]$).
+
+\subsection{Monte Carlo Power Analysis}
+Primary contrasts across tasks T1--T5 utilize $n=20$ trials per arm. 10,000-trial Monte Carlo simulations (\texttt{power\_analysis.json}) establish:
+\begin{itemize}
+    \item $\Delta = 0.70$: $100.0\%$ power (robustly detectable).
+    \item $\Delta = 0.35$: $49.7\% \pm 1.1\%$ power.
+    \item $\Delta = 0.20$: $\mathbf{10.8\% \pm 0.6\%}$ power (Bonferroni $\alpha = 0.0167$).
+\end{itemize}
+
+\textbf{Methodological Prohibition of Equivalence Claims:}
+Because the power to detect small performance differences ($\Delta \le 0.20$) is under $11\%$, obtaining $p > 0.05$ cannot be interpreted as evidence that plain HTML and semantic markup perform equivalently. A null result indicates only that the sample size was insufficient to detect subtle effects.
+
+\section{Empirical Case Study: Latency Scaling and Watchdog Truncation}
+\label{sec:casestudy}
+
+To evaluate execution dynamics under local deployment, we conducted five exploratory diagnostic trials on \texttt{qwen3:4b} using \texttt{browser-use 0.13.10} (\texttt{results/local\_llama\_summary.csv}). Table~\ref{tab:qwen_runs} reports the trial telemetry.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Exploratory diagnostic trials on local \texttt{qwen3:4b} (Task T2).}
+\label{tab:qwen_runs}
+\begin{tabular}{lllcccl}
+\toprule
+\textbf{Run ID} & \textbf{Arm} & \textbf{Variant} & \textbf{Duration} & \textbf{Steps} & \textbf{CDP Ground Truth} & \textbf{Observed Mechanism} \\
+\midrule
+\texttt{qwen3\_smoke\_001} & \textsc{DATA-CFG} & \texttt{v3-data-attrs} & 3.34s   & 0 & False      & Pydantic validator failure (\texttt{max\_history\_items} $\le 5$) \\
+\texttt{qwen3\_smoke\_002} & \textsc{DATA-CFG} & \texttt{v3-data-attrs} & 1013.09s & 2 & \textbf{True (1.0)} & Step 1 succeeded; unconstrained step loop \\
+\texttt{qwen3\_smoke\_003} & \textsc{DATA-CFG} & \texttt{v3-data-attrs} & 288.61s  & 2 & \textbf{True (1.0)} & Step 1 succeeded (102.9s); Step 2 watchdog timeout \\
+\texttt{qwen3\_smoke\_004} & \textsc{ABS}      & \texttt{v3-data-attrs} & 185.50s  & 1 & False      & Step 1 watchdog timeout; unhandled cancellation \\
+\texttt{qwen3\_smoke\_005} & \textsc{ABS}      & \texttt{v3-data-attrs} & 188.56s  & 1 & False      & Step 1 watchdog timeout; cancellation telemetry captured \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Context Expansion and Latency Scaling}
+In Step 1 of \texttt{qwen3\_smoke\_003}, the prompt was $\sim$1,500 tokens. On hybrid CPU/GPU compute (34\% CPU / 66\% GPU on 4 GB VRAM), \texttt{qwen3:4b} completed prompt evaluation and action generation in 102.9 seconds. In Step 2, \texttt{browser-use} appended the prior step history, action result, and updated DOM, expanding context to $>3,200$ tokens. At hybrid ingestion rates ($\sim$15--20 tokens/sec), processing 3,200 tokens required $>180$ seconds, triggering the outer step watchdog ceiling.
+
+\subsection{In-Flight Cancellation Telemetry}
+In \texttt{browser-use}, step timeouts are enforced via:
+\begin{lstlisting}[language=Python]
+await asyncio.wait_for(self.step(step_info), timeout=self.settings.step_timeout)
+\end{lstlisting}
+When the 180-second timeout expires, \texttt{asyncio.wait\_for} injects \texttt{asyncio.CancelledError}. In Python 3.8+, \texttt{CancelledError} inherits directly from \texttt{BaseException}, not \texttt{Exception}. In run 004, the wrapper's \texttt{except Exception:} handler was bypassed, resulting in empty telemetry (\texttt{model\_call\_telemetry: []}). 
+
+In run 005, implementing dedicated \texttt{except asyncio.CancelledError:} safely captured:
+\begin{itemize}
+    \item \texttt{call\_index}: 1, \texttt{status}: \texttt{"cancelled\_in\_flight"}, \texttt{error\_type}: \texttt{"CancelledError"}.
+    \item \texttt{wall\_clock\_seconds}: 179.6983s.
+    \item Unobserved server metrics (\texttt{prompt\_tokens}, \texttt{eval\_duration\_ms}) were strictly preserved as \texttt{null}.
+\end{itemize}
+
+\section{Discussion and Implications for Web Standards}
+\label{sec:discussion}
+
+\subsection{The Fallacy of Metadata Augmentation for AI}
+Web authors cannot assume that adding Schema.org JSON-LD or custom data attributes will assist AI agents. Under standard \texttt{browser-use}, client-side DOM serializers discard these elements before the LLM receives the observation.
+
+\subsection{The ``ARIA Stuffing'' Hazard}
+Standards bodies (W3C/TPAC) have warned against developers overloading ARIA attributes specifically to optimize for AI agents. If ARIA attributes provide no generalized accuracy advantage over clear typography---and merely duplicate entity text onto buttons---stuffing ARIA tags risks polluting accessibility trees for human screen-reader users without aiding AI agents.
+
+\subsection{The Necessity of Out-of-Band Machine Endpoints}
+Rather than attempting to embed machine data in HTML DOM channels that are vulnerable to serialization pruning, standards organizations should prioritize dedicated machine endpoints (e.g., \texttt{llms.txt}, Model Context Protocol APIs) that bypass DOM serialization entirely.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper formalizes the DOM serialization gap in autonomous browser agents, establishing that default observation pipelines discard rich structured metadata (Schema.org JSON-LD and developer custom attributes) prior to model prompt construction. We have empirically documented the Critical Divergence between browser accessibility trees and DOM serializers, identified the action-label co-location confound, and proven the statistical power boundaries of small-sample web agent experiments. By providing a 100\% reproducible offline verification suite, this work establishes essential systems baselines for future web agent engineering.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\appendix
+
+\section{Offline Statistical Pipeline Verification Benchmark}
+\label{app:benchmark}
+
+\textbf{Synthetic Software Benchmark Disclaimer:} The metrics in Tables~\ref{tab:synth1} and~\ref{tab:synth2} are generated from a mock/synthetic benchmark dataset (\texttt{test\_scratch\_synthetic\_data/dataset\_1\_valid\_complete.csv}) to demonstrate that \texttt{analyze\_v3\_results.py} executes without error. \textbf{They do not represent real agent task performance.}
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Synthetic software pipeline output (Tasks T1--T5, Bonferroni $\alpha = 0.0167$).}
+\label{tab:synth1}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Contrast ID} & \textbf{Treatment ($n/N$)} & \textbf{Reference ($n/N$)} & \textbf{Risk Diff} & \textbf{Newcombe 95\% CI} & \textbf{CMH $\chi^2$} & \textbf{Adjusted p} \\
+\midrule
+\textsc{ARIA vs BASELINE}     & 14 / 20 (70.0\%) & 25 / 40 (62.5\%) & \textbf{+0.0750} & [-0.1782, +0.2801] & 0.088 & 1.0000 \\
+\textsc{DATA-CFG vs BASELINE} & 17 / 20 (85.0\%) & 25 / 40 (62.5\%) & \textbf{+0.2250} & [-0.0113, +0.4024] & 2.399 & 0.3644 \\
+\textsc{ARIA vs DATA-CFG}     & 14 / 20 (70.0\%) & 17 / 20 (85.0\%) & \textbf{-0.1500} & [-0.3751, +0.0906] & 0.683 & 1.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Baseline quality control check (Synthetic Benchmark).}
+\label{tab:synth2}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Condition} & \textbf{Success ($n/N$)} & \textbf{Rate} & \textbf{Fisher's Exact Stability p} \\
+\midrule
+\textsc{BASELINE (ABS)}     & 13 / 20 & 65.0\% & \multirow{2}{*}{$p = 1.0000$ (Satisfies $p \ge 0.10$)} \\
+\textsc{BASELINE\_REP (VIS)} & 12 / 20 & 60.0\% & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Step-by-Step Offline Reproducibility Instructions}
+\label{app:reproduce}
+
+All systems findings can be reproduced offline on Windows/Linux in under two minutes:
+\begin{enumerate}
+    \item \textbf{Multi-Channel Reachability Trace:} Run \texttt{python audit\_metadata\_reachability.py} to generate \texttt{serialization\_audit\_metrics.json}.
+    \item \textbf{Chromium Blink AXTree vs. Serializer Comparison:} Run \texttt{python compare\_accessibility\_tree.py} to generate \texttt{accessibility\_tree\_comparison.json}.
+    \item \textbf{Observation Pipeline Test Suite:} Run \texttt{python test\_observation\_pipeline_stages.py} to verify 5/5 assertions across all observation pipeline stages in $<0.2$ seconds.
+    \item \textbf{Statistical Engine Benchmark:} Run \texttt{python test\_analyze\_v3\_results.py} to verify 11/11 statistical assertions against Agresti (2002) and Newcombe (1998) clinical trial reference data.
+\end{enumerate}
+
+\end{document}

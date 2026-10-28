@@ -1,0 +1,59 @@
+{
+  "project_title": "The DOM Serialization Gap: Architectural Pruning, Information Loss, and Observation Confounds in Autonomous Browser Agents",
+  "framework": "browser-use",
+  "framework_version": "0.13.10",
+  "target_platform": "Chromium / Chrome DevTools Protocol (CDP)",
+  "design_name": "Randomized Complete Block Design (RCBD) / Stratified Multi-Arm Design",
+  "arm_definitions": {
+    "ABS": "Baseline variant with standard HTML visible typography; semantic attributes absent.",
+    "ARIA": "WAI-ARIA markup variant; semantic labels attached to buttons and landmark elements.",
+    "DATA-CFG": "Developer-defined data-* attribute variant (e.g. data-action, data-product-id)."
+  },
+  "arms": [
+    "ABS",
+    "ARIA",
+    "DATA-CFG"
+  ],
+  "arm_count": 3,
+  "strata_count": 5,
+  "strata_tasks": [
+    "T1_direct_search",
+    "T2_category_filter",
+    "T3_cart_review",
+    "T4_checkout_nav",
+    "T5_multi_item_lookup"
+  ],
+  "pilot_accounting": {
+    "primary_eligible_n_per_arm": 13,
+    "primary_eligible_N_total": 39,
+    "sensitivity_eligible_n_per_arm": {
+      "ABS": 13,
+      "ARIA": 13,
+      "DATA-CFG": 15
+    },
+    "sensitivity_eligible_N_total": 41,
+    "quarantined_attempts": 4,
+    "excluded_infrastructure_aborts": 3,
+    "total_trace_files_on_disk": 46
+  },
+  "inference_specification": {
+    "primary_estimand": "Stratified risk difference (RD) between treatment arm (ARIA, DATA-CFG) and reference arm (ABS) across 5 task strata, evaluated via Mantel-Haenszel weighting with Sato and Greenland-Robins variance estimators.",
+    "significance_level_family": 0.05,
+    "pairwise_comparisons": 3,
+    "bonferroni_adjusted_alpha": 0.016666666666666666,
+    "equivalence_margin": 0.1,
+    "tost_nominal_alpha": 0.05
+  },
+  "sample_size_requirements": {
+    "target_power": 0.8,
+    "assumed_delta": 0.2,
+    "baseline_success_rates": [
+      0.3,
+      0.5,
+      0.7
+    ],
+    "n_per_arm_closed_form": 124,
+    "three_arm_total_N": 372,
+    "four_arm_legacy_total_N": 496
+  }
+}

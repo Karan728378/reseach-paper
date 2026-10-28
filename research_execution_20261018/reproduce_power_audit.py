@@ -23,7 +23,7 @@ import json
 from pathlib import Path
 
 # Set up paths
-EXEC_DIR = Path("C:/testing/research_execution_20261018")
+EXEC_DIR = Path(__file__).resolve().parent
 OUTPUT_JSON = EXEC_DIR / "power_audit_results.json"
 
 def norm_cdf(x: float) -> float:

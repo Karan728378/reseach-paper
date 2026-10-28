@@ -55,10 +55,10 @@ Without rigorous experimental isolation, researchers cannot determine whether ag
 No prior work has experimentally isolated the information-delivery channel within identical DOM structures to evaluate its causal effect on browser-agent decision-making.
 
 ### Summary of Contributions
-1. **Defensible Research Formulation:** We formulate the first single-variable evaluation framework isolating four HTML information channels: $	ext{ABS}$, $	ext{VIS}$, $	ext{ARIA}$, and $	ext{DATA-CFG}$.
+1. **Defensible Research Formulation:** We formulate a single-variable evaluation framework isolating HTML information channels under a clean 3-arm design ($\text{ABS}$, $\text{ARIA}$, $\text{DATA-CFG}$; $N=72$) and a 4-arm design ($N=96$).
 2. **Observation-Pipeline Audit:** We document the exact pruning and filtering mechanisms in modern browser-agent serializers, demonstrating why JSON-LD and unconfigured custom attributes collapse to fact absence.
-3. **Flaw-Free Verification Suite:** We identify and resolve four critical verifier flaws prevalent in historical web benchmarks, providing strict verifier implementations validated by 15 synthetic offline tests.
-4. **Reproducible Experiment Package:** We deliver a complete Randomized Complete Block Design ($N=96$, $	ext{seed}=42$), JSON schemas, and analytical power calculations, ready for prospective execution.
+3. **Hardened Verification Suite:** We identify and resolve four critical verifier flaws prevalent in historical web benchmarks, providing strict verifier implementations validated by exhaustive offline regression and mutation tests.
+4. **Reproducible Experiment Package:** We deliver a complete Randomized Complete Block Design ($N=72$ / $N=96$, $\text{seed}=42$), JSON schemas, and analytical power calculations, ready for prospective execution.
 
 ---
 
@@ -68,18 +68,19 @@ No prior work has experimentally isolated the information-delivery channel withi
 > **How does the DOM information channel (visible text, ARIA attribute, or whitelisted custom data attribute) through which a web-grounded fact is delivered affect a text-based browser agent's retrieval accuracy and grounded action execution compared to fact absence?**
 
 ### Hypotheses
-- **Hypothesis 1 ($H_1$ — Channel Presence vs. Absence):** Task success in channels containing the target fact ($	ext{VIS}$, $	ext{ARIA}$, $	ext{DATA-CFG}$) is significantly higher than in the absence condition ($	ext{ABS}$).  
-  *Primary Estimand:* Risk Difference $RD(	ext{Arm} - 	ext{ABS}) = P(Y=1 \mid 	ext{Arm}) - P(Y=1 \mid 	ext{ABS})$.
-- **Hypothesis 2 ($H_2$ — Visible Text vs. ARIA Channel):** When the DOM serializer includes ARIA attributes in the text observation, task success in the $	ext{ARIA}$ channel is not significantly inferior to $	ext{VIS}$.  
-  *Primary Estimand:* Risk Difference $RD(	ext{VIS} - 	ext{ARIA})$.
-- **Hypothesis 3 ($H_3$ — Configured Custom Attributes):** When the agent runner is patched to whitelist custom $data-*$ attributes ($	ext{DATA-CFG}$), task success is significantly higher than $	ext{ABS}$; whereas without configuration, $data-*$ attributes are stripped and yield identical failure rates to $	ext{ABS}$.  
-  *Primary Estimand:* Risk Difference $RD(	ext{DATA-CFG} - 	ext{ABS})$.
+- **Hypothesis 1 ($H_1$ — Channel Presence vs. Absence):** Task success in channels containing the target fact ($\text{ARIA}$, $\text{DATA-CFG}$) is significantly higher than in the absence condition ($\text{ABS}$).  
+  *Primary Estimand:* Risk Difference $RD(\text{Arm} - \text{ABS}) = P(Y=1 \mid \text{Arm}) - P(Y=1 \mid \text{ABS})$.
+- **Hypothesis 2 ($H_2$ — Visible Text vs. ARIA Channel):** When the DOM serializer includes ARIA attributes in the text observation, task success in the $\text{ARIA}$ channel is not significantly inferior to unaugmented text.  
+  *Primary Estimand:* Risk Difference $RD(\text{BASELINE} - \text{ARIA})$.
+- **Hypothesis 3 ($H_3$ — Configured Custom Attributes):** When the agent runner is patched to whitelist custom $data-*$ attributes ($\text{DATA-CFG}$), task success is significantly higher than $\text{ABS}$; whereas without configuration, $data-*$ attributes are stripped and yield identical failure rates to $\text{ABS}$.  
+  *Primary Estimand:* Risk Difference $RD(\text{DATA-CFG} - \text{ABS})$.
 
 ### Non-Claim Boundaries
 This study **cannot** and **does not** claim:
 - Generalizability across all LLM model families (evaluated specifically on Google Gemini with `browser-use`).
-- Equivalence between channels if null hypotheses fail to be rejected (the study is underpowered for $\Delta \le 0.15$).
+- Equivalence between channels if null hypotheses fail to be rejected (the pilot study is underpowered for $\Delta \le 0.15$).
 - Human-equivalent accessibility performance.
+- Live empirical model discovery prior to explicit human execution authorization (0 live runs completed to date).
 
 ---
 

@@ -1,0 +1,414 @@
+<USER_REQUEST>
+# MASTER EXECUTION PROMPT — DOM SERIALIZATION GAP RESEARCH
+## Fix the Pipeline, Execute Real Groq Live Runs, Recover from Errors, and Complete the Study
+
+You are the autonomous senior research engineer, Python debugging specialist, browser-agent engineer, and experimental-methodology auditor responsible for completing my existing research project.
+
+**Your job is to execute the research workflow, not merely explain how I could execute it.** Inspect the existing code and files, make necessary changes, run tests, launch actual browser-agent experiments using Groq, diagnose failures from evidence, implement fixes, and resume execution. Continue through the entire feasible workflow and provide a precise final accounting.
+
+Do not stop after producing a plan, identifying a bug, writing a patch, or passing offline tests. Move to the next justified stage automatically.
+
+---
+
+# 1. PROJECT LOCATION AND ENVIRONMENT
+
+Project directory:
+
+`C:\testing\research_execution_20261018`
+
+Python interpreter:
+
+`C:\testing\.venv311\Scripts\python.exe`
+
+Main runner:
+
+`protocol_v3_runner.py`
+
+Backend:
+
+`groq_backend.py`
+
+Existing research schedule:
+
+`proposed_3arm_schedule.csv`
+
+Existing one-trial schedule:
+
+`results\single_live_trial_schedule_20261026.csv`
+
+Previous failed live run:
+
+`results\single_live_trial_20261026_runs\run_001.json`
+
+Previous summary:
+
+`results\single_live_trial_20261026.csv`
+
+The local research website was previously reachable at:
+
+`http://127.0.0.1:8080/variants/v0-baseline/index.html`
+
+The previous real execution used:
+
+- Provider: Groq
+- Model: `openai/gpt-oss-120b`
+- Browser-use: 0.13.10
+- Headless browser
+- `use_vision=False`
+- DATA-CFG treatment
+- Task T2: find “Mechanical Keyboard Pro” and add it to the cart
+
+Do not assume that all files, paths, schedules, or services are still in the expected state. Verify them.
+
+Never print, expose, log, or request the value of any API key. Check only whether the required environment variable is configured.
+
+---
+
+# 2. RESEARCH OBJECTIVE
+
+Research title:
+
+**The DOM Serialization Gap: Evaluating Additive Semantic Markup and Observation-Pipeline Bottlenecks in Autonomous Browser Agents**
+
+The research investigates how browser-agent observation and DOM serialization pipelines expose semantic attributes to autonomous agents, and whether additive semantic markup affects task execution.
+
+The study must preserve the distinction between:
+
+1. DOM attributes present on the website.
+2. Attributes actually included in the serialized agent observation.
+3. Attributes delivered in the model request.
+4. Model decisions and browser actions.
+5. Independently verified task outcomes.
+
+Do not treat one of these as proof of another.
+
+The existing experimental arms, task definitions, variants, outcome verifiers, statistical plan, and research hypotheses are the source of truth. Inspect them before modifying anything.
+
+Do not silently redesign the study, remove difficult tasks, change the outcome definition, or selectively weaken a treatment to obtain successful runs.
+
+---
+
+# 3. FIRST: AUDIT THE PREVIOUS LIVE FAILURE
+
+Inspect the actual source code and previous run artifacts.
+
+The previous run reached the DATA-CFG page, but the model request was rejected by Groq:
+
+`HTTP 413: Request too large ... TPM limit 8000, requested 14161 tokens.`
+
+The cart remained empty. The recorded result had `success=False`, `score=0`, `estimated_input_tokens=14000`, and a blank top-level `error_message`, although the provider error was present in the action history.
+
+The JSON also reported zero captured observations.
+
+Treat this as a failed live attempt, not a successful experiment.
+
+Investigate:
+
+- Why the serialized model request exceeded the provider's available limit.
+- Whether the oversized payload comes from the system prompt, DOM observation, history, action schema, tool descriptions, task prompt, or their combination.
+- Whether message compaction is enabled and actually functioning.
+- Whether the runner's observation capture is being persisted correctly.
+- Why provider errors do not consistently reach the run-level error fields.
+- Why the runner can record `status=completed` even though the task failed.
+- Why the estimated cost reported in the run and summary may differ.
+- Whether request limits are enforced before a provider call or merely recorded after it.
+- Whether an error action is incorrectly treated as an ordinary agent step.
+
+Use source inspection and measured payloads. Do not guess at the cause.
+
+---
+
+# 4. FIX THE PIPELINE PROPERLY
+
+Make minimal, targeted, tested changes to the existing project.
+
+## A. Control request size
+
+Measure the serialized message payload before sending it to Groq. Record:
+
+- Message count.
+- Total serialized character count.
+- Estimated input tokens.
+- Largest individual message sizes.
+- Current history size.
+- Observation size.
+- Active model and configured request limits.
+
+Prefer a reliable tokenizer for the selected model when available. If using a character-based estimate, label it as an estimate and use a conservative safety margin.
+
+Prevent requests that are predictably larger than the configured budget from reaching the provider.
+
+Inspect browser-use's supported configuration. Relevant installed options include:
+
+- `max_clickable_elements_length`
+- `max_history_items`
+- `message_compaction`
+- `max_actions_per_step`
+- `use_thinking`
+- `include_tool_call_examples`
+
+Choose settings based on actual measurements and the existing research protocol, not arbitrary trial and error.
+
+If observation length must be reduced, preserve the research treatments. Apply shared truncation rules consistently across arms, while retaining the arm-specific attributes necessary to test the hypotheses.
+
+Do not selectively remove DATA-CFG or ARIA attributes just to make one arm fit the context window.
+
+## B. Fix error propagation and result classification
+
+Distinguish clearly between:
+
+- Successful task completion.
+- Valid task failure after actual agent execution.
+- Provider/API failure.
+- Request rejected before model execution.
+- Browser infrastructure failure.
+- Invalid or incomplete run.
+- Experiment interrupted before a valid outcome could be established.
+
+A finalized JSON file does not imply a successful task.
+
+Persist provider exceptions, HTTP status codes, retry counts, request-size estimates, termination reason, and relevant stack traces in the appropriate error fields. Redact credentials and sensitive data.
+
+Do not count infrastructure failures as task failures in the confirmatory outcome analysis unless the preregistered methodology explicitly requires that treatment.
+
+## C. Preserve reproducibility
+
+Every change must be traceable.
+
+Before editing, save a source-control diff or backup. Record:
+
+- Files changed.
+- Exact reason for each change.
+- Tests used to validate the change.
+- Whether the change affects the experimental protocol or only infrastructure.
+- Any potential effect on comparability with prior runs.
+
+Do not modify the installed browser-use package as a shortcut unless no supported project-level solution exists and the modification is explicitly documented.
+
+---
+
+# 5. TEST BEFORE THE NEXT LIVE CALL
+
+Run the relevant existing tests using the specified Python interpreter.
+
+At minimum, investigate and run applicable tests for:
+
+- Groq backend serialization.
+- Agent prompt pipeline.
+- DOM treatment-attribute reachability.
+- Result verification.
+- Statistical-analysis pipeline.
+- Offline test suite.
+- Budget and request-limit safeguards.
+
+Add targeted tests for any bug you fix.
+
+Tests must verify that:
+
+1. Oversized requests are detected before provider dispatch.
+2. The configured request ceiling cannot be silently bypassed.
+3. HTTP 413 is recorded as a provider/request failure.
+4. A failed task cannot be reported as a successful task.
+5. Arm-specific semantic attributes remain available where intended.
+6. Treatment-delivery evidence is measured from the actual serialized observation.
+7. An interrupted or invalid run cannot enter the confirmatory success denominator incorrectly.
+8. Repeated execution does not overwrite earlier raw run artifacts.
+
+Do not claim a test passed unless it was actually executed and its result was inspected.
+
+After the fixes pass offline tests, continue to live validation. Do not stop merely because tests pass.
+
+---
+
+# 6. GROQ-ONLY LIVE EXECUTION
+
+Use Groq for the live experiments. Do not silently switch to Gemini, OpenAI, a mock backend, a fake LLM, or synthetic responses to get successful-looking results.
+
+Verify the configured Groq model, service limits, and current request configuration before dispatch.
+
+The current model may remain `openai/gpt-oss-120b` if it is available and its request fits the service limits. If it cannot handle the necessary prompt size, investigate genuinely available Groq-hosted model alternatives and verify their actual context limits, rate limits, and compatibility before recommending a change. Do not invent model capabilities.
+
+If a different Groq-hosted model is necessary, record the change and assess whether using multiple models would compromise experimental comparability. Do not mix models in the confirmatory dataset without an explicitly justified and documented design.
+
+## Start small, then scale
+
+1. Run one bounded, genuine live validation trial.
+2. Verify that the request reached Groq, the browser agent received a valid response, and the independent task verifier inspected the final browser state.
+3. Inspect the complete raw artifact and treatment-delivery record.
+4. If valid, continue automatically to the next scheduled run.
+5. If invalid due to infrastructure or provider errors, diagnose and repair the cause before resuming.
+6. Once the pipeline is stable, execute the existing confirmatory schedule in its predefined order, subject to actual provider limits and available resources.
+
+Do not use `--mock` for live evidence. Do not use the existing smoke-test mode as a substitute for the actual research schedule.
+
+Do not execute the full schedule until the bounded live validation demonstrates that the runner can produce valid, independently verified outcomes.
+
+---
+
+# 7. ERROR-RECOVERY LOOP — DO NOT ABANDON THE WORKFLOW AFTER THE FIRST ERROR
+
+For every failure, follow this sequence:
+
+1. Capture the exact error, stack trace, request metadata, run ID, and artifact paths.
+2. Classify the failure: configuration, serialization, provider limit, authentication, rate limit, browser/CDP, website, verifier, or experimental-protocol issue.
+3. Inspect the relevant code and raw evidence.
+4. Identify the specific root cause, or state explicitly what remains uncertain.
+5. Implement the smallest justified fix.
+6. Run the relevant offline regression tests.
+7. Confirm that the fix does not compromise treatment comparability or the study's outcome definitions.
+8. Resume from the first unfinished scheduled run.
+9. Verify the new run independently before counting it as a valid completed experiment.
+10. Continue through the remaining work.
+
+Do not repeatedly retry an identical request that has already been rejected for the same reason.
+
+Use bounded backoff for genuine transient rate limits and connection failures. Do not treat a 413 payload-size rejection as a transient error that can be solved by waiting.
+
+If a failure requires a human decision, a new credential, a billing-tier change, or authorization that is unavailable, state the exact blocker and ask only for that required intervention. Continue other safe, independent work where possible.
+
+**The goal is persistence with evidence-based recovery, not infinite retries.**
+
+---
+
+# 8. COST, REQUEST, AND EXECUTION SAFEGUARDS
+
+Inspect the actual Groq limits and current project safeguards before execution.
+
+Set explicit, finite per-run limits for:
+
+- Model requests.
+- Agent steps.
+- Estimated input size.
+- Cost per run.
+- Retry attempts.
+- Total execution budget where the project supports it.
+
+The previous two-request cap was insufficient to prevent an oversized first request. Fix pre-dispatch request-size control rather than simply increasing the request count.
+
+Maintain a persistent run ledger so that restarting the process does not erase completed work or restart valid runs unnecessarily.
+
+Never count an API call as a successful trial merely because the call was attempted or billed.
+
+Never claim that all runs are complete unless the requested schedule has actually been processed and every row has a recorded, auditable disposition.
+
+If provider quota or budget is exhausted, stop further paid calls until the limit can be resolved. Do not bypass service limits by rotating credentials or creating uncontrolled parallel requests.
+
+---
+
+# 9. REPORT AFTER EVERY SUCCESSFUL LIVE RUN
+
+After each live run, emit a concise progress report containing:
+
+- Run index and run ID.
+- Experimental arm.
+- Task ID.
+- Actual Groq model.
+- Whether the request was accepted by the provider.
+- Whether the agent completed the task.
+- Independent verifier outcome.
+- Treatment attributes actually observed.
+- Number of model requests and agent steps.
+- Elapsed time.
+- Estimated input/output tokens and cost, clearly labeled as estimates where applicable.
+- Raw artifact and summary paths.
+- Number of valid completed runs so far.
+- Number of task failures.
+- Number of infrastructure/provider failures.
+- Number of remaining scheduled rows.
+
+Do not label a run “successful” unless the independently defined verifier confirms the task outcome.
+
+A valid task failure still counts as a completed trial when the experimental protocol defines it as such. An infrastructure failure is a separate category.
+
+Keep progress output concise enough to read, but preserve complete records on disk.
+
+---
+
+# 10. CONTINUE UNTIL THE REQUESTED WORK IS COMPLETED
+
+Do not stop after one successful trial, one patch, or one passing test.
+
+After every valid run:
+
+1. Persist the raw artifact.
+2. Persist the run ledger.
+3. Update the summary.
+4. Report progress.
+5. Continue to the next unfinished scheduled run.
+
+After every recoverable failure, fix and validate the cause, then resume.
+
+Do not rerun already valid rows merely to improve the success rate. Follow the schedule and its retry policy. Preserve failed attempts and their provenance.
+
+If the process is interrupted, provide the exact restart command and resume from the saved ledger rather than starting from row one.
+
+Do not terminate early merely because the initial live validation succeeded. Continue until every requested scheduled row has a valid recorded outcome or a clearly documented, unavoidable blocker prevents further execution.
+
+Never fabricate a completed row, substitute synthetic data, or mark an unexecuted row complete.
+
+---
+
+# 11. FINAL AUDIT AND RESEARCH ANALYSIS
+
+When execution ends, produce a factual report with:
+
+- Scheduled rows.
+- Total live attempts.
+- Valid completed trials.
+- Independently verified task successes.
+- Valid task failures.
+- Provider/API failures.
+- Browser/infrastructure failures.
+- Invalid or incomplete runs.
+- Remaining unexecuted rows.
+- Actual model(s) used.
+- Estimated and, where available, provider-reported costs.
+- Request and token usage.
+- Treatment-delivery completeness by arm.
+- Reasons for missing or invalid observations.
+- All changed files and tests run.
+- Any remaining blockers.
+
+Reconcile the schedule, raw run artifacts, and summary table. Investigate discrepancies rather than silently choosing the most favorable number.
+
+Keep exploratory diagnostics, pilot runs, failed infrastructure attempts, synthetic data, and confirmatory observations in separate categories.
+
+Only calculate confirmatory treatment effects using valid observations under the predefined analysis plan. Apply the planned statistical tests and corrections only when their assumptions and data requirements are met.
+
+If the available evidence is insufficient for statistical conclusions, say so plainly. Do not manufacture statistical significance, claim a causal effect without appropriate evidence, or rewrite the research question to disguise failed experiments.
+
+Update the manuscript, methodology, reproducibility instructions, data provenance ledger, and limitations only to reflect findings that the actual artifacts support.
+
+---
+
+# 12. OPERATING RULES
+
+- Execute commands in the existing Windows PowerShell environment.
+- Use `C:\testing\.venv311\Scripts\python.exe` explicitly.
+- Inspect existing files before editing; preserve unrelated work.
+- Prefer targeted, reversible changes.
+- Never expose API keys or private credentials.
+- Never substitute mock execution for Groq live execution.
+- Never hide failures or overwrite raw artifacts.
+- Never claim progress that is not supported by the logs.
+- Do not ask me to manually perform routine debugging that you can do in the available environment.
+- If you have direct filesystem and terminal access, make the changes and execute the commands yourself. Do not merely give me commands to run.
+- If you do not have access to my local terminal, state that limitation clearly and provide the exact next command or patch required; do not pretend to have edited or executed anything.
+
+## START NOW
+
+Begin by inspecting the current project state and the failed live-run artifacts. Then fix the request-size and error-recording problems, run regression tests, perform one bounded real Groq live validation, and continue through the predefined schedule as far as valid execution and actual provider limits permit.
+
+**Do the work, preserve the evidence, report each verified run, recover intelligently from errors, and finish with an auditable count of exactly what was and was not completed.**
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-26T02:05:56+05:30.
+
+The user's current state is as follows:
+Active Document: c:\testing\research_execution_20261018\budget_controller.py (LANGUAGE_PYTHON)
+Cursor is on line: 272
+Other open documents:
+- c:\testing\research_execution_20261018\budget_controller.py (LANGUAGE_PYTHON)
+- c:\testing\research_execution_20261018\test_groq_connection.py (LANGUAGE_PYTHON)
+- c:\testing\research_execution_20261018\protocol_v3_runner.py (LANGUAGE_PYTHON)
+</ADDITIONAL_METADATA>

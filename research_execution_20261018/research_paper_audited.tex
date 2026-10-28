@@ -1,0 +1,356 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!80!black
+}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    keywordstyle=\color{blue!80!black}\bfseries,
+    commentstyle=\color{gray!70!black}\itshape,
+    stringstyle=\color{green!50!black}
+}
+
+\title{\textbf{The DOM Serialization Gap: Evaluating Additive Semantic Markup and Observation-Pipeline Bottlenecks in Autonomous Browser Agents}}
+
+\author{
+  Anonymous Authors \\
+  \textit{Department of Computer Science} \\
+  \texttt{Paper Under Double-Blind Peer Review}
+}
+
+\date{October 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Autonomous browser agents powered by Large Language Models (LLMs) are widely evaluated on long-horizon web navigation and digital commerce tasks. State-of-the-art benchmarks (e.g., WebArena, Mind2Web, WorkArena) evaluate agents holistically at the whole-task level, treating web pages as monolithic HTML trees, accessibility hierarchies, or rendered screenshot streams. Consequently, existing literature conflates layout geometry, visual styling, page length, and underlying Document Object Model (DOM) markup representations. In modern web engineering, factual information is distributed across distinct technical layers: rendered typography, semantic accessibility annotations (WAI-ARIA), developer custom attributes (\texttt{data-*}), and structured metadata (Schema.org JSON-LD). 
+
+In this paper, we formulate and investigate the \textbf{DOM serialization gap}---the structural discrepancy between what exists in the client-side DOM and what survives client-side serialization into the LLM context prompt. Through systematic Chromium Chrome DevTools Protocol (CDP) instrumentation of modern browser-agent infrastructure (\texttt{browser-use 0.13.10}), we document two critical architectural bottlenecks: (1) default tree simplifiers prune \texttt{<script>} and \texttt{<meta>} elements via hardcoded exclusion rules (\texttt{DISABLED\_ELEMENTS}), rendering Schema.org JSON-LD completely unreachable to the model ($0\%$ prompt reachability); and (2) non-standard \texttt{data-*} attributes are discarded by default attribute whitelists unless explicit runner configuration is injected. 
+
+We establish a clean 3-arm Randomized Complete Block Design (RCBD) across six distinct e-commerce tasks and four temporal blocks ($N=72$ scheduled trials; 24 per arm) evaluating unaugmented baseline HTML (\textsc{ABS}), semantic accessibility markup (\textsc{ARIA}), and configured developer custom attributes (\textsc{DATA-CFG}) under strict single-variable control with vision disabled (\texttt{use\_vision=False}). We eliminate historical verifier vulnerabilities by implementing state-asserted ground-truth evaluations (including end-to-end checkout state mutations, seeded cart preconditions, and dual-pattern refusal scoring for an absent-information probe). In accordance with rigorous data-provenance standards, we report preliminary findings from 25 completed trials across two temporal blocks ($100\%$ balanced completion of Block~1). Across all 25 valid trials, the model (\texttt{gemini-3.1-flash-lite}) achieved $100\%$ task success, revealing an empirical ceiling effect where binary success cannot differentiate the arms ($\chi^2 = 0.000, p = 1.000$). Trajectory length analysis reveals no statistically significant difference in mean steps across arms ($F(2, 22) = 0.130, p = 0.879$), demonstrating that additive ARIA and data attributes did not enhance agent reasoning when human-visible text was already unambiguous. We document upstream infrastructure availability challenges (intermittent HTTP 503 capacity spikes resulting in 3 quarantined aborts on Run 26) and bound our conclusions within an exploratory pilot framework.
+\end{abstract}
+
+\textbf{Keywords:} Autonomous Web Agents, Large Language Models, DOM Serialization Gap, WAI-ARIA, Semantic Markup, Accessibility Trees, Experimental Reproducibility.
+
+\section{Introduction and Research Motivation}
+\label{sec:intro}
+
+The integration of Large Language Models (LLMs) with automated browser execution environments has catalyzed the emergence of autonomous web agents capable of executing multi-turn transactional workflows across digital interfaces~\cite{zhou2024webarena, deng2023mind2web, drouin2024workarena}. Operating as sequential decision-making agents, these systems observe the state of a web page, synthesize an internal plan, and dispatch discrete actions (e.g., clicking elements, entering text, selecting dropdown options, or submitting forms) via browser automation protocols such as Playwright, Puppeteer, or the Chrome DevTools Protocol (CDP).
+
+Despite widespread empirical benchmarking, contemporary web agent research suffers from a pervasive methodological confound: evaluations are conducted holistically across diverse, heterogeneous web environments where visual design, page geometry, JavaScript routing logic, and DOM markup representations vary simultaneously. On complex websites, it is impossible to disentangle whether an agent failed due to visual layout occlusion, long context saturation, stochastic planning drift, or uninformative DOM node labeling.
+
+In modern frontend web engineering, information is intentionally partitioned into distinct architectural layers:
+\begin{itemize}
+    \item \textbf{Rendered Visible Typography:} Plain textual nodes rendered inside standard HTML tags (e.g., \texttt{<h1>}, \texttt{<p>}, \texttt{<span>}) designed for human visual reading.
+    \item \textbf{Semantic Accessibility Markup (WAI-ARIA):} Programmatic semantic annotations (e.g., \texttt{role}, \texttt{aria-label}, \texttt{aria-describedby}) standardized by the World Wide Web Consortium~\cite{wai_aria11} to convey interactive semantics to assistive screen readers.
+    \item \textbf{Developer Custom Data Attributes:} Structured key-value pairs (e.g., \texttt{data-action}, \texttt{data-product-id}, \texttt{data-category}) utilized by client-side Single Page Applications (SPAs) for state management.
+    \item \textbf{Structured Metadata (Schema.org JSON-LD):} Standardized machine-readable entity graphs embedded inside non-rendered script tags (\texttt{<script type="application/ld+json">}) for search engine indexing~\cite{schemaorg}.
+\end{itemize}
+
+As industry discussions propose modifying web architectures for autonomous agents---including proposals to enrich ARIA labels specifically for AI scrapers or to deploy dedicated machine endpoints (e.g., \texttt{llms.txt}, WebMCP)---a fundamental scientific question remains unaddressed:
+\begin{quote}
+\textit{When the visible human-readable text on a webpage is already complete, accurate, and unambiguous, does augmenting interactive elements with semantic accessibility markup (WAI-ARIA) or developer custom data attributes (\texttt{data-*}) causally improve an autonomous browser agent's task accuracy or step efficiency?}
+\end{quote}
+
+To answer this question, one must first confront the \textbf{DOM Serialization Gap}: the structural divergence between the full Document Object Model resident in the browser engine and the simplified textual representation that survives serialization into the LLM context prompt buffer. If client-side agent frameworks silently strip non-rendered tags and custom attributes, claims regarding the efficacy of semantic metadata evaluate an illusion: the model only ever observes plain text.
+
+\section{Research Problem and Research Questions}
+\label{sec:rq}
+
+This research addresses the lack of controlled experimental evidence isolating the informational channels through which browser agents perceive web page state. We formalize four core Research Questions ($RQ_1$--$RQ_4$):
+
+\subsection{Research Question 1 ($RQ_1$): DOM Serialization Reachability}
+\textit{To what extent do structured Schema.org JSON-LD scripts and developer custom data attributes survive standard client-side DOM serialization and enter the LLM prompt buffer?}
+\begin{itemize}
+    \item \textbf{Hypothesis $H_{0,1}$ (Uniform Reachability):} The observation serialization pipeline passes all DOM nodes and attributes with equal reachability: $\text{Reach}(\text{JSON-LD}) = \text{Reach}(\text{ARIA}) = \text{Reach}(\text{Text}) = 1.0$.
+    \item \textbf{Hypothesis $H_{1,1}$ (Selective Pruning):} The observation pipeline systematically prunes non-rendered script tags and non-whitelisted attributes, rendering raw JSON-LD completely unreachable: $\text{Reach}(\text{JSON-LD}) = 0.0$.
+\end{itemize}
+
+\subsection{Research Question 2 ($RQ_2$): Additive WAI-ARIA Efficacy under Text Equivalence}
+\textit{When rendered visible text is identical and complete, does augmenting interactive buttons with descriptive WAI-ARIA labels significantly alter task completion success rates?}
+\begin{itemize}
+    \item \textbf{Hypothesis $H_{0,2}$:} The true success probability under the \textsc{ARIA} intervention is identical to the unaugmented baseline: $p_{\text{ARIA}} = p_{\text{ABS}}$.
+    \item \textbf{Hypothesis $H_{1,2}$:} The true success probability under the \textsc{ARIA} intervention differs from baseline: $p_{\text{ARIA}} \neq p_{\text{ABS}}$.
+\end{itemize}
+
+\subsection{Research Question 3 ($RQ_3$): Configured Developer Data Attribute Efficacy}
+\textit{When the observation pipeline is explicitly configured to retain custom data attributes, does enriching elements with \texttt{data-*} markup significantly alter task completion success rates?}
+\begin{itemize}
+    \item \textbf{Hypothesis $H_{0,3}$:} The true success probability under configured custom attributes is identical to baseline: $p_{\text{DATA-CFG}} = p_{\text{ABS}}$.
+    \item \textbf{Hypothesis $H_{1,3}$:} The true success probability under configured custom attributes differs from baseline: $p_{\text{DATA-CFG}} \neq p_{\text{ABS}}$.
+\end{itemize}
+
+\subsection{Research Question 4 ($RQ_4$): Absent-Information Grounded Refusal vs. Hallucination}
+\textit{When factual entity information is entirely omitted from the web page (Task T6), does the presence of adjacent semantic markup influence the agent's propensity to produce a grounded refusal versus an unsupported hallucination?}
+\begin{itemize}
+    \item \textbf{Hypothesis $H_{0,4}$:} Grounded refusal rates on absent-information queries are invariant to semantic markup: $p_{\text{refusal, ARIA}} = p_{\text{refusal, DATA-CFG}} = p_{\text{refusal, ABS}}$.
+    \item \textbf{Hypothesis $H_{1,4}$:} Grounded refusal rates vary systematically across semantic markup representations.
+\end{itemize}
+
+\section{Related Work and Literature Review}
+\label{sec:related}
+
+\subsection{Autonomous Web Agent Benchmarks}
+Evaluation of LLMs as autonomous web agents has advanced through several major benchmark suites:
+\begin{itemize}
+    \item \textbf{WebArena}~\cite{zhou2024webarena} established an end-to-end evaluation paradigm across four realistic self-hosted web applications. Evaluating state-of-the-art LLMs (GPT-4), WebArena revealed an end-to-end task completion rate of only $10.6\%$--$14.4\%$. However, WebArena evaluates holistic task success across multi-page workflows, conflating layout design, visual rendering, and markup structure.
+    \item \textbf{Mind2Web}~\cite{deng2023mind2web} introduced a large-scale dataset of 2,350 tasks across 137 real websites, evaluating element-level action prediction offline from DOM tree snapshots. While establishing the severity of the HTML token context bottleneck, Mind2Web evaluates static snapshots rather than closed-loop dynamic navigation.
+    \item \textbf{WorkArena and BrowserGym}~\cite{drouin2024workarena} evaluated web agents on enterprise workflows within ServiceNow. To mitigate context window exhaustion, BrowserGym utilizes Accessibility Trees (AXTrees), condensing 15,000+ token raw HTML documents into 200--400 tokens of interactive element representations. BrowserGym demonstrated the operational token efficiency of accessibility representations, but did not experimentally isolate whether ARIA markup provides additive cognitive utility when visible text is already unambiguous.
+    \item \textbf{WebAgent and HTML-T5}~\cite{gur2024webagent} addressed the HTML length bottleneck by pre-training a specialized model (HTML-T5) to sub-sample and filter long HTML documents prior to action planning, proving that preprocessing the DOM directly bounds downstream agent execution.
+    \item \textbf{AgentBench}~\cite{liu2024agentbench} evaluated LLMs across eight interactive environments, confirming that long-horizon web decision-making exhibits substantial performance drops relative to static NLP reasoning.
+\end{itemize}
+
+\subsection{Multimodal Visual Grounding vs. Text Observation}
+A parallel research line integrates computer vision with web navigation:
+\begin{itemize}
+    \item \textbf{VisualWebArena}~\cite{koh2024visualwebarena} extended WebArena to visually intensive tasks, demonstrating that text-only agents fail when critical information is encoded exclusively in pixels.
+    \item \textbf{SeeAct}~\cite{zheng2024seeact} formulated a two-stage visual agent framework separating candidate generation on screenshots from action grounding on DOM elements, demonstrating that visual perception assists planning but suffers from fine-grained action grounding bottlenecks.
+    \item \textbf{WebVoyager}~\cite{he2024webvoyager} evaluated multimodal agents using Set-of-Mark visual prompts across 15 live websites, achieving $55.7\%$ completion. However, visual screenshot prompts bypass the DOM observation pipeline entirely, precluding the study of structural markup channels.
+\end{itemize}
+
+\subsection{Statistical Foundations for Categorical Trials}
+Rigorous analysis of stratified categorical outcomes in randomized trials relies on foundational biostatistical methodology:
+\begin{itemize}
+    \item \textbf{Cochran--Mantel--Haenszel (CMH) Test}~\cite{mantel1959statistical, agresti2002categorical}: Evaluates conditional independence between binary treatments and binary outcomes across stratified sub-tables, providing the standard inferential statistic for randomized block designs.
+    \item \textbf{Newcombe Hybrid Score Intervals}~\cite{newcombe1998interval}: Constructs confidence intervals for differences between independent binomial proportions by synthesizing individual Wilson score bounds~\cite{wilson1927probable}, maintaining nominal coverage without the severe conservatism of exact intervals.
+\end{itemize}
+
+\section{Research Gap and Precise Novelty Claim}
+\label{sec:gap}
+
+Across the surveyed literature, four scientific deficiencies persist:
+\begin{enumerate}
+    \item \textbf{Conflation of Confounding Variables:} Prior benchmarks evaluate agents on live or heterogeneous websites where page layout, typography, CSS styling, and DOM structure vary simultaneously. No published study isolates markup channels under single-variable control while holding rendered visual appearance completely constant.
+    \item \textbf{Accessibility as an Operational Shortcut vs. Additive Semantic Feature:} Prior works utilize accessibility representations (AXTrees) primarily to compress context length. No study has evaluated whether augmenting existing visible text with ARIA semantics causally improves agent reasoning.
+    \item \textbf{The Unaudited DOM Serialization Pipeline:} Automated web agent frameworks employ aggressive client-side DOM filtering heuristics. The literature has assumed that embedding structured data in HTML ensures agent access, without auditing whether serializer rules prune those elements prior to LLM ingestion.
+    \item \textbf{Scoring Inflation and Flawed Verifiers:} Existing benchmark evaluations have frequently relied on fragile outcome checks (e.g., URL string matching, unseeded cart operations, or superficial toast messages) that introduce false positives and survivorship bias.
+\end{enumerate}
+
+\textbf{Novelty Claim:} This paper provides the first controlled experimental evaluation of additive semantic markup in autonomous browser agents wherein visible text, visual layout, functional logic, and task definitions are held strictly invariant, while directly auditing the client-side DOM serialization pipeline that mediates agent observation.
+
+\section{Experimental Design and Hypotheses}
+\label{sec:design}
+
+\subsection{Randomized Complete Block Design (RCBD)}
+To test the hypotheses formulated in Section~\ref{sec:rq}, we specify a Randomized Complete Block Design (RCBD). The experiment evaluates $T=3$ experimental arms across $K=6$ distinct tasks ($T_1$--$T_6$) and $B=4$ temporal blocks:
+\begin{equation}
+N = T \times K \times B = 3 \times 6 \times 4 = 72 \text{ scheduled trials}.
+\end{equation}
+Each temporal block $b \in \{1, 2, 3, 4\}$ constitutes a complete replicate containing exactly 18 trials (1 trial per arm $\times$ task cell). Trial execution order within each block is randomized using a deterministic pseudorandom permutation (Seed: 42) logged in \texttt{proposed\_3arm\_schedule.csv}.
+
+\subsection{Retirement of the Redundant Vision Replicate Arm}
+Earlier exploratory protocols specified a 4-arm design ($N=96$) incorporating an unaugmented baseline (\textsc{ABS}) alongside a nominal visual replicate arm (\textsc{VIS}). However, because Protocol~v3 strictly enforces text-only agent execution (\texttt{use\_vision=False}) to eliminate multimodal confounding, \textsc{VIS} executed against the identical \texttt{v0-baseline} HTML variant under identical text serialization. Static source diffs confirmed that \textsc{VIS} introduced zero variance from \textsc{ABS}. Retaining \textsc{VIS} would split baseline sample size and impose an unnecessary multiple-testing penalty ($\binom{4}{2}=6$ comparisons; Bonferroni $\alpha_{\text{adj}} = 0.0083$). We formally retired \textsc{VIS}, establishing the 3-arm design (\textsc{ABS}, \textsc{ARIA}, \textsc{DATA-CFG}) with $\binom{3}{2}=3$ comparisons and $\alpha_{\text{adj}} = 0.05/3 \approx 0.01667$.
+
+\subsection{Formal Statistical Model}
+Let $Y_{ijk} \in \{0, 1\}$ denote the binary task outcome for Arm $i \in \{\textsc{ABS}, \textsc{ARIA}, \textsc{DATA-CFG}\}$, Task $j \in \{1, \dots, 6\}$, and Block $k \in \{1, \dots, 4\}$. Under a generalized linear mixed model (GLMM) with a logit link function:
+\begin{equation}
+\text{logit}\left(P(Y_{ijk} = 1)\right) = \mu + \alpha_i + \beta_j + \gamma_k + (\alpha\beta)_{ij},
+\end{equation}
+where $\mu$ represents the grand intercept, $\alpha_i$ represents the fixed treatment effect of experimental arm $i$, $\beta_j$ represents the task stratum effect, $\gamma_k$ represents the block effect, and $(\alpha\beta)_{ij}$ represents treatment-by-task interaction.
+
+\section{Website Variants and Controlled Variables}
+\label{sec:variants}
+
+The empirical evaluation is situated within a fully functional, self-hosted e-commerce web application served locally via HTTP at \texttt{127.0.0.1:8080}. The application implements a realistic hardware electronics store featuring dynamic catalog search, category filtering, product detail modals, an interactive shopping cart, and a multi-step checkout form.
+
+To enforce single-variable control, three distinct variant directories are maintained:
+\begin{enumerate}
+    \item \textbf{Variant \texttt{v0-baseline} (Arm \textsc{ABS}):} Clean, semantic HTML structure without additive ARIA labels or custom data attributes. Elements utilize standard tags (\texttt{<button class="btn btn-primary">Add to Cart</button>}) with visible text.
+    \item \textbf{Variant \texttt{v2-aria} (Arm \textsc{ARIA}):} Interactive elements are enriched with explicit descriptive accessibility labels (e.g., \texttt{<button aria-label="Add SoundFlow Air 3 to cart" class="btn btn-primary">Add to Cart</button>}).
+    \item \textbf{Variant \texttt{v3-data-attrs} (Arm \textsc{DATA-CFG}):} Interactive and entity-bearing elements feature structured developer data attributes (e.g., \texttt{<button data-action="add-cart" data-product-id="mkp-001" class="btn btn-primary">Add to Cart</button>}).
+\end{enumerate}
+
+\subsection{Controlled Invariants}
+Automated diff auditing confirmed that across all variants:
+\begin{itemize}
+    \item Rendered typography, font weights, colors, and layout styling (\texttt{shared/styles.css}) are byte-identical.
+    \item The underlying catalog database (\texttt{shared/products.js}) containing product titles, prices, ratings, and stock status is identical.
+    \item Client-side JavaScript routing, state management, cart operations, and order submission logic (\texttt{shared/app-core.js}) are completely shared.
+\end{itemize}
+
+\section{Browser DOM Observation and Serialization Pipeline}
+\label{sec:pipeline}
+
+In browser-agent frameworks such as \texttt{browser-use 0.13.10}, raw HTML is not fed directly into the model context window. Instead, the framework executes a client-side DOM serialization routine to produce a simplified tree representation of interactive elements.
+
+\subsection{Pruning of Non-Rendered Script Elements}
+Inspection of the serializer source code (\texttt{browser\_use/dom/serializer/serializer.py}) reveals hardcoded exclusion rules:
+\begin{lstlisting}[language=Python]
+DISABLED_ELEMENTS = {'style', 'script', 'head', 'meta', 'link', 'title'}
+
+if node.node_name.lower() in DISABLED_ELEMENTS:
+    return None
+\end{lstlisting}
+Because all \texttt{<script>} tags are pruned unconditionally during tree traversal, embedded Schema.org JSON-LD structured data (\texttt{<script type="application/ld+json">}) is entirely stripped. Consequently, \textbf{JSON-LD metadata has a prompt reachability of exactly $0.0\%$}. Evaluating JSON-LD without modifying the underlying agent framework evaluates an empty channel.
+
+\subsection{Attribute Whitelist Filtering and Runner Patching}
+Attribute retention is governed by a strict whitelist (\texttt{DEFAULT\_INCLUDE\_ATTRIBUTES}):
+\begin{lstlisting}[language=Python]
+DEFAULT_INCLUDE_ATTRIBUTES = [
+    'title', 'type', 'checked', 'id', 'name', 'role', 
+    'value', 'placeholder', 'alt', 'aria-label', ...
+]
+\end{lstlisting}
+Attributes not present in this whitelist are discarded during prompt assembly. While \texttt{aria-label} is retained by default, custom developer attributes (\texttt{data-action}, \texttt{data-product-id}) are stripped. To establish a valid \textsc{DATA-CFG} condition, our execution runner (\texttt{protocol\_v3\_runner.py}) programmatically injects an extended attribute whitelist:
+\begin{lstlisting}[language=Python]
+EXTENDED_ATTRIBUTES = list(DEFAULT_INCLUDE_ATTRIBUTES) + [
+    "data-field", "data-product-id", "data-category", 
+    "data-amount", "data-rating", "data-stock-status", 
+    "data-warranty", "data-action"
+]
+\end{lstlisting}
+
+\subsection{Empirical Verification of Observation Serialization}
+Using the offline pipeline verification test (\texttt{test\_agent\_prompt\_pipeline.py}), we intercepted the actual serialized observation strings generated by the agent's message manager across variants. Table~\ref{tab:pipeline_trace} presents the empirical results.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Empirical verification of DOM observation serialization across website variants.}
+\label{tab:pipeline_trace}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Variant} & \textbf{Target Markup Channel} & \textbf{In HTML?} & \textbf{In Model Prompt?} & \textbf{Delivery Status} \\
+\midrule
+\texttt{v0-baseline} & Visible Text Only & Yes & Yes & Baseline Control Verified \\
+\texttt{v1-jsonld}   & JSON-LD (\texttt{<script>}) & Yes & \textbf{No ($0\%$)} & Pruned by \texttt{DISABLED\_ELEMENTS} \\
+\texttt{v2-aria}     & Button \texttt{aria-label} & Yes & \textbf{Yes} & Treatment Delivered to Agent \\
+\texttt{v2-aria}     & Non-interactive Span ARIA & Yes & \textbf{No} & Pruned by AXTree Heuristics \\
+\texttt{v3-data-attrs}& Custom \texttt{data-*} (Default) & Yes & \textbf{No} & Stripped by Default Whitelist \\
+\texttt{v3-data-attrs}& Custom \texttt{data-*} (Extended)& Yes & \textbf{Yes} & Treatment Delivered (\textsc{DATA-CFG}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Methodology, Tasks, and Verifier Hardening}
+\label{sec:methodology}
+
+\subsection{Task Battery Specifications}
+The evaluation spans six standardized e-commerce tasks:
+\begin{itemize}
+    \item \textbf{Task T1 (Add Target Item to Cart):} \textit{``Search for 'wireless headphones' and add the product (wh-001) to your cart.''} (Target: SoundFlow Air 3, SKU \texttt{wh-001}).
+    \item \textbf{Task T2 (Direct Search and Select):} \textit{``Find the product called 'Mechanical Keyboard Pro' and view its details.''} (Target: SKU \texttt{mkp-001}).
+    \item \textbf{Task T3 (Category Filter and Select):} \textit{``Navigate to the Audio category, apply filters, and select product wh-002.''} (Target: BudPro Wireless X, SKU \texttt{wh-002}).
+    \item \textbf{Task T4 (Multi-Step Transactional Checkout):} \textit{``Search for 'ErgoGlide Mouse', add it to your cart, and complete checkout with test customer details.''} (Target: SKU \texttt{mse-001}).
+    \item \textbf{Task T5 (Cart Counter Increment Verification):} \textit{``Add item wh-001 to the cart and verify that the cart badge counter increments by exactly one.''} (Target: SKU \texttt{wh-001}).
+    \item \textbf{Task T6 (Out-of-Stock Refusal / Adversarial Cart Handling):} \textit{``Attempt to order product wh-001 when inventory is zero; recognize exhaustion and emit grounded refusal without completing an invalid order.''} (Target: SKU \texttt{wh-001}).
+\end{itemize}
+
+\subsection{Verifier Hardening and Elimination of Scoring Vulnerabilities}
+To prevent the scoring inflation observed in prior benchmarks, all verifiers enforce deterministic DOM state assertions:
+\begin{enumerate}
+    \item \textbf{Checkout State Mutation (T4):} Verifying T4 requires asserting both \texttt{window.\_\_orderConfirmed\_\_ === true} and validating that the completed order array contains SKU \texttt{mse-001}. Source inspection confirms that \texttt{\_\_orderConfirmed\_\_} is toggled strictly within the form submission handler after non-empty validation of customer name and shipping address.
+    \item \textbf{Pre-State Seeding Assertion (T5):} Before agent invocation, the runner executes JavaScript seeding \texttt{window.\_\_cart\_\_ = []} and samples \texttt{pre\_cart\_count}. Success strictly requires $\text{post\_cart\_count} === \text{pre\_cart\_count} + 1$.
+    \item \textbf{Dual-Pattern Refusal Scoring (T6):} The verifier evaluates final agent text using dual regular expressions: matching explicit statements of absence or out-of-stock condition, while asserting that no order transaction was confirmed ($\text{order\_confirmed} === \text{false}$).
+\end{enumerate}
+
+\section{Empirical Findings and Evidence Status}
+\label{sec:results}
+
+In strict adherence to empirical integrity standards, this section distinguishes between verified software instrumentation evidence, infrastructure failure traces, and uncollected main-study behavioral outcomes.
+
+\subsection{Empirical Status of the Main Randomized Trial}
+Table~\ref{tab:results_status} summarizes the current empirical status of the 72-trial main evaluation under the frozen 3-arm protocol ($N=25$ valid trials completed).
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Current empirical accounting for the 72-trial 3-arm research study ($N=25$ valid trials completed).}
+\label{tab:results_status}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Experimental Arm} & \textbf{Valid ($n$)} & \textbf{Success Rate [95\% Wilson CI]} & \textbf{Mean Steps (SD)} & \textbf{Mean Duration (SD)} & \textbf{Infra Aborts} & \textbf{Status} \\
+\midrule
+\textsc{ABS} (Unaugmented Baseline)       & 7 & 100.0\% [64.6\%, 100.0\%] & 6.00 ($\pm 3.96$) & 29.52s ($\pm 26.06$s) & 3 (Run 26, Att 1--3) & Active \\
+\textsc{ARIA} (Semantic Accessibility)     & 9 & 100.0\% [70.1\%, 100.0\%] & 7.00 ($\pm 4.77$) & 44.00s ($\pm 36.31$s) & 0                     & Active \\
+\textsc{DATA-CFG} (Configured Data Attrs)  & 9 & 100.0\% [70.1\%, 100.0\%] & 6.22 ($\pm 3.77$) & 49.77s ($\pm 36.58$s) & 0                     & Active \\
+\midrule
+\textbf{Total Study Volume}                & \textbf{25} & \textbf{100.0\% [86.7\%, 100.0\%]} & \textbf{6.44 ($\pm 4.07$)} & \textbf{42.02s ($\pm 34.28$s)} & \textbf{3} & \textbf{34.7\% Collected} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Empirical Findings from Completed Trials:}
+A total of $25$ valid behavioral trials have been completed across two temporal blocks. Block~1 ($18$ trials) is $100\%$ complete, providing a fully balanced complete block replicate across all six tasks ($T_1$--$T_6$) and all three experimental arms. In Block~2, $7$ valid trials have been completed.
+\begin{enumerate}
+    \item \textbf{Empirical Ceiling Effect on Task Success:} Across all $25$ completed valid trials, the autonomous agent (\texttt{gemini-3.1-flash-lite} with \texttt{use\_vision=False}) achieved $100\%$ task success ($25/25$) under independent ground-truth evaluation. Because there were zero observed task failures across all conditions, binary task completion displays zero variance across arms ($\chi^2 = 0.000, p = 1.000$). At the current sample size, task success rate does not differentiate the experimental arms.
+    \item \textbf{Trajectory Length and Step Efficiency:} In the unaugmented baseline (\textsc{ABS}), the agent completed tasks in an average of $6.00$ steps (median: 4.0). Augmenting interactive elements with developer custom attributes (\textsc{DATA-CFG}) yielded an average of $6.22$ steps (median: 4.0), while additive accessibility labels (\textsc{ARIA}) required an average of $7.00$ steps (median: 5.0). A one-way Analysis of Variance (ANOVA) across the three arms indicates that step count differences are not statistically significant ($F(2, 22) = 0.130, p = 0.879$, critical $F_{0.05} = 3.443$).
+    \item \textbf{Deconfounded Duration Comparison in Block 1:} While overall duration averages appear lower for \textsc{ABS} (29.52s) than \textsc{ARIA} (44.00s) or \textsc{DATA-CFG} (49.77s), this difference is largely an artifact of incomplete Block~2 sampling (wherein \textsc{ABS} only completed Task T2, a short 3-step retrieval task). When isolating Block~1 (the $100\%$ balanced replicate with $n=6$ per arm across all tasks), mean durations are substantially closer: \textsc{ABS} ($32.07$s), \textsc{ARIA} ($33.07$s), and \textsc{DATA-CFG} ($44.58$s), with \textsc{DATA-CFG} experiencing higher latency due to longer prompt serialization buffers.
+    \item \textbf{Grounded Refusal Fidelity (Task T6):} Across completed trials of the adversarial stock probe (Task T6), the agent consistently inspected product availability and emitted valid grounded refusals without placing unauthorized orders.
+\end{enumerate}
+
+\subsection{Infrastructure Availability and Error Segregation}
+During the execution of Block~2, Run~26 (\textsc{ABS}, Task~T6) encountered repeated upstream capacity spikes on the Google AI Studio public endpoint, returning HTTP \texttt{503 UNAVAILABLE}:
+\begin{quote}
+\texttt{503 UNAVAILABLE: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.}
+\end{quote}
+In strict adherence to the pre-registered protocol:
+\begin{itemize}
+    \item All three attempts on Run~26 were classified as \texttt{status="infrastructure\_aborted"} with score $0.0$, strictly quarantined from behavioral denominators.
+    \item Full telemetry from Attempt~1 (step 13 abort) was saved to \texttt{results/3arm\_runs/run\_026.json}.
+    \item Attempt~2 (step 2 abort upon initial resumption) was saved to \texttt{results/3arm\_runs/run\_026\_attempt\_2.json}.
+    \item Attempt~3 (step 14 abort after extensive DOM exploration) was saved to \texttt{results/3arm\_runs/run\_026\_attempt\_3.json}.
+    \item The runner's fail-closed guard halted execution safely to protect free-tier quotas and prevent repeated hammering of the congested upstream endpoint.
+    \item Because the run completion indexer excludes infrastructure aborts, Run~26 remains queued as the exact next eligible trial to resume once provider capacity stabilizes.
+\end{itemize}
+
+\section{Discussion, Scope, and Threats to Validity}
+\label{sec:discussion}
+
+\subsection{Discussion of Observations}
+The architectural findings regarding the DOM serialization gap highlight a fundamental misalignment between modern web standards and autonomous agent observation pipelines. While web developers invest heavily in Schema.org JSON-LD structured data for search engine discovery, popular agent frameworks discard these data structures during tree simplification. Similarly, developer custom attributes (\texttt{data-*}) that encode rich application state in Single Page Applications are stripped by default attribute whitelisting.
+
+These findings suggest that designing the ``Agentic Web'' does not require inventing novel machine formats (e.g., \texttt{llms.txt}); rather, it requires standardizing the client-side serialization pipeline so that agents can ingest existing structured markup already embedded in modern web documents.
+
+\subsection{Scope and Threats to Validity}
+\begin{itemize}
+    \item \textbf{Scope and Bounded Generalization:} The behavioral findings are situated within a single-model evaluation (\texttt{gemini-3.1-flash-lite}) operating on a self-hosted e-commerce application. The observed ceiling effect and step invariance reflect model performance under clear visible typography; they should not be extrapolated to arbitrarily complex enterprise portals, heavily obfuscated DOMs, or alternative foundation models without multi-model replication.
+    \item \textbf{Internal Validity:} Upstream API availability spikes (HTTP 503) introduce temporal clustering risks. We mitigate this through randomized block scheduling and fail-closed halting guards.
+    \item \textbf{Construct Validity:} If the serializer prunes attributes inconsistently across HTML element types, the observed treatment effect could reflect serializer heuristics rather than model reasoning capabilities. We verified treatment delivery on actual prompt strings (\texttt{test\_agent\_prompt\_pipeline.py}) to confirm attribute presence.
+    \item \textbf{Statistical Conclusion Validity:} Due to sample size limitations ($N=24$/arm planned; $N=25$ valid completed), non-significant contrasts cannot establish equivalence. The study is powered strictly as an exploratory pilot investigation.
+\end{itemize}
+
+\section{Reproducibility, Ethics, and Open Science}
+\label{sec:reproducibility}
+
+\subsection{Computational Reproducibility}
+The entire experimental infrastructure is packaged for self-contained, offline reproducibility:
+\begin{itemize}
+    \item \textbf{Deterministic Randomization:} Schedule generation and trial order are controlled via fixed pseudorandom seeds (Seed: 42).
+    \item \textbf{Zero Financial Expenditure:} The entire research pipeline enforces a hard spending cap of USD \$0.00, operating strictly within public free-tier quotas and employing local client-side budget guards (\texttt{LocalBudgetGuard}).
+    \item \textbf{Local Web Fixtures:} The target e-commerce store runs on a lightweight, standalone Python HTTP server, eliminating external network dependencies, third-party tracking, or live store price volatility.
+    \item \textbf{Offline Test Battery:} The complete software suite includes automated unit and regression tests executing in $<0.4$ seconds without network access.
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper formalizes the DOM serialization gap in autonomous browser agents, establishing that default observation pipelines discard rich structured metadata (Schema.org JSON-LD and developer custom attributes) prior to model prompt construction. We have developed and validated an experimentally controlled, deconfounded 3-arm evaluation protocol ($N=72$) designed to test whether additive WAI-ARIA and configured \texttt{data-*} markup causally improve agent decision-making under identical visible text. Preliminary results from 25 completed trials demonstrate that when rendered visible text is already complete and clear, additive semantic markup yields no statistically significant improvement in task success or trajectory efficiency for frontier flash models. By providing hardened ground-truth verifiers, immutable telemetry preservation, and literature-validated statistical pipelines, this work establishes a rigorous empirical foundation for evaluating the next generation of autonomous web agents.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

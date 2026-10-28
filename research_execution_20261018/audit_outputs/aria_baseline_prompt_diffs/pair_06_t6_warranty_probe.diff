@@ -1,0 +1,108 @@
+--- BASELINE_pair_06_t6_warranty_probe
++++ ARIA_pair_06_t6_warranty_probe
+@@ -278,7 +278,7 @@
+ Agent initialized
+ <step>
+ Result
+-Navigated to http://127.0.0.1:PORT/variants/v0-baseline/index.html#home
++Navigated to http://127.0.0.1:PORT/variants/v2-aria/index.html#home
+ </agent_history>
+ 
+ <agent_state>
+@@ -291,9 +291,9 @@
+ </agent_state>
+ <browser_state>
+ <page_stats>11 links, 34 interactive, 0 iframes, 1 shadow(open), 0 shadow(closed), 227 total elements</page_stats>
+-Current tab: D99D
++Current tab: CAD6
+ Available tabs:
+-Tab D99D: http://127.0.0.1:PORT/variants/v0-baseline/index.html#home - 127.0.0.1:8098/variants/v0-bas
++Tab CAD6: http://127.0.0.1:PORT/variants/v2-aria/index.html#home - 127.0.0.1:8098/variants/v2-ari
+ 
+ <page_info>0.0 pages above, 0.5 pages below — scroll down to reveal more content</page_info>
+ 
+@@ -301,9 +301,9 @@
+ [Start of page]
+ [24]<a id=logo-link />
+ 	TechMart
+-[3]<form id=search-form />
+-	|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off />
+-	[13]<button type=submit id=search-submit-btn />
++[3]<form id=search-form role=search />
++	|SHADOW(open)|[4]<input type=text id=search-input placeholder=Search products... autocomplete=off aria-label=Search products />
++	[13]<button type=submit id=search-submit-btn aria-label=Search />
+ 		Search
+ [25]<a id=cart-nav-link />
+ 	Cart (
+@@ -332,7 +332,7 @@
+ 	In Stock
+ [156]<a />
+ 	View Details
+-[28]<button />
++[28]<button aria-label=Add item to cart />
+ 	Add to Cart
+ ⌨️
+ Mechanical Keyboard Pro
+@@ -343,7 +343,7 @@
+ 	In Stock
+ [178]<a />
+ 	View Details
+-[29]<button />
++[29]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🖥️
+ CrystalView 27
+@@ -354,7 +354,7 @@
+ 	In Stock
+ [200]<a />
+ 	View Details
+-[30]<button />
++[30]<button aria-label=Add item to cart />
+ 	Add to Cart
+ BudPro Wireless X
+ Wireless Headphones
+@@ -364,7 +364,7 @@
+ 	In Stock
+ [222]<a />
+ 	View Details
+-[31]<button />
++[31]<button aria-label=Add item to cart />
+ 	Add to Cart
+ SoundFlow Air 3
+ Wireless Headphones
+@@ -374,7 +374,7 @@
+ 	In Stock
+ [245]<a />
+ 	View Details
+-[32]<button />
++[32]<button aria-label=Add item to cart />
+ 	Add to Cart
+ USB-C Hub Pro
+ Accessories
+@@ -384,7 +384,7 @@
+ 	In Stock
+ [268]<a />
+ 	View Details
+-[33]<button />
++[33]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🖱️
+ ErgoGlide Mouse
+@@ -395,7 +395,7 @@
+ 	In Stock
+ [291]<a />
+ 	View Details
+-[34]<button />
++[34]<button aria-label=Add item to cart />
+ 	Add to Cart
+ 🗂️
+ Desk Organizer Elite
+@@ -405,7 +405,7 @@
+ Out of Stock
+ [314]<a />
+ 	View Details
+-[35]<button disabled=true />
++[35]<button aria-label=Add item to cart disabled=true />
+ 	Out of Stock
+ </browser_state>
+ <step_info>Step1 maximum:1

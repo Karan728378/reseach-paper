@@ -1,0 +1,26 @@
+module,function_count,passed,failed,skipped,runtime_sec,exit_code,status,scope_description
+test_accessibility_tree_comparison.py,10,10,0,0,0.15,0,PASS,Audits accessibility_tree_comparison
+test_agent_prompt_pipeline.py,0,0,0,0,2.54,0,PASS,Audits agent_prompt_pipeline
+test_analyze_v3_results.py,11,11,0,0,0.33,0,PASS,Audits analyze_v3_results
+test_aria_baseline_prompt_divergence.py,5,5,0,0,0.15,0,PASS,Audits aria_baseline_prompt_divergence
+test_baseline_pooling_consistency.py,5,5,0,0,0.15,0,PASS,Audits baseline_pooling_consistency
+test_browser_lifecycle_and_recovery.py,10,10,0,0,7.33,0,PASS,Audits browser_lifecycle_and_recovery
+test_budget_controls.py,7,7,0,0,0.17,0,PASS,Audits budget_controls
+test_budget_guard_repairs.py,6,6,0,0,0.24,0,PASS,Audits budget_guard_repairs
+test_data_reconciliation_and_provenance.py,20,20,0,0,0.54,0,PASS,Audits data_reconciliation_and_provenance
+test_disambiguation_probes.py,7,7,0,0,0.94,0,PASS,Audits disambiguation_probes
+test_forensic_audit_regressions.py,12,12,0,0,0.16,0,PASS,Audits forensic_audit_regressions
+test_groq_backend.py,14,14,0,0,8.97,0,PASS,Audits groq_backend
+test_implementation_fixes.py,6,6,0,0,0.83,0,PASS,Audits implementation_fixes
+test_live_instrumentation_offline.py,3,3,0,0,13.22,0,PASS,Audits live_instrumentation_offline
+test_manuscript_consistency.py,5,5,0,0,0.18,0,PASS,Audits manuscript_consistency
+test_mutation_audit.py,10,10,0,0,0.89,0,PASS,Audits mutation_audit
+test_observation_pipeline_stages.py,5,5,0,0,0.99,0,PASS,Audits observation_pipeline_stages
+test_power_audit.py,7,7,0,0,0.16,0,PASS,Audits power_audit
+test_runner_guard_integration.py,5,5,0,0,2.28,0,PASS,Audits runner_guard_integration
+test_schedule_validity.py,6,6,0,0,0.17,0,PASS,Audits schedule_validity
+test_sentinel_pipeline.py,5,5,0,0,0.18,0,PASS,Audits sentinel_pipeline
+test_step_limits_and_budget_audit.py,12,12,0,0,4.66,0,PASS,Audits step_limits_and_budget_audit
+test_t6_verifier_isolated.py,7,7,0,0,0.16,0,PASS,Audits t6_verifier_isolated
+test_treatment_leakage_and_integrity.py,6,6,0,0,0.17,0,PASS,Audits treatment_leakage_and_integrity
+test_verifier_ground_truth_battery.py,12,12,0,0,0.84,0,PASS,Audits verifier_ground_truth_battery
